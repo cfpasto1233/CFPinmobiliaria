@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -10,13 +10,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './navbar.scss',
 })
 export class NavbarComponent {
-  readonly scrolled = signal(false);
   readonly menuOpen = signal(false);
-
-  @HostListener('window:scroll')
-  onScroll(): void {
-    this.scrolled.set(window.scrollY > 50);
-  }
 
   toggleMenu(): void {
     this.menuOpen.update((v) => !v);

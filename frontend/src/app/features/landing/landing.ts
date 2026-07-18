@@ -10,23 +10,84 @@ import { NavbarComponent } from '../../layouts/navbar/navbar.component';
   template: `
     <app-navbar />
 
-    <main class="landing-hero min-vh-100 d-flex flex-column align-items-center justify-content-center">
-      <h1 class="display-4 fw-bold">Cfpasto</h1>
-      <p class="lead text-muted">Bienvenido a la plataforma.</p>
-      <div class="d-flex gap-3 mt-3">
-        <a routerLink="/auth/login" class="btn btn-primary">Iniciar sesi&oacute;n</a>
-        <a routerLink="/auth/register" class="btn btn-outline-secondary">Registrarse</a>
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">T&iacute;tulo placeholder</h1>
+        <p class="hero-subtitle">Subt&iacute;tulo placeholder para la plataforma</p>
+        <a routerLink="/auth/login" class="btn btn-accent-hero">Comenzar ahora</a>
       </div>
-    </main>
+    </section>
   `,
   styles: `
     :host {
       display: block;
-      background-color: #ffffff;
     }
 
-    .landing-hero {
-      padding-top: 5rem;
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      padding: 2rem;
+      max-width: 800px;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 3.5rem;
+      color: #1a1a2e;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      font-size: 1.15rem;
+      color: #6b7280;
+      margin-bottom: 2rem;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-accent-hero {
+      display: inline-block;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.8rem 2rem;
+      border-radius: 0.5rem;
+      background-color: #0C2C73;
+      color: #ffffff;
+      border: none;
+      text-decoration: none;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+
+      &:hover {
+        background-color: #1a4399;
+        color: #ffffff;
+        transform: translateY(-1px);
+      }
+    }
+
+    @media (max-width: 767.98px) {
+      .hero-title {
+        font-size: 2.25rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
     }
   `,
 })
