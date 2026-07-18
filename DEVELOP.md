@@ -81,6 +81,25 @@ docker compose down           # mantiene volúmenes (datos intactos)
 docker compose down -v        # destruye volúmenes (reset total de datos)
 ```
 
+### Despliegue self-hosted con Traefik (alternativo a Railway + Vercel)
+
+`compose.traefik.yml` levanta el router Traefik de producción (puertos 80/443, certificados
+Let's Encrypt vía resolver ACME, dashboard con basic-auth) para desplegar todo el stack
+(`db`, `backend`, `frontend`, `adminer`, etc.) por Docker Compose en un VPS con dominio propio.
+Es un camino alternativo al de `docs/DEPLOY_VERCEL_RAILWAY.md` — no hace falta usarlo si el
+backend va en Railway y el frontend en Vercel.
+
+```bash
+# Una sola vez: crear la red externa que comparten todos los servicios con label traefik-public
+docker network create traefik-public
+
+# Levantar Traefik + el stack completo
+docker compose -f compose.yml -f compose.traefik.yml up -d
+```
+
+Requiere `DOMAIN`, `EMAIL`, `USERNAME` y `HASHED_PASSWORD` configurados en `.env` (ver
+`.env.example`). `HASHED_PASSWORD` se genera con `openssl passwd -apr1`.
+
 ---
 
 ## 3. Variables de entorno
@@ -164,6 +183,7 @@ docker compose up -d     # reinicia desde cero
 | **Backend API** | http://localhost:8000 | FastAPI |
 | **Swagger UI** | http://localhost:8000/docs | Documentación interactiva de la API |
 | **ReDoc** | http://localhost:8000/redoc | Documentación alternativa |
+| **Adminer** | http://localhost:8080 | UI de administración de PostgreSQL |
 | **MinIO Console** | http://localhost:9001 | Panel de administración de MinIO |
 | **MinIO S3 API** | http://localhost:9000 | Endpoint S3 compatible |
 | **Mailcatcher** | http://localhost:1080 | Captura de emails enviados en dev |

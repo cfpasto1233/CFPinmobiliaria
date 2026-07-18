@@ -1,0 +1,14 @@
+# Railway deployment config — backend only
+# Docs: https://docs.railway.com/reference/config-as-code
+
+[build]
+# Build context = raíz del repo (el Dockerfile necesita acceso a uv.lock y backend/)
+dockerfilePath = "backend/Dockerfile"
+buildContext = "."
+
+[deploy]
+# El CMD del Dockerfile (scripts/start.sh) maneja prestart + fastapi run con $PORT
+healthcheckPath = "/api/v1/utils/health-check/"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3

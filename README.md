@@ -102,6 +102,7 @@ git push origin feature/nombre-feature
 | Frontend | http://localhost:4200 |
 | Backend API | http://localhost:8000 |
 | Swagger UI | http://localhost:8000/docs |
+| Adminer | http://localhost:8080 |
 | MinIO Console | http://localhost:9001 |
 | Mailcatcher | http://localhost:1080 |
 

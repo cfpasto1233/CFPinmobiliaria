@@ -25,7 +25,9 @@ openssl rand -hex 32
 ```
 Guardar el resultado — se necesita en el Paso 4.
 
-### Crear `railway.toml` en la raíz del proyecto
+### `railway.toml` ya está commiteado en la raíz del proyecto
+
+Railway lo detecta automáticamente al conectar el repo — no hace falta crearlo:
 
 ```toml
 [build]
@@ -33,18 +35,14 @@ dockerfilePath = "backend/Dockerfile"
 buildContext = "."
 
 [deploy]
-startCommand = "bash /app/backend/scripts/start.sh"
 healthcheckPath = "/api/v1/utils/health-check/"
-healthcheckTimeout = 60
-restartPolicyType = "on_failure"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
 ```
 
-### Commit del railway.toml
-```bash
-git add railway.toml
-git commit -m "chore: add railway.toml for deployment"
-git push origin main
-```
+El `startCommand` no se especifica: Railway usa el `CMD` del `backend/Dockerfile`
+(`scripts/start.sh`), que ya corre `prestart.sh` + `fastapi run` con `$PORT`.
 
 ---
 
@@ -74,6 +72,10 @@ Hacer commit y push antes de continuar.
 
 ### Configuración inicial
 
+`frontend/vercel.json` ya está commiteado y define Build Command, Output Directory e Install
+Command — Vercel los autodetecta desde ahí. Solo hace falta fijar el Root Directory en el
+dashboard:
+
 1. Ir a **https://vercel.com** → Login con GitHub
 2. **Add New Project** → seleccionar el repositorio de Cfpasto
 3. Configurar el proyecto:
@@ -82,9 +84,9 @@ Hacer commit y push antes de continuar.
 |---|---|
 | Framework Preset | Angular |
 | Root Directory | `frontend` |
-| Build Command | `npm run build` |
-| Output Directory | `dist/frontend/browser` |
-| Install Command | `npm install` |
+
+(Build Command, Output Directory e Install Command vienen de `frontend/vercel.json`:
+`npm run build`, `dist/frontend/browser`, `npm install`.)
 
 4. Agregar en **Environment Variables** (Production):
 
@@ -290,6 +292,7 @@ fetch('https://api.[dominio].com/api/v1/utils/health-check/')
 | Archivo | Cambio |
 |---|---|
 | `frontend/src/environments/environment.prod.ts` | `apiUrl: 'https://api.[dominio].com'` |
-| `railway.toml` | Crear en la raíz (ver Paso 0) |
+| `railway.toml` | Ya existe en la raíz ✓ (ver Paso 0) |
+| `frontend/vercel.json` | Ya existe ✓ (ver Paso 2) |
 
 No se modifica ningún otro archivo del código — toda la configuración de producción va en variables de entorno.

@@ -43,6 +43,11 @@ services:
     ports:
       - "5433:5432"
 
+  adminer:
+    restart: "no"
+    ports:
+      - "8080:8080"
+
   minio:
     restart: "no"
     ports:
