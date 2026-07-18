@@ -1,0 +1,36 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+  background: $cfpasto-bg-subtle;
+}
+
+.admin-shell-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1035;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+
+  @media (max-width: 991.98px) {
+    display: block;
+  }
+}
+
+.admin-shell-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-shell-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}

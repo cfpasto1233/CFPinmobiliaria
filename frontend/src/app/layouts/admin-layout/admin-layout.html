@@ -1,0 +1,15 @@
+<div class="admin-shell">
+  <app-sidebar [open]="sidebarOpen()" />
+
+  @if (sidebarOpen()) {
+    <div class="admin-shell-backdrop" (click)="closeSidebar()"></div>
+  }
+
+  <div class="admin-shell-main">
+    <app-topbar (toggleSidebar)="toggleSidebar()" />
+
+    <main class="admin-shell-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

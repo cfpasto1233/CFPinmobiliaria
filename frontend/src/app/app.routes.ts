@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/auth/auth.guard';
+import { authGuard, superAdminGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -26,6 +26,31 @@ export const routes: Routes = [
       import('./features/dashboard/dashboard.component').then(
         (m) => m.DashboardComponent,
       ),
+  },
+  {
+    path: 'admin',
+    canActivate: [authGuard, superAdminGuard],
+    loadComponent: () =>
+      import('./layouts/admin-layout/admin-layout.component').then(
+        (m) => m.AdminLayoutComponent,
+      ),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'resumen' },
+      {
+        path: 'resumen',
+        loadComponent: () =>
+          import('./features/admin/overview/admin-overview.component').then(
+            (m) => m.AdminOverviewComponent,
+          ),
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('./features/admin/users/admin-users.component').then(
+            (m) => m.AdminUsersComponent,
+          ),
+      },
+    ],
   },
   {
     path: 'design-system',

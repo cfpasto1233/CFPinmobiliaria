@@ -1,0 +1,48 @@
+<h2 class="admin-users-title">Usuarios</h2>
+
+@if (loading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+} @else if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+} @else if (users().length === 0) {
+  <div class="text-center py-5 text-muted">Sin usuarios registrados.</div>
+} @else {
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Email</th>
+              <th>Nombre</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Superadmin</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users(); track user.id) {
+              <tr>
+                <td>{{ user.email }}</td>
+                <td>{{ user.full_name || '—' }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                  <span class="admin-users-badge" [class.is-inactive]="!user.is_active">
+                    {{ user.is_active ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="admin-users-badge" [class.is-superadmin]="user.is_superuser">
+                    {{ user.is_superuser ? 'Sí' : 'No' }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+}

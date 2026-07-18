@@ -14,7 +14,7 @@ export const AuthActions = {
     '[Auth] Login',
     props<{ email: string; password: string; rememberMe: boolean }>(),
   ),
-  loginSuccess: createAction('[Auth] Login Success'),
+  loginSuccess: createAction('[Auth] Login Success', props<{ user: UserInfo }>()),
   loginFailure: createAction('[Auth] Login Failure', props<{ error: string }>()),
 
   refreshToken: createAction('[Auth] Refresh Token'),

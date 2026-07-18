@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { AuthService } from '../../../core/auth/auth.service';
-import { NotificationService } from '../../../core/notifications/notification.service';
+import { AuthActions } from '../../../store/Authentication/authentication.actions';
 
 @Component({
   selector: 'app-login',
@@ -13,20 +14,20 @@ import { NotificationService } from '../../../core/notifications/notification.se
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly notif = inject(NotificationService);
-
-  readonly submitting = signal(false);
+  private readonly store = inject(Store);
+  protected readonly auth = inject(AuthService);
 
   readonly loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(1)]],
+    rememberMe: [false],
   });
 
   onSubmit(): void {
     if (this.loginForm.invalid) return;
-    // Se conectará con el LoginService generado por ng-openapi
-    this.notif.info('Funcionalidad disponible tras generar el cliente HTTP.');
+    const { email, password, rememberMe } = this.loginForm.getRawValue();
+    this.store.dispatch(
+      AuthActions.login({ email: email ?? '', password: password ?? '', rememberMe: rememberMe ?? false }),
+    );
   }
 }

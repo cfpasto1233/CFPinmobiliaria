@@ -10,9 +10,12 @@ import {
 import { provideEffects } from '@ngrx/effects';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideDefaultClient } from '../client';
+import { environment } from '../environments/environment';
 import { AuthClientInterceptor } from './core/auth/auth.interceptor';
 import { RefreshInterceptor } from './core/auth/refresh.interceptor';
 import { AuthenticationEffects } from './store/Authentication/authentication.effects';
+import { UsersEffects } from './store/Users/users.effects';
 import { metaReducers, rootReducer } from './store';
 import { routes } from './app.routes';
 
@@ -31,9 +34,13 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: RefreshInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthClientInterceptor, multi: true },
+    // El token BASE_PATH_DEFAULT del cliente generado cae en '/api' si no se registra esto,
+    // y cada servicio ya arma la URL como `${basePath}/api/v1/...` — sin este override
+    // termina pidiendo /api/api/v1/... (404).
+    provideDefaultClient({ basePath: environment.apiUrl }),
 
     provideStore(rootReducer, { metaReducers }),
-    provideEffects([AuthenticationEffects]),
+    provideEffects([AuthenticationEffects, UsersEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
