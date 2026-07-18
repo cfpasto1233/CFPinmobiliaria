@@ -38,3 +38,43 @@
     </div>
   </div>
 </section>
+
+<section class="featured-properties">
+  <div class="featured-header">
+    <span class="campaign-pill">
+      <span class="campaign-dot"></span>
+      Campaña del mes — Julio 2024
+    </span>
+
+    <!-- Visual únicamente por ahora: aún no existe módulo de propiedades/backend -->
+    <button type="button" class="btn btn-outline-primary featured-cta">
+      Ver todas las propiedades →
+    </button>
+  </div>
+
+  <h2 class="featured-title">Propiedades Destacadas</h2>
+  <p class="featured-subtitle">
+    Selección especial con condiciones de financiación preferenciales este mes.
+  </p>
+
+  <div class="property-grid">
+    @for (property of featuredProperties; track property.title) {
+      <article class="property-card">
+        <div class="property-media">
+          <span class="property-badge property-badge-type" [class.is-rent]="property.type === 'arriendo'">
+            {{ property.type === 'venta' ? 'Venta' : 'Arriendo' }}
+          </span>
+          <span class="property-badge property-badge-campaign">Campaña</span>
+        </div>
+
+        <div class="property-body">
+          <p class="property-location">{{ property.location }}</p>
+          <h3 class="property-name">{{ property.title }}</h3>
+          <p class="property-price" [class.is-rent]="property.type === 'arriendo'">
+            {{ property.price }}<span class="property-price-suffix">{{ property.type === 'arriendo' ? '/mes' : '' }}</span>
+          </p>
+        </div>
+      </article>
+    }
+  </div>
+</section>
