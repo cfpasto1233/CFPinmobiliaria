@@ -1,0 +1,97 @@
+@use 'design-tokens' as *;
+
+// =============================================================================
+// Cfpasto — App SCSS
+// =============================================================================
+// Este archivo carga DESPUES de bootstrap.scss.
+// Solo mixins y utilidades que dependen de Bootstrap ya compilado.
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin section-padding {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@mixin card-base {
+  background: $cfpasto-surface;
+  border: 1px solid $cfpasto-border;
+  border-radius: $cfpasto-radius-lg;
+  box-shadow: $cfpasto-shadow-sm;
+}
+
+// ─── Componentes utilitarios ────────────────────────────────────────────────
+
+.btn-soft-primary {
+  color: $cfpasto-primary;
+  background-color: rgba(12, 44, 115, 0.08);
+  border: 1px solid rgba(12, 44, 115, 0.15);
+
+  &:hover {
+    background-color: rgba(12, 44, 115, 0.14);
+    border-color: rgba(12, 44, 115, 0.25);
+  }
+
+  &:active {
+    background-color: rgba(12, 44, 115, 0.20);
+  }
+}
+
+.btn-soft-accent {
+  color: $cfpasto-accent-dark;
+  background-color: rgba(244, 163, 0, 0.10);
+  border: 1px solid rgba(244, 163, 0, 0.20);
+
+  &:hover {
+    background-color: rgba(244, 163, 0, 0.18);
+    border-color: rgba(244, 163, 0, 0.30);
+  }
+
+  &:active {
+    background-color: rgba(244, 163, 0, 0.25);
+  }
+}
+
+.btn-soft-danger {
+  color: $cfpasto-error;
+  background-color: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+
+  &:hover {
+    background-color: rgba(220, 38, 38, 0.14);
+  }
+}
+
+.btn-soft-success {
+  color: $cfpasto-success;
+  background-color: rgba(5, 150, 105, 0.08);
+  border: 1px solid rgba(5, 150, 105, 0.15);
+
+  &:hover {
+    background-color: rgba(5, 150, 105, 0.14);
+  }
+}
+
+.btn-soft-warning {
+  color: $cfpasto-warning;
+  background-color: rgba(217, 119, 6, 0.08);
+  border: 1px solid rgba(217, 119, 6, 0.15);
+
+  &:hover {
+    background-color: rgba(217, 119, 6, 0.14);
+  }
+}
+
+.btn-soft-info {
+  color: $cfpasto-info;
+  background-color: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+
+  &:hover {
+    background-color: rgba(37, 99, 235, 0.14);
+  }
+}

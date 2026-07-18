@@ -1,0 +1,27 @@
+// Tokens de diseno ANTES de Bootstrap para que las variables se resuelvan
+@import 'design-tokens';
+
+// Overrides de Bootstrap — estos sobreescriben los defaults de Bootstrap
+$primary: $cfpasto-primary;
+$secondary: $cfpasto-accent;
+$success: $cfpasto-success;
+$info: $cfpasto-info;
+$warning: $cfpasto-warning;
+$danger: $cfpasto-error;
+
+$font-family-sans: $cfpasto-font-body;
+$font-family-system-sans: $cfpasto-font-body;
+
+$border-radius: $cfpasto-radius;
+$border-radius-sm: $cfpasto-radius-sm;
+$border-radius-lg: $cfpasto-radius-lg;
+
+$box-shadow-sm: $cfpasto-shadow-sm;
+$box-shadow: $cfpasto-shadow;
+$box-shadow-lg: $cfpasto-shadow-lg;
+
+$enable-shadows: false;
+$enable-gradients: false;
+
+// Importar Bootstrap completo
+@import 'bootstrap/scss/bootstrap';

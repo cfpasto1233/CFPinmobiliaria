@@ -1,0 +1,80 @@
+// =============================================================================
+// Cfpasto — Design Tokens
+// =============================================================================
+// Este partial se importa ANTES de Bootstrap para sobreescribir variables.
+// Nunca importar Bootstrap directamente desde aqui.
+
+// ─── Colores Corporativos ───────────────────────────────────────────────────
+
+$cfpasto-primary: #0C2C73;
+$cfpasto-primary-light: #1a4399;
+$cfpasto-primary-dark: #081d52;
+$cfpasto-primary-rgb: 12, 44, 115;
+
+$cfpasto-accent: #F4A300;
+$cfpasto-accent-light: #f5b733;
+$cfpasto-accent-dark: #d48f00;
+$cfpasto-accent-rgb: 244, 163, 0;
+
+// ─── Neutros ────────────────────────────────────────────────────────────────
+
+$cfpasto-white: #ffffff;
+$cfpasto-bg: #F2F2F2;
+$cfpasto-bg-subtle: #fafafa;
+$cfpasto-surface: #ffffff;
+$cfpasto-text-dark: #1a1a2e;
+$cfpasto-text-muted: #6b7280;
+$cfpasto-text-light: #9ca3af;
+$cfpasto-border: #e5e7eb;
+$cfpasto-border-light: #f3f4f6;
+
+// ─── Semanticos ─────────────────────────────────────────────────────────────
+
+$cfpasto-success: #059669;
+$cfpasto-success-light: #10b981;
+$cfpasto-success-bg: #ecfdf5;
+$cfpasto-success-border: #a7f3d0;
+
+$cfpasto-warning: #d97706;
+$cfpasto-warning-light: #f59e0b;
+$cfpasto-warning-bg: #fffbeb;
+$cfpasto-warning-border: #fde68a;
+
+$cfpasto-error: #dc2626;
+$cfpasto-error-light: #ef4444;
+$cfpasto-error-bg: #fef2f2;
+$cfpasto-error-border: #fecaca;
+
+$cfpasto-info: #2563eb;
+$cfpasto-info-light: #3b82f6;
+$cfpasto-info-bg: #eff6ff;
+$cfpasto-info-border: #bfdbfe;
+
+// ─── Tipografia ─────────────────────────────────────────────────────────────
+
+$cfpasto-font-heading: 'Outfit', sans-serif;
+$cfpasto-font-body: 'Poppins', sans-serif;
+
+$cfpasto-text-xs: 0.75rem;
+$cfpasto-text-sm: 0.875rem;
+$cfpasto-text-base: 1rem;
+$cfpasto-text-lg: 1.125rem;
+$cfpasto-text-xl: 1.25rem;
+$cfpasto-text-2xl: 1.5rem;
+$cfpasto-text-3xl: 1.875rem;
+$cfpasto-text-4xl: 2.25rem;
+$cfpasto-text-5xl: 3rem;
+
+// ─── Border Radius ──────────────────────────────────────────────────────────
+
+$cfpasto-radius-sm: 0.375rem;
+$cfpasto-radius: 0.5rem;
+$cfpasto-radius-lg: 0.75rem;
+$cfpasto-radius-xl: 1rem;
+
+// ─── Sombras ────────────────────────────────────────────────────────────────
+
+$cfpasto-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$cfpasto-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+$cfpasto-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+$cfpasto-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
