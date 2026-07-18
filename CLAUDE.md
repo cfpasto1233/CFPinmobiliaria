@@ -98,7 +98,8 @@ bash scripts/generate-client.sh   # equivalente a generate:client, requiere back
 ```
 
 ## Tests
-Sin suite activa todavía: `backend/tests/` solo tiene `__init__.py`. No asumir cobertura existente.
+Sin suite activa todavía: `backend/tests/` solo tiene `__init__.py` y `frontend/` no tiene ningún
+`*.spec.ts`. No asumir cobertura existente.
 
 ## Reglas críticas
 - **No SQLModel** — SQLAlchemy 2.x puro (`Mapped`, `mapped_column`).
