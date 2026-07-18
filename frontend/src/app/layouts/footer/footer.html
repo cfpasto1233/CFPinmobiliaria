@@ -1,0 +1,29 @@
+<footer class="site-footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="images/Logopest.webp" alt="Cf Inmobiliaria" class="footer-logo-image" />
+      </div>
+
+      <p class="footer-tagline">Conectamos personas con su próximo hogar en toda Colombia.</p>
+    </div>
+
+    @for (group of linkGroups; track group.heading) {
+      <div class="footer-links">
+        <p class="footer-links-heading">{{ group.heading }}</p>
+        <ul class="footer-links-list">
+          @for (link of group.links; track link) {
+            <li>
+              <!-- Visual únicamente por ahora: aún no existen estas rutas -->
+              <button type="button" class="footer-link">{{ link }}</button>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copyright">© {{ currentYear }} Cf Inmobiliaria. Todos los derechos reservados.</p>
+  </div>
+</footer>

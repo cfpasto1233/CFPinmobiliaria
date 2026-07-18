@@ -320,3 +320,276 @@
   font-size: $cfpasto-text-sm;
   color: $cfpasto-text-muted;
 }
+
+// ─── Tips Inmobiliarios ──────────────────────────────────────────────────────
+
+.tips {
+  background: $cfpasto-white;
+  padding: 5rem 1.5rem;
+}
+
+.tips-header {
+  max-width: 640px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.tips-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 0.75rem;
+}
+
+.tips-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  color: $cfpasto-primary;
+  margin-bottom: 0.75rem;
+}
+
+.tips-subtitle {
+  font-family: $cfpasto-font-body;
+  color: $cfpasto-text-muted;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tip-card {
+  border: 1px solid $cfpasto-border;
+  border-radius: $cfpasto-radius;
+  padding: 1.5rem;
+  transition: border-color 0.25s ease;
+
+  &:has(.tip-trigger[aria-expanded='true']) {
+    border-color: $cfpasto-primary-light;
+  }
+}
+
+.tip-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.tip-number {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.15em;
+  color: $cfpasto-accent;
+}
+
+.tip-chevron {
+  color: $cfpasto-text-light;
+  transition: transform 0.25s ease;
+
+  &.is-open {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.tip-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 600;
+  font-size: $cfpasto-text-lg;
+  color: $cfpasto-primary;
+}
+
+.tip-description {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+}
+
+// ─── Carrusel de estadísticas ────────────────────────────────────────────────
+
+.stats-carousel {
+  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+  padding: 4rem 1.5rem 0;
+}
+
+.stats-carousel-inner {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.carousel-arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: $cfpasto-radius;
+  color: $cfpasto-white;
+  cursor: pointer;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  @media (max-width: 767.98px) {
+    display: none;
+  }
+}
+
+.carousel-content {
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+}
+
+.carousel-value {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: $cfpasto-accent;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.carousel-label {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-white;
+  margin-bottom: 0.75rem;
+}
+
+.carousel-description {
+  font-family: $cfpasto-font-body;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 480px;
+  margin: 0 auto 1.5rem;
+}
+
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50rem;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: width 0.25s ease, background-color 0.25s ease;
+
+  &.is-active {
+    width: 24px;
+    background: $cfpasto-accent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.stats-cta-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 0;
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stats-cta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+
+  &:first-child {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  &:last-child {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  @media (max-width: 767.98px) {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.stats-cta-question {
+  font-family: $cfpasto-font-body;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.stats-cta-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid $cfpasto-accent;
+  border-radius: $cfpasto-radius;
+  color: $cfpasto-accent;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  padding: 0.6rem 1.25rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease;
+
+  &:hover {
+    background: $cfpasto-accent;
+    color: $cfpasto-text-dark;
+  }
+}

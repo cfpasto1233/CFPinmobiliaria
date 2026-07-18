@@ -78,3 +78,96 @@
     }
   </div>
 </section>
+
+<section class="tips">
+  <div class="tips-header">
+    <p class="tips-eyebrow">Guía del comprador e inquilino</p>
+    <h2 class="tips-title">Tips Inmobiliarios</h2>
+    <p class="tips-subtitle">
+      Consejos prácticos para tomar decisiones inteligentes al comprar, vender o arrendar.
+    </p>
+  </div>
+
+  <div class="tips-grid">
+    @for (tip of tips; track tip.title; let i = $index) {
+      <div class="tip-card">
+        <button
+          type="button"
+          class="tip-trigger"
+          [attr.aria-expanded]="isTipExpanded(i)"
+          [attr.aria-controls]="'tip-panel-' + i"
+          (click)="toggleTip(i)"
+        >
+          <span class="tip-number">{{ tip.number }}</span>
+          <svg
+            class="tip-chevron"
+            [class.is-open]="isTipExpanded(i)"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <h3 class="tip-title">{{ tip.title }}</h3>
+
+        @if (isTipExpanded(i)) {
+          <p class="tip-description" [id]="'tip-panel-' + i">{{ tip.description }}</p>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="stats-carousel">
+  <div class="stats-carousel-inner">
+    <button type="button" class="carousel-arrow carousel-arrow-prev" aria-label="Estadística anterior" (click)="prevStat()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="carousel-content">
+      <p class="carousel-value">{{ statSlides[activeStatIndex()].value }}</p>
+      <h3 class="carousel-label">{{ statSlides[activeStatIndex()].label }}</h3>
+      <p class="carousel-description">{{ statSlides[activeStatIndex()].description }}</p>
+
+      <div class="carousel-dots">
+        @for (slide of statSlides; track slide.label; let i = $index) {
+          <button
+            type="button"
+            class="carousel-dot"
+            [class.is-active]="i === activeStatIndex()"
+            [attr.aria-current]="i === activeStatIndex()"
+            [attr.aria-label]="'Ir a la estadística ' + (i + 1)"
+            (click)="goToStat(i)"
+          ></button>
+        }
+      </div>
+    </div>
+
+    <button type="button" class="carousel-arrow carousel-arrow-next" aria-label="Siguiente estadística" (click)="nextStat()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  <div class="stats-cta-row">
+    @for (cta of statsCtaOptions; track cta.question) {
+      <div class="stats-cta-item">
+        <p class="stats-cta-question">{{ cta.question }}</p>
+        <button type="button" class="stats-cta-btn">{{ cta.actionLabel }}</button>
+      </div>
+    }
+  </div>
+</section>
+
+<app-footer />
