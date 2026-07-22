@@ -47,10 +47,11 @@ backend/app/
 frontend/src/app/
   core/auth/          # auth.guard.ts, auth.interceptor.ts, refresh.interceptor.ts, auth.service.ts
   core/notifications/ # NotificationService
-  features/           # landing (público), auth (login/register), dashboard (requiere auth)
+  features/           # landing (público), auth (login/register), dashboard, admin (superadmin), design-system
   layouts/            # navbar y demás layout components
   shared/components/  # Toast, modales, reutilizables
-  store/Authentication/ # único store existente hoy (feature key "auth")
+  store/Authentication/ # feature key "auth"
+  store/Users/         # feature key "users" (CRUD de usuarios, usado por admin)
 frontend/src/client/  # generado por ng-openapi — NUNCA editar a mano
 ```
 
@@ -101,6 +102,10 @@ bash scripts/generate-client.sh   # equivalente a generate:client, requiere back
 Sin suite activa todavía: `backend/tests/` solo tiene `__init__.py` y `frontend/` no tiene ningún
 `*.spec.ts`. No asumir cobertura existente.
 
+## Ramas
+`main` (producción) ← `develop` (integración) ← `feature/*` / `hotfix/*`. Los PRs de feature van
+contra `develop`, no contra `main`.
+
 ## Reglas críticas
 - **No SQLModel** — SQLAlchemy 2.x puro (`Mapped`, `mapped_column`).
 - **No SignalStore** — NgRx clásico (actions, reducer, effects, selectors).
@@ -130,6 +135,8 @@ usuarios en `PRODUCT.md`.
 | Log de decisiones técnicas / hitos de avance | `docs/DECISIONS.md`, `docs/MILESTONES.md` |
 
 ## Estado actual
-Backend: auth (login/refresh/logout) + CRUD de usuarios. Frontend: landing pública + login +
-register + dashboard base. Módulos de negocio del dominio inmobiliario están pendientes de
-definir/construir — no asumir que existen entidades más allá de `User`.
+Backend: auth (login/refresh/logout) + CRUD de usuarios. No asumir que existen entidades más
+allá de `User` — modelos, schemas y CRUD del backend siguen limitados a auth/usuarios.
+Frontend: landing pública + login/register + dashboard + área superadmin (`features/admin`,
+gestión de usuarios) + `features/design-system` (showcase de componentes UI). Módulos de negocio
+del dominio inmobiliario están pendientes de definir/construir.

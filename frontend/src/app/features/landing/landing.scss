@@ -4,6 +4,65 @@
   display: block;
 }
 
+%eyebrow-text {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+}
+
+%no-motion-transition {
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+%no-motion-transition-hover {
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+%heading-bold {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+}
+
+%heading-semibold {
+  font-family: $cfpasto-font-heading;
+  font-weight: 600;
+}
+
+%body-semibold {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+}
+
+%body-text {
+  font-family: $cfpasto-font-body;
+}
+
+%accent-fill {
+  background: $cfpasto-accent;
+  color: $cfpasto-text-dark;
+}
+
+%responsive-grid-cols {
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
 .hero {
   position: relative;
   min-height: 100vh;
@@ -51,18 +110,12 @@
 }
 
 .hero-eyebrow {
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
-  font-size: $cfpasto-text-sm;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: $cfpasto-accent;
+  @extend %eyebrow-text;
   margin-bottom: 1.5rem;
 }
 
 .hero-title {
-  font-family: $cfpasto-font-heading;
-  font-weight: 700;
+  @extend %heading-bold;
   font-size: clamp(2.25rem, 5vw, 3.75rem);
   line-height: 1.2;
   color: $cfpasto-white;
@@ -87,8 +140,7 @@
 }
 
 .search-card-label {
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
+  @extend %body-semibold;
   font-size: $cfpasto-text-xs;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -115,18 +167,11 @@
     transform: translateY(-1px);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-
-    &:hover {
-      transform: none;
-    }
-  }
+  @extend %no-motion-transition-hover;
 }
 
 .search-option-label {
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
+  @extend %body-semibold;
   font-size: $cfpasto-text-base;
   text-align: center;
 }
@@ -158,12 +203,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: $cfpasto-accent;
-  color: $cfpasto-text-dark;
+  @extend %accent-fill;
   padding: 0.5rem 1rem;
   border-radius: 50rem;
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
+  @extend %body-semibold;
   font-size: $cfpasto-text-xs;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -181,8 +224,7 @@
 }
 
 .featured-title {
-  font-family: $cfpasto-font-heading;
-  font-weight: 700;
+  @extend %heading-bold;
   font-size: clamp(1.75rem, 3vw, 2.25rem);
   color: $cfpasto-primary;
   max-width: 1200px;
@@ -190,7 +232,7 @@
 }
 
 .featured-subtitle {
-  font-family: $cfpasto-font-body;
+  @extend %body-text;
   color: $cfpasto-text-muted;
   max-width: 1200px;
   margin: 0 auto 2.5rem;
@@ -203,13 +245,7 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 767.98px) {
-    grid-template-columns: 1fr;
-  }
+  @extend %responsive-grid-cols;
 }
 
 .property-card {
@@ -225,13 +261,7 @@
     box-shadow: $cfpasto-shadow-lg;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-
-    &:hover {
-      transform: none;
-    }
-  }
+  @extend %no-motion-transition-hover;
 }
 
 .property-media {
@@ -260,8 +290,7 @@
   top: 0.75rem;
   padding: 0.3rem 0.65rem;
   border-radius: 50rem;
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
+  @extend %body-semibold;
   font-size: $cfpasto-text-xs;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -273,8 +302,7 @@
   color: $cfpasto-white;
 
   &.is-rent {
-    background: $cfpasto-accent;
-    color: $cfpasto-text-dark;
+    @extend %accent-fill;
   }
 }
 
@@ -289,23 +317,21 @@
 }
 
 .property-location {
-  font-family: $cfpasto-font-body;
+  @extend %body-text;
   font-size: $cfpasto-text-sm;
   color: $cfpasto-text-muted;
   margin-bottom: 0.25rem;
 }
 
 .property-name {
-  font-family: $cfpasto-font-heading;
-  font-weight: 600;
+  @extend %heading-semibold;
   font-size: $cfpasto-text-lg;
   color: $cfpasto-text-dark;
   margin-bottom: 0.5rem;
 }
 
 .property-price {
-  font-family: $cfpasto-font-heading;
-  font-weight: 700;
+  @extend %heading-bold;
   font-size: $cfpasto-text-lg;
   color: $cfpasto-primary;
 
@@ -315,7 +341,7 @@
 }
 
 .property-price-suffix {
-  font-family: $cfpasto-font-body;
+  @extend %body-text;
   font-weight: 500;
   font-size: $cfpasto-text-sm;
   color: $cfpasto-text-muted;
@@ -335,25 +361,19 @@
 }
 
 .tips-eyebrow {
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
-  font-size: $cfpasto-text-sm;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: $cfpasto-accent;
+  @extend %eyebrow-text;
   margin-bottom: 0.75rem;
 }
 
 .tips-title {
-  font-family: $cfpasto-font-heading;
-  font-weight: 700;
+  @extend %heading-bold;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   color: $cfpasto-primary;
   margin-bottom: 0.75rem;
 }
 
 .tips-subtitle {
-  font-family: $cfpasto-font-body;
+  @extend %body-text;
   color: $cfpasto-text-muted;
 }
 
@@ -364,13 +384,7 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 767.98px) {
-    grid-template-columns: 1fr;
-  }
+  @extend %responsive-grid-cols;
 }
 
 .tip-card {
@@ -397,8 +411,7 @@
 }
 
 .tip-number {
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
+  @extend %body-semibold;
   font-size: $cfpasto-text-sm;
   letter-spacing: 0.15em;
   color: $cfpasto-accent;
@@ -412,20 +425,17 @@
     transform: rotate(180deg);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
+  @extend %no-motion-transition;
 }
 
 .tip-title {
-  font-family: $cfpasto-font-heading;
-  font-weight: 600;
+  @extend %heading-semibold;
   font-size: $cfpasto-text-lg;
   color: $cfpasto-primary;
 }
 
 .tip-description {
-  font-family: $cfpasto-font-body;
+  @extend %body-text;
   font-size: $cfpasto-text-sm;
   color: $cfpasto-text-muted;
   margin-top: 0.75rem;
@@ -481,8 +491,7 @@
 }
 
 .carousel-value {
-  font-family: $cfpasto-font-heading;
-  font-weight: 700;
+  @extend %heading-bold;
   font-size: clamp(2.5rem, 6vw, 4rem);
   color: $cfpasto-accent;
   line-height: 1;
@@ -490,15 +499,14 @@
 }
 
 .carousel-label {
-  font-family: $cfpasto-font-heading;
-  font-weight: 700;
+  @extend %heading-bold;
   font-size: $cfpasto-text-2xl;
   color: $cfpasto-white;
   margin-bottom: 0.75rem;
 }
 
 .carousel-description {
-  font-family: $cfpasto-font-body;
+  @extend %body-text;
   color: rgba(255, 255, 255, 0.65);
   max-width: 480px;
   margin: 0 auto 1.5rem;
@@ -526,9 +534,7 @@
     background: $cfpasto-accent;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
+  @extend %no-motion-transition;
 }
 
 .stats-cta-row {
@@ -569,7 +575,7 @@
 }
 
 .stats-cta-question {
-  font-family: $cfpasto-font-body;
+  @extend %body-text;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.75);
 }
@@ -580,8 +586,7 @@
   border: 1px solid $cfpasto-accent;
   border-radius: $cfpasto-radius;
   color: $cfpasto-accent;
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
+  @extend %body-semibold;
   font-size: $cfpasto-text-sm;
   padding: 0.6rem 1.25rem;
   white-space: nowrap;
@@ -589,7 +594,6 @@
   transition: background-color 0.25s ease, color 0.25s ease;
 
   &:hover {
-    background: $cfpasto-accent;
-    color: $cfpasto-text-dark;
+    @extend %accent-fill;
   }
 }
