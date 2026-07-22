@@ -11,18 +11,18 @@ Read `CLAUDE.md` first — es el archivo canónico de instrucciones. Este archiv
 | Expectation | Reality |
 |---|---|
 | Python package manager | `uv` (not pip, not poetry) — root `pyproject.toml` es un UV workspace con `members = ["backend"]` |
-| Node package manager | `npm` con Node 20+ |
-| Lockfiles | `package-lock.json` (frontend), `uv.lock` (backend, también en root) |
+| Node package manager | `bun` con Node 20+ (no npm/yarn) |
+| Lockfiles | `bun.lock` (raíz, cubre el workspace `frontend`), `uv.lock` (backend, también en root) |
 | Test suite | Sin tests activos aún. Backend: `tests/` está vacío. |
 
 ## Comandos (exactos, no obvios)
 
 ```bash
 # Frontend (dentro de frontend/)
-npm install
-npm run start              # ng serve, proxy /api → localhost:8000
-npm run build              # production build
-npm run generate:client    # regenerar cliente ng-openapi
+bun install
+bun run start              # ng serve, proxy /api → localhost:8000
+bun run build              # production build
+bun run generate:client    # regenerar cliente ng-openapi
 
 # Backend (dentro de backend/)
 uv sync

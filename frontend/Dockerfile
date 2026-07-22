@@ -1,16 +1,16 @@
 # Stage 1: Build
-FROM node:22-slim AS build-stage
+FROM oven/bun:1-slim AS build-stage
 
 WORKDIR /app
 
-COPY ./package.json ./package-lock.json* /app/
+COPY ./package.json ./bun.lock* /app/
 COPY ./frontend/package.json /app/frontend/package.json
 
-RUN npm install
+RUN bun install
 
 COPY ./frontend /app/frontend/
 WORKDIR /app/frontend
-RUN npm run build
+RUN bun run build
 
 # Stage 2: Serve con Nginx
 FROM nginx:1.27-alpine

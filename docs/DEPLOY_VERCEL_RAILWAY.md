@@ -86,7 +86,7 @@ dashboard:
 | Root Directory | `frontend` |
 
 (Build Command, Output Directory e Install Command vienen de `frontend/vercel.json`:
-`npm run build`, `dist/frontend/browser`, `npm install`.)
+`bun run build`, `dist/frontend/browser`, `bun install`.)
 
 4. Agregar en **Environment Variables** (Production):
 

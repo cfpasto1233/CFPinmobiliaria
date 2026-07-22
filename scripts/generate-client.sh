@@ -16,5 +16,5 @@ done
 
 echo "Generating HTTP client..."
 cd frontend
-npm run generate:client
+bun run generate:client
 echo "Client generated at frontend/src/client/"

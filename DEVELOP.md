@@ -46,7 +46,7 @@ cd D:\Proyectos\Cfpasto
 uv sync
 
 # 4. Instalar dependencias del frontend
-cd frontend && npm install && cd ..
+cd frontend && bun install && cd ..
 
 # 5. Construir imágenes Docker
 docker compose build
@@ -285,7 +285,7 @@ Para desarrollo activo del frontend con hot-reload:
 ```bash
 # El backend debe estar corriendo (con Docker)
 cd frontend
-npm run start      # levanta ng serve en http://localhost:4200
+bun run start      # levanta ng serve en http://localhost:4200
 ```
 
 El proxy está configurado en `proxy.conf.json` para redirigir `/api` → `http://localhost:8000`.
@@ -293,9 +293,9 @@ El proxy está configurado en `proxy.conf.json` para redirigir `/api` → `http:
 ### Scripts disponibles en `frontend/`
 
 ```bash
-npm run start               # ng serve con proxy
-npm run build               # build de producción
-npm run generate:client     # solo regenera el cliente HTTP
+bun run start               # ng serve con proxy
+bun run build               # build de producción
+bun run generate:client     # solo regenera el cliente HTTP
 ```
 
 ---
@@ -440,7 +440,7 @@ bash scripts/generate-client.sh
 ### Paso 9 — Verificar
 
 ```bash
-cd frontend && npm run build    # debe compilar sin errores
+cd frontend && bun run build    # debe compilar sin errores
 docker compose build backend frontend
 docker compose up -d
 ```
@@ -498,4 +498,4 @@ docker compose build frontend
 docker compose up -d frontend
 ```
 
-Para desarrollo activo con hot-reload, usar `npm run start` directamente (ver sección 7).
+Para desarrollo activo con hot-reload, usar `bun run start` directamente (ver sección 7).

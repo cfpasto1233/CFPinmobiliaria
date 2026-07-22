@@ -7,7 +7,7 @@ compacto de lo que se suele pasar por alto; `docs/*.md` tiene el detalle profund
 - **Backend:** Python 3.12, FastAPI, SQLAlchemy 2.x (sin SQLModel), Alembic, PostgreSQL 17
 - **Frontend:** Angular 21 (standalone + Signals + OnPush), NgRx clásico, Bootstrap 5.3, ng-openapi
 - **Infra:** Docker Compose, Redis 7 (cache + rate limiting), MinIO (S3), Mailcatcher (SMTP dev)
-- **Herramientas:** uv (Python, workspace en `pyproject.toml` root con `members=["backend"]`), **npm** (Node 20+, no bun/yarn)
+- **Herramientas:** uv (Python, workspace en `pyproject.toml` root con `members=["backend"]`), **bun** (Node 20+, no npm/yarn)
 
 ## Arquitectura
 
@@ -86,10 +86,10 @@ POSTGRES_SERVER=localhost uv run alembic downgrade -1
 ### Frontend (local)
 ```bash
 cd frontend
-npm install
-npm run start                 # ng serve, proxy /api → localhost:8000, http://localhost:4200
-npm run build                 # build de producción
-npm run generate:client       # Regenerar cliente HTTP desde OpenAPI (requiere backend en :8000)
+bun install
+bun run start                 # ng serve, proxy /api → localhost:8000, http://localhost:4200
+bun run build                 # build de producción
+bun run generate:client       # Regenerar cliente HTTP desde OpenAPI (requiere backend en :8000)
 ```
 
 ### Cliente HTTP (raíz del repo)
