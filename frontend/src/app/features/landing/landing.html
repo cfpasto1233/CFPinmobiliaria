@@ -1,7 +1,15 @@
 <app-navbar />
 
 <section class="hero">
-  <video #heroVideo class="hero-video" autoplay muted loop playsinline src="videos/prueba.mp4"></video>
+  <video
+    #heroVideo
+    class="hero-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    src="videos/prueba.mp4"
+  ></video>
   <div class="hero-overlay"></div>
 
   <div class="hero-content">
@@ -16,17 +24,109 @@
       <p class="search-card-label">¿Qué estás buscando?</p>
 
       <!-- Visual únicamente por ahora: aún no existe módulo de propiedades/backend -->
-      <button type="button" class="search-option">
-        <span class="search-option-label">Arriendos</span>
-      </button>
+      <div class="search-option-wrap">
+        <button
+          type="button"
+          class="search-option"
+          [attr.aria-expanded]="isArriendosMenuOpen()"
+          (click)="toggleArriendosMenu()"
+        >
+          <span class="search-option-label">Arriendos</span>
+          <svg
+            class="search-option-chevron"
+            [class.is-open]="isArriendosMenuOpen()"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        @if (isArriendosMenuOpen()) {
+        <div class="search-submenu">
+          <button
+            type="button"
+            class="search-submenu-item"
+            (click)="closeArriendosMenu()"
+          >
+            <span class="search-submenu-title">Quiero arrendar con CFP</span>
+            <span class="search-submenu-subtitle">Para inquilinos</span>
+          </button>
+
+          <button
+            type="button"
+            class="search-submenu-item"
+            (click)="closeArriendosMenu()"
+          >
+            <span class="search-submenu-title"
+              >Quiero que CFP arriende mi propiedad</span
+            >
+            <span class="search-submenu-subtitle">Para propietarios</span>
+          </button>
+        </div>
+        }
+      </div>
 
       <button type="button" class="search-option">
         <span class="search-option-label">Ventas</span>
       </button>
 
       <button type="button" class="search-option">
-        <span class="search-option-label">Clientes</span>
+        <span class="search-option-label">Proyectos</span>
       </button>
+
+      <div class="search-option-wrap">
+        <button
+          type="button"
+          class="search-option"
+          [attr.aria-expanded]="isClientesMenuOpen()"
+          (click)="toggleClientesMenu()"
+        >
+          <span class="search-option-label">Clientes</span>
+          <svg
+            class="search-option-chevron"
+            [class.is-open]="isClientesMenuOpen()"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        @if (isClientesMenuOpen()) {
+        <div class="search-submenu">
+          <button
+            type="button"
+            class="search-submenu-item"
+            (click)="closeClientesMenu()"
+          >
+            <span class="search-submenu-title">Recaudo</span>
+          </button>
+
+          <button
+            type="button"
+            class="search-submenu-item"
+            (click)="closeClientesMenu()"
+          >
+            <span class="search-submenu-title">Reportes</span>
+          </button>
+        </div>
+        }
+      </div>
 
       <button type="button" class="search-option">
         <span class="search-option-label">Publica tu propiedad</span>
@@ -43,7 +143,7 @@
   <div class="featured-header">
     <span class="campaign-pill">
       <span class="campaign-dot"></span>
-      Campaña del mes — Julio 2024
+      Campaña de aniversario
     </span>
 
     <!-- Visual únicamente por ahora: aún no existe módulo de propiedades/backend -->
@@ -52,29 +152,32 @@
     </button>
   </div>
 
-  <h2 class="featured-title">Propiedades Destacadas</h2>
-  <p class="featured-subtitle">
-    Selección especial con condiciones de financiación preferenciales este mes.
-  </p>
-
   <div class="property-grid">
     @for (property of featuredProperties; track property.title) {
-      <article class="property-card">
-        <div class="property-media">
-          <span class="property-badge property-badge-type" [class.is-rent]="property.type === 'arriendo'">
-            {{ property.type === 'venta' ? 'Venta' : 'Arriendo' }}
-          </span>
-          <span class="property-badge property-badge-campaign">Campaña</span>
-        </div>
+    <article class="property-card">
+      <div class="property-media">
+        <span
+          class="property-badge property-badge-type"
+          [class.is-rent]="property.type === 'arriendo'"
+        >
+          {{ property.type === 'venta' ? 'Venta' : 'Arriendo' }}
+        </span>
+        <span class="property-badge property-badge-campaign">Campaña</span>
+      </div>
 
-        <div class="property-body">
-          <p class="property-location">{{ property.location }}</p>
-          <h3 class="property-name">{{ property.title }}</h3>
-          <p class="property-price" [class.is-rent]="property.type === 'arriendo'">
-            {{ property.price }}<span class="property-price-suffix">{{ property.type === 'arriendo' ? '/mes' : '' }}</span>
-          </p>
-        </div>
-      </article>
+      <div class="property-body">
+        <p class="property-location">{{ property.location }}</p>
+        <h3 class="property-name">{{ property.title }}</h3>
+        <p
+          class="property-price"
+          [class.is-rent]="property.type === 'arriendo'"
+        >
+          {{ property.price }}<span class="property-price-suffix"
+            >{{ property.type === 'arriendo' ? '/mes' : '' }}</span
+          >
+        </p>
+      </div>
+    </article>
     }
   </div>
 </section>
@@ -84,52 +187,70 @@
     <p class="tips-eyebrow">Guía del comprador e inquilino</p>
     <h2 class="tips-title">Tips Inmobiliarios</h2>
     <p class="tips-subtitle">
-      Consejos prácticos para tomar decisiones inteligentes al comprar, vender o arrendar.
+      Consejos prácticos para tomar decisiones inteligentes al comprar, vender o
+      arrendar.
     </p>
   </div>
 
   <div class="tips-grid">
     @for (tip of tips; track tip.title; let i = $index) {
-      <div class="tip-card">
-        <button
-          type="button"
-          class="tip-trigger"
-          [attr.aria-expanded]="isTipExpanded(i)"
-          [attr.aria-controls]="'tip-panel-' + i"
-          (click)="toggleTip(i)"
+    <div class="tip-card">
+      <button
+        type="button"
+        class="tip-trigger"
+        [attr.aria-expanded]="isTipExpanded(i)"
+        [attr.aria-controls]="'tip-panel-' + i"
+        (click)="toggleTip(i)"
+      >
+        <span class="tip-number">{{ tip.number }}</span>
+        <svg
+          class="tip-chevron"
+          [class.is-open]="isTipExpanded(i)"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
         >
-          <span class="tip-number">{{ tip.number }}</span>
-          <svg
-            class="tip-chevron"
-            [class.is-open]="isTipExpanded(i)"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
 
-        <h3 class="tip-title">{{ tip.title }}</h3>
+      <h3 class="tip-title">{{ tip.title }}</h3>
 
-        @if (isTipExpanded(i)) {
-          <p class="tip-description" [id]="'tip-panel-' + i">{{ tip.description }}</p>
-        }
-      </div>
+      @if (isTipExpanded(i)) {
+      <p class="tip-description" [id]="'tip-panel-' + i">
+        {{ tip.description }}
+      </p>
+      }
+    </div>
     }
   </div>
 </section>
 
 <section class="stats-carousel">
   <div class="stats-carousel-inner">
-    <button type="button" class="carousel-arrow carousel-arrow-prev" aria-label="Estadística anterior" (click)="prevStat()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <button
+      type="button"
+      class="carousel-arrow carousel-arrow-prev"
+      aria-label="Estadística anterior"
+      (click)="prevStat()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <polyline points="15 18 9 12 15 6"></polyline>
       </svg>
     </button>
@@ -137,24 +258,41 @@
     <div class="carousel-content">
       <p class="carousel-value">{{ statSlides[activeStatIndex()].value }}</p>
       <h3 class="carousel-label">{{ statSlides[activeStatIndex()].label }}</h3>
-      <p class="carousel-description">{{ statSlides[activeStatIndex()].description }}</p>
+      <p class="carousel-description">
+        {{ statSlides[activeStatIndex()].description }}
+      </p>
 
       <div class="carousel-dots">
         @for (slide of statSlides; track slide.label; let i = $index) {
-          <button
-            type="button"
-            class="carousel-dot"
-            [class.is-active]="i === activeStatIndex()"
-            [attr.aria-current]="i === activeStatIndex()"
-            [attr.aria-label]="'Ir a la estadística ' + (i + 1)"
-            (click)="goToStat(i)"
-          ></button>
+        <button
+          type="button"
+          class="carousel-dot"
+          [class.is-active]="i === activeStatIndex()"
+          [attr.aria-current]="i === activeStatIndex()"
+          [attr.aria-label]="'Ir a la estadística ' + (i + 1)"
+          (click)="goToStat(i)"
+        ></button>
         }
       </div>
     </div>
 
-    <button type="button" class="carousel-arrow carousel-arrow-next" aria-label="Siguiente estadística" (click)="nextStat()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <button
+      type="button"
+      class="carousel-arrow carousel-arrow-next"
+      aria-label="Siguiente estadística"
+      (click)="nextStat()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
     </button>
@@ -162,10 +300,10 @@
 
   <div class="stats-cta-row">
     @for (cta of statsCtaOptions; track cta.question) {
-      <div class="stats-cta-item">
-        <p class="stats-cta-question">{{ cta.question }}</p>
-        <button type="button" class="stats-cta-btn">{{ cta.actionLabel }}</button>
-      </div>
+    <div class="stats-cta-item">
+      <p class="stats-cta-question">{{ cta.question }}</p>
+      <button type="button" class="stats-cta-btn">{{ cta.actionLabel }}</button>
+    </div>
     }
   </div>
 </section>

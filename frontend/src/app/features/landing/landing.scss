@@ -176,6 +176,80 @@
   text-align: center;
 }
 
+.search-option-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.search-option-wrap .search-option {
+  gap: 0.5rem;
+}
+
+.search-option-chevron {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+
+  &.is-open {
+    transform: rotate(180deg);
+  }
+
+  @extend %no-motion-transition;
+}
+
+.search-submenu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  background: $cfpasto-primary-dark;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: $cfpasto-radius-lg;
+  box-shadow: $cfpasto-shadow-lg;
+  overflow: hidden;
+}
+
+.search-submenu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  @extend %no-motion-transition;
+}
+
+.search-submenu-title {
+  @extend %heading-bold;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: $cfpasto-white;
+}
+
+.search-submenu-subtitle {
+  @extend %body-text;
+  font-size: $cfpasto-text-sm;
+  color: rgba(255, 255, 255, 0.55);
+}
+
 @media (max-width: 767.98px) {
   .hero-content {
     padding: 7rem 1.25rem 3rem;
@@ -221,21 +295,6 @@
 
 .featured-cta {
   white-space: nowrap;
-}
-
-.featured-title {
-  @extend %heading-bold;
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  color: $cfpasto-primary;
-  max-width: 1200px;
-  margin: 0 auto 0.5rem;
-}
-
-.featured-subtitle {
-  @extend %body-text;
-  color: $cfpasto-text-muted;
-  max-width: 1200px;
-  margin: 0 auto 2.5rem;
 }
 
 .property-grid {

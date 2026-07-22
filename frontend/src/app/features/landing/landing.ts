@@ -92,6 +92,26 @@ export class Landing implements AfterViewInit, OnDestroy {
     },
   ];
 
+  protected readonly isArriendosMenuOpen = signal(false);
+
+  protected toggleArriendosMenu(): void {
+    this.isArriendosMenuOpen.update((open) => !open);
+  }
+
+  protected closeArriendosMenu(): void {
+    this.isArriendosMenuOpen.set(false);
+  }
+
+  protected readonly isClientesMenuOpen = signal(false);
+
+  protected toggleClientesMenu(): void {
+    this.isClientesMenuOpen.update((open) => !open);
+  }
+
+  protected closeClientesMenu(): void {
+    this.isClientesMenuOpen.set(false);
+  }
+
   private readonly expandedTips = signal<ReadonlySet<number>>(new Set());
 
   protected isTipExpanded(index: number): boolean {
