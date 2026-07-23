@@ -34,23 +34,6 @@ export const routes: Routes = [
       import('./layouts/admin-layout/admin-layout.component').then(
         (m) => m.AdminLayoutComponent,
       ),
-    children: [
-      { path: '', pathMatch: 'full', redirectTo: 'resumen' },
-      {
-        path: 'resumen',
-        loadComponent: () =>
-          import('./features/admin/overview/admin-overview.component').then(
-            (m) => m.AdminOverviewComponent,
-          ),
-      },
-      {
-        path: 'usuarios',
-        loadComponent: () =>
-          import('./features/admin/users/admin-users.component').then(
-            (m) => m.AdminUsersComponent,
-          ),
-      },
-    ],
   },
   {
     path: 'design-system',

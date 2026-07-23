@@ -1,45 +1,67 @@
-<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
-  <div class="card shadow-sm" style="width: 100%; max-width: 420px">
-    <div class="card-body p-4">
-      <h2 class="card-title text-center mb-4">Iniciar sesión</h2>
+<div class="auth-page">
+  <div class="auth-brand">
+    <div class="auth-brand-overlay"></div>
+
+    <div class="auth-brand-content">
+      <a routerLink="/" class="auth-brand-logo">
+        <img src="images/logo.webp" alt="Cfpasto" />
+      </a>
+
+      <p class="auth-brand-eyebrow">Tu hogar empieza con nosotros</p>
+
+      <h1 class="auth-brand-title">
+        Bienvenido de nuevo a
+        <span class="auth-brand-title-accent">Cfpasto</span>
+      </h1>
+
+      <p class="auth-brand-text">
+        Gestiona tus arriendos, ventas y clientes desde un solo lugar.
+      </p>
+    </div>
+  </div>
+
+  <div class="auth-form-panel">
+    <div class="auth-form-card">
+      <h2 class="auth-form-title">Iniciar sesión</h2>
+      <p class="auth-form-subtitle">Ingresa tus credenciales para acceder a tu cuenta.</p>
 
       @if (auth.error(); as error) {
-        <div class="alert alert-danger py-2" role="alert">{{ error }}</div>
+        <div class="auth-alert" role="alert">{{ error }}</div>
       }
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="mb-3">
-          <label for="email" class="form-label">Correo electrónico</label>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+        <div class="auth-field">
+          <label for="email" class="auth-label">Correo electrónico</label>
           <input
             id="email"
             type="email"
-            class="form-control"
+            class="auth-input"
             formControlName="email"
             autocomplete="email"
           />
         </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
+
+        <div class="auth-field">
+          <label for="password" class="auth-label">Contraseña</label>
           <input
             id="password"
             type="password"
-            class="form-control"
+            class="auth-input"
             formControlName="password"
             autocomplete="current-password"
           />
         </div>
-        <div class="mb-3 form-check">
-          <input
-            id="rememberMe"
-            type="checkbox"
-            class="form-check-input"
-            formControlName="rememberMe"
-          />
-          <label for="rememberMe" class="form-check-label">Recordarme</label>
+
+        <div class="auth-field-inline">
+          <label class="auth-checkbox">
+            <input id="rememberMe" type="checkbox" formControlName="rememberMe" />
+            <span>Recordarme</span>
+          </label>
         </div>
+
         <button
           type="submit"
-          class="btn btn-primary w-100"
+          class="btn btn-primary auth-submit"
           [disabled]="loginForm.invalid || auth.isLoading()"
         >
           @if (auth.isLoading()) {
@@ -48,8 +70,8 @@
           Entrar
         </button>
       </form>
-      <hr />
-      <p class="text-center mb-0">
+
+      <p class="auth-form-footer">
         ¿No tienes cuenta?
         <a routerLink="/auth/register">Regístrate</a>
       </p>

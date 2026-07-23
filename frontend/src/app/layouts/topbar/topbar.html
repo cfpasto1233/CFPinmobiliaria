@@ -16,9 +16,12 @@
 
   <div class="topbar-actions">
     @if (auth.user(); as user) {
-      <span class="topbar-user">{{ user.email }}</span>
+      <div class="topbar-user">
+        <span class="topbar-user-avatar">{{ userInitial() }}</span>
+        <span class="topbar-user-email">{{ user.email }}</span>
+      </div>
     }
-    <a routerLink="/" class="topbar-link">Volver al sitio</a>
+
     <button type="button" class="topbar-logout" (click)="auth.logout()">Cerrar sesión</button>
   </div>
 </header>

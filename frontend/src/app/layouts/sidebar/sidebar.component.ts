@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 interface AdminNavItem {
   label: string;
   path: string;
+  icon: 'overview' | 'users';
 }
 
 @Component({
@@ -17,8 +18,6 @@ interface AdminNavItem {
 export class SidebarComponent {
   readonly open = input(false);
 
-  protected readonly navItems: readonly AdminNavItem[] = [
-    { label: 'Resumen', path: '/admin/resumen' },
-    { label: 'Usuarios', path: '/admin/usuarios' },
-  ];
+  // Sin módulos habilitados todavía para el superadmin.
+  protected readonly navItems: readonly AdminNavItem[] = [];
 }

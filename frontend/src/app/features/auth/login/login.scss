@@ -1,0 +1,213 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 991.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Panel de marca ─────────────────────────────────────────────────────────
+
+.auth-brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background: linear-gradient(160deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+  overflow: hidden;
+
+  @media (max-width: 991.98px) {
+    padding: 2.5rem 1.5rem;
+    min-height: 260px;
+  }
+}
+
+.auth-brand-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba($cfpasto-accent, 0.18), transparent 55%);
+}
+
+.auth-brand-content {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+}
+
+.auth-brand-logo {
+  display: inline-flex;
+  margin-bottom: 2.5rem;
+
+  img {
+    height: 40px;
+    width: auto;
+  }
+
+  @media (max-width: 991.98px) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.auth-brand-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 1rem;
+}
+
+.auth-brand-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.2;
+  color: $cfpasto-white;
+  margin-bottom: 1rem;
+}
+
+.auth-brand-title-accent {
+  display: block;
+  color: $cfpasto-accent;
+}
+
+.auth-brand-text {
+  font-family: $cfpasto-font-body;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0;
+}
+
+// ─── Panel de formulario ────────────────────────────────────────────────────
+
+.auth-form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  background: $cfpasto-bg-subtle;
+}
+
+.auth-form-card {
+  width: 100%;
+  max-width: 380px;
+}
+
+.auth-form-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-3xl;
+  color: $cfpasto-primary;
+  margin-bottom: 0.5rem;
+}
+
+.auth-form-subtitle {
+  font-family: $cfpasto-font-body;
+  color: $cfpasto-text-muted;
+  margin-bottom: 2rem;
+}
+
+.auth-alert {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-error;
+  background: $cfpasto-error-bg;
+  border: 1px solid $cfpasto-error-border;
+  border-radius: $cfpasto-radius;
+  padding: 0.65rem 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.auth-label {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-dark;
+}
+
+.auth-input {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  color: $cfpasto-text-dark;
+  background: $cfpasto-white;
+  border: 1px solid $cfpasto-border;
+  border-radius: $cfpasto-radius;
+  padding: 0.65rem 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $cfpasto-primary;
+    box-shadow: 0 0 0 0.2rem rgba($cfpasto-primary, 0.18);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.auth-field-inline {
+  display: flex;
+  align-items: center;
+}
+
+.auth-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  cursor: pointer;
+
+  input {
+    accent-color: $cfpasto-primary;
+  }
+}
+
+.auth-submit {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+}
+
+.auth-form-footer {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  text-align: center;
+  margin: 2rem 0 0;
+
+  a {
+    color: $cfpasto-primary;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

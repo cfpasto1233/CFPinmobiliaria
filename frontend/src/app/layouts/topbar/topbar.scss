@@ -45,7 +45,7 @@
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   margin-left: auto;
 
   @media (max-width: 575.98px) {
@@ -54,27 +54,39 @@
 }
 
 .topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding-left: 1.25rem;
+  border-left: 1px solid $cfpasto-border;
+
+  @media (max-width: 767.98px) {
+    padding-left: 0;
+    border-left: none;
+  }
+}
+
+.topbar-user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba($cfpasto-primary, 0.1);
+  color: $cfpasto-primary;
+  font-family: $cfpasto-font-heading;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+}
+
+.topbar-user-email {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
   color: $cfpasto-text-muted;
 
-  @media (max-width: 575.98px) {
-    display: none;
-  }
-}
-
-.topbar-link {
-  font-family: $cfpasto-font-body;
-  font-weight: 500;
-  font-size: $cfpasto-text-sm;
-  color: $cfpasto-primary;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  @media (max-width: 575.98px) {
+  @media (max-width: 767.98px) {
     display: none;
   }
 }
@@ -93,5 +105,9 @@
 
   &:hover {
     background: $cfpasto-error-bg;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 }

@@ -11,6 +11,7 @@ import { AuthActions } from '../../../store/Authentication/authentication.action
   imports: [ReactiveFormsModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './login.html',
+  styleUrl: './login.scss',
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
