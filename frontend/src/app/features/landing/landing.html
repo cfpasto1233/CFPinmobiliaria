@@ -280,7 +280,13 @@
     @for (cta of statsCtaOptions; track cta.question) {
     <div class="stats-cta-item">
       <p class="stats-cta-question">{{ cta.question }}</p>
-      <button type="button" class="stats-cta-btn">{{ cta.actionLabel }}</button>
+      @if (cta.whatsappMessage; as message) {
+        <a [href]="whatsappLink(message)" target="_blank" rel="noopener noreferrer" class="stats-cta-btn">{{
+          cta.actionLabel
+        }}</a>
+      } @else {
+        <button type="button" class="stats-cta-btn">{{ cta.actionLabel }}</button>
+      }
     </div>
     }
   </div>

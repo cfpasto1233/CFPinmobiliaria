@@ -57,7 +57,13 @@
         </li>
 
         <li class="nav-item">
-          <a class="btn btn-accent btn-contact" (click)="closeMenu()">
+          <a
+            class="btn btn-accent btn-contact"
+            [href]="asesorWhatsappLink"
+            target="_blank"
+            rel="noopener noreferrer"
+            (click)="closeMenu()"
+          >
             Comun&iacute;cate con un asesor
           </a>
         </li>

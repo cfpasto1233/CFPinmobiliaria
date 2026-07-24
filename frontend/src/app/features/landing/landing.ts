@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { whatsappLink } from '../../core/whatsapp/whatsapp.util';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
@@ -33,6 +34,7 @@ interface StatSlide {
 interface StatsCtaOption {
   question: string;
   actionLabel: string;
+  whatsappMessage?: string;
 }
 
 @Component({
@@ -163,8 +165,14 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
   protected readonly statsCtaOptions: readonly StatsCtaOption[] = [
     { question: '¿Tienes una propiedad?', actionLabel: 'Publícala gratis' },
     { question: '¿Buscas casa o apartamento?', actionLabel: 'Ver propiedades' },
-    { question: '¿Necesitas orientación?', actionLabel: 'Pide una asesoría' },
+    {
+      question: '¿Necesitas orientación?',
+      actionLabel: 'Pide una asesoría',
+      whatsappMessage: 'Hola, quiero pedir una asesoría inmobiliaria.',
+    },
   ];
+
+  protected readonly whatsappLink = whatsappLink;
 
   protected readonly activeStatIndex = signal(0);
   private statAutoplayId?: ReturnType<typeof setInterval>;
