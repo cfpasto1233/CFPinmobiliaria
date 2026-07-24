@@ -14,6 +14,16 @@ import {
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 
+type FormFieldName = 'nombre' | 'descripcion' | 'ubicacion' | 'precio' | 'tipo';
+
+const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
+  nombre: 'El nombre es obligatorio.',
+  descripcion: 'La descripción es obligatoria.',
+  ubicacion: 'La ubicación es obligatoria.',
+  precio: 'El precio es obligatorio.',
+  tipo: 'Selecciona un tipo.',
+};
+
 @Component({
   selector: 'app-propiedad-form',
   standalone: true,
@@ -52,6 +62,8 @@ export class PropiedadFormComponent implements OnInit {
   protected readonly fotoPrincipalPreview = signal<string | null>(null);
   protected readonly fotoPrincipalError = signal<string | null>(null);
   protected readonly fotoAdicionalError = signal<string | null>(null);
+  protected readonly fotoPrincipalDragOver = signal(false);
+  protected readonly fotoAdicionalDragOver = signal(false);
 
   constructor() {
     effect(() => {
@@ -74,44 +86,63 @@ export class PropiedadFormComponent implements OnInit {
     }
   }
 
+  protected fieldError(name: FormFieldName): string | null {
+    const control = this.form.get(name);
+    if (!control || !control.invalid || !(control.dirty || control.touched)) return null;
+    if (control.hasError('required')) return REQUIRED_MESSAGES[name];
+    if (control.hasError('maxlength')) return 'Máximo 255 caracteres.';
+    if (control.hasError('min')) return 'El precio debe ser mayor a 0.';
+    return null;
+  }
+
+  protected onFotoPrincipalDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.fotoPrincipalDragOver.set(true);
+  }
+
+  protected onFotoPrincipalDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.fotoPrincipalDragOver.set(false);
+  }
+
+  protected onFotoPrincipalDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.fotoPrincipalDragOver.set(false);
+    this.handleFotoPrincipal(event.dataTransfer?.files?.[0] ?? null);
+  }
+
   protected onFotoPrincipalSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) return;
+    this.handleFotoPrincipal(input.files?.[0] ?? null);
+    input.value = '';
+  }
 
-    const validationError = this.validateImage(file);
-    if (validationError) {
-      this.fotoPrincipalError.set(validationError);
-      input.value = '';
-      return;
-    }
-    this.fotoPrincipalError.set(null);
+  protected onFotoAdicionalDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.fotoAdicionalDragOver.set(true);
+  }
 
-    if (this.isEditMode && this.propiedadId) {
-      this.store.dispatch(PropiedadesActions.replaceFotoPrincipal({ propiedadId: this.propiedadId, file }));
-      input.value = '';
-      return;
-    }
+  protected onFotoAdicionalDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.fotoAdicionalDragOver.set(false);
+  }
 
-    this.fotoPrincipalFile.set(file);
-    this.fotoPrincipalPreview.set(URL.createObjectURL(file));
+  protected onFotosAdicionalesDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.fotoAdicionalDragOver.set(false);
+    this.handleFotosAdicionales(event.dataTransfer?.files ?? null);
   }
 
   protected onFotosAdicionalesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const files = input.files;
-    if (!files || !this.propiedadId) return;
-
-    this.fotoAdicionalError.set(null);
-    for (const file of Array.from(files)) {
-      const validationError = this.validateImage(file);
-      if (validationError) {
-        this.fotoAdicionalError.set(validationError);
-        continue;
-      }
-      this.store.dispatch(PropiedadesActions.addFoto({ propiedadId: this.propiedadId, file }));
-    }
+    this.handleFotosAdicionales(input.files);
     input.value = '';
+  }
+
+  protected onRemoveFotoPrincipalSeleccionada(): void {
+    this.fotoPrincipalFile.set(null);
+    this.fotoPrincipalPreview.set(null);
+    this.fotoPrincipalError.set(null);
   }
 
   protected onRemoveFoto(fotoId: string): void {
@@ -121,7 +152,10 @@ export class PropiedadFormComponent implements OnInit {
   }
 
   protected onSubmit(): void {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     const raw = this.form.getRawValue();
     const form: PropiedadForm = {
@@ -143,6 +177,39 @@ export class PropiedadFormComponent implements OnInit {
     }
 
     this.store.dispatch(PropiedadesActions.create({ form, fotoPrincipal: this.fotoPrincipalFile()! }));
+  }
+
+  private handleFotoPrincipal(file: File | null): void {
+    if (!file) return;
+
+    const validationError = this.validateImage(file);
+    if (validationError) {
+      this.fotoPrincipalError.set(validationError);
+      return;
+    }
+    this.fotoPrincipalError.set(null);
+
+    if (this.isEditMode && this.propiedadId) {
+      this.store.dispatch(PropiedadesActions.replaceFotoPrincipal({ propiedadId: this.propiedadId, file }));
+      return;
+    }
+
+    this.fotoPrincipalFile.set(file);
+    this.fotoPrincipalPreview.set(URL.createObjectURL(file));
+  }
+
+  private handleFotosAdicionales(files: FileList | null): void {
+    if (!files || !this.propiedadId) return;
+
+    this.fotoAdicionalError.set(null);
+    for (const file of Array.from(files)) {
+      const validationError = this.validateImage(file);
+      if (validationError) {
+        this.fotoAdicionalError.set(validationError);
+        continue;
+      }
+      this.store.dispatch(PropiedadesActions.addFoto({ propiedadId: this.propiedadId, file }));
+    }
   }
 
   private validateImage(file: File): string | null {

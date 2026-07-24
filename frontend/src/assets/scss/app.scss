@@ -26,6 +26,22 @@
 
 // ─── Componentes utilitarios ────────────────────────────────────────────────
 
+.btn-soft-secondary {
+  color: $cfpasto-text-muted;
+  background-color: $cfpasto-bg-subtle;
+  border: 1px solid $cfpasto-border;
+
+  &:hover {
+    color: $cfpasto-text-dark;
+    background-color: $cfpasto-border-light;
+    border-color: $cfpasto-border;
+  }
+
+  &:active {
+    background-color: $cfpasto-border;
+  }
+}
+
 .btn-soft-primary {
   color: $cfpasto-primary;
   background-color: rgba(12, 44, 115, 0.08);

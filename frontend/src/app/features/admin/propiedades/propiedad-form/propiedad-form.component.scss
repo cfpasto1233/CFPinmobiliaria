@@ -5,11 +5,23 @@
 }
 
 .propiedad-form-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
   margin-bottom: 1.5rem;
+}
+
+.propiedad-form-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+
+  &:hover {
+    color: $cfpasto-primary;
+  }
 }
 
 .propiedad-form-title {
@@ -24,11 +36,38 @@
   border-radius: $cfpasto-radius-xl;
   overflow: hidden;
   box-shadow: $cfpasto-shadow-md;
-  max-width: 720px;
+  max-width: 760px;
+}
+
+.propiedad-form-section-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 600;
+  font-size: $cfpasto-text-lg;
+  color: $cfpasto-text-dark;
+  margin: 0 0 1.25rem;
+}
+
+.propiedad-form-divider {
+  border: none;
+  border-top: 1px solid $cfpasto-border-light;
+  margin: 1.75rem 0;
 }
 
 .propiedad-form-field {
   margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.propiedad-form-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 600;
+  color: $cfpasto-text-dark;
+  margin-bottom: 0.4rem;
 }
 
 .propiedad-form-row {
@@ -41,21 +80,163 @@
   }
 }
 
-.propiedad-form-preview {
-  display: block;
+.propiedad-form-price {
+  .input-group-text {
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-sm;
+    color: $cfpasto-text-muted;
+    background: $cfpasto-bg-subtle;
+    border-color: $cfpasto-border;
+  }
+
+  &.is-invalid .form-control,
+  &.is-invalid .input-group-text {
+    border-color: $cfpasto-error;
+  }
+}
+
+.form-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-error;
+  margin-top: 0.35rem;
+}
+
+// --- Dropzone (foto principal / fotos adicionales) ---
+
+.propiedad-form-dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 1.5px dashed $cfpasto-border;
+  border-radius: $cfpasto-radius-lg;
+  background: $cfpasto-bg-subtle;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    border-color: $cfpasto-primary-light;
+    background: rgba($cfpasto-primary, 0.03);
+  }
+
+  &.is-dragover {
+    border-color: $cfpasto-primary;
+    background: rgba($cfpasto-primary, 0.06);
+  }
+
+  &.has-error {
+    border-color: $cfpasto-error;
+  }
+
+  &:focus-within {
+    outline: 2px solid $cfpasto-primary;
+    outline-offset: 2px;
+  }
+}
+
+.propiedad-form-dropzone-compact {
+  padding: 1rem;
   margin-top: 0.75rem;
-  width: 160px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: $cfpasto-radius;
-  border: 1px solid $cfpasto-border;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.propiedad-form-dropzone-icon {
+  color: $cfpasto-text-light;
+}
+
+.propiedad-form-dropzone-text {
+  margin: 0;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+}
+
+.propiedad-form-dropzone-hint {
+  margin: 0;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-light;
+}
+
+.propiedad-form-dropzone-filled {
+  padding: 0;
+  overflow: hidden;
+  height: 200px;
+  border-style: solid;
+  border-color: $cfpasto-border;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &:hover {
+    border-color: $cfpasto-primary-light;
+  }
+}
+
+.propiedad-form-dropzone-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 600;
+  color: $cfpasto-white;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.propiedad-form-dropzone-filled:hover .propiedad-form-dropzone-overlay {
+  opacity: 1;
+}
+
+.propiedad-form-clear {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: $cfpasto-error;
+  }
+}
+
+.propiedad-form-count {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.05rem 0.45rem;
+  font-size: $cfpasto-text-xs;
+  font-weight: 600;
+  color: $cfpasto-text-muted;
+  background: $cfpasto-border-light;
+  border-radius: $cfpasto-radius-sm;
 }
 
 .propiedad-form-fotos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   gap: 0.75rem;
-  margin-top: 0.5rem;
 }
 
 .propiedad-form-foto-item {
@@ -85,9 +266,35 @@
   cursor: pointer;
 }
 
-.form-error {
+// --- Barra de acciones ---
+
+.propiedad-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: $cfpasto-bg-subtle;
+  border-top: 1px solid $cfpasto-border-light;
+
+  @media (max-width: 575.98px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.propiedad-form-required-hint {
   font-family: $cfpasto-font-body;
-  font-size: $cfpasto-text-sm;
-  color: $cfpasto-error;
-  margin-top: 0.35rem;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-light;
+}
+
+.propiedad-form-actions-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  @media (max-width: 575.98px) {
+    justify-content: flex-end;
+  }
 }

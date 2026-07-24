@@ -1,125 +1,248 @@
 <div class="propiedad-form">
   <div class="propiedad-form-header">
-    <h1 class="propiedad-form-title">{{ isEditMode ? 'Editar propiedad' : 'Nueva propiedad' }}</h1>
-    <a routerLink="/admin/propiedades" class="btn btn-soft-secondary">Volver</a>
+    <div>
+      <a routerLink="/admin/propiedades" class="propiedad-form-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5" />
+          <path d="M12 19l-7-7 7-7" />
+        </svg>
+        Propiedades
+      </a>
+      <h1 class="propiedad-form-title">{{ isEditMode ? 'Editar propiedad' : 'Nueva propiedad' }}</h1>
+    </div>
   </div>
 
   @if (error(); as err) {
     <div class="alert alert-danger">{{ err }}</div>
   }
 
-  <div class="card border-0 shadow-sm">
-    <div class="card-body p-4">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="propiedad-form-field">
-          <label for="nombre" class="form-label">Nombre *</label>
-          <input id="nombre" type="text" class="form-control" formControlName="nombre" />
-        </div>
-
-        <div class="propiedad-form-field">
-          <label for="descripcion" class="form-label">Descripción *</label>
-          <textarea id="descripcion" class="form-control" rows="4" formControlName="descripcion"></textarea>
-        </div>
-
-        <div class="propiedad-form-row">
-          <div class="propiedad-form-field">
-            <label for="ubicacion" class="form-label">Ubicación *</label>
-            <input id="ubicacion" type="text" class="form-control" formControlName="ubicacion" />
-          </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="card border-0">
+      <div class="card-body p-4 p-lg-5">
+        <section class="propiedad-form-section">
+          <h2 class="propiedad-form-section-title">Información general</h2>
 
           <div class="propiedad-form-field">
-            <label for="precio" class="form-label">Precio (COP) *</label>
-            <input id="precio" type="number" min="1" class="form-control" formControlName="precio" />
-          </div>
-
-          <div class="propiedad-form-field">
-            <label class="form-label">Tipo *</label>
-            <ng-select
-              [items]="tipoOptions"
-              bindLabel="label"
-              bindValue="value"
-              [clearable]="false"
-              [appendTo]="'body'"
-              formControlName="tipo"
-            ></ng-select>
-          </div>
-        </div>
-
-        @if (!isEditMode) {
-          <div class="propiedad-form-field">
-            <label class="form-label">Foto principal *</label>
+            <label for="nombre" class="propiedad-form-label">Nombre *</label>
             <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
+              id="nombre"
+              type="text"
               class="form-control"
-              (change)="onFotoPrincipalSelected($event)"
+              [class.is-invalid]="fieldError('nombre')"
+              formControlName="nombre"
             />
-            @if (fotoPrincipalError(); as err) {
-              <div class="form-error">{{ err }}</div>
-            }
-            @if (fotoPrincipalPreview(); as preview) {
-              <img [src]="preview" alt="Vista previa de la foto principal" class="propiedad-form-preview" />
-            }
-          </div>
-        }
-
-        @if (isEditMode && selected(); as propiedad) {
-          <div class="propiedad-form-field">
-            <label class="form-label">Foto principal</label>
-            <img [src]="propiedad.foto_principal_url" [alt]="propiedad.nombre" class="propiedad-form-preview" />
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              class="form-control mt-2"
-              (change)="onFotoPrincipalSelected($event)"
-            />
-            <div class="form-text">Selecciona un archivo para reemplazar la foto principal.</div>
-            @if (fotoPrincipalError(); as err) {
+            @if (fieldError('nombre'); as err) {
               <div class="form-error">{{ err }}</div>
             }
           </div>
 
           <div class="propiedad-form-field">
-            <label class="form-label">Fotos adicionales</label>
+            <label for="descripcion" class="propiedad-form-label">Descripción *</label>
+            <textarea
+              id="descripcion"
+              class="form-control"
+              rows="4"
+              [class.is-invalid]="fieldError('descripcion')"
+              formControlName="descripcion"
+            ></textarea>
+            @if (fieldError('descripcion'); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+          </div>
+        </section>
 
-            @if (propiedad.fotos.length > 0) {
-              <div class="propiedad-form-fotos-grid">
-                @for (foto of propiedad.fotos; track foto.id) {
-                  <div class="propiedad-form-foto-item">
-                    <img [src]="foto.url" alt="Foto adicional" />
-                    <button
-                      type="button"
-                      class="propiedad-form-foto-remove"
-                      (click)="onRemoveFoto(foto.id)"
-                      aria-label="Eliminar foto"
-                    >
-                      &times;
-                    </button>
-                  </div>
-                }
+        <hr class="propiedad-form-divider" />
+
+        <section class="propiedad-form-section">
+          <h2 class="propiedad-form-section-title">Ubicación y precio</h2>
+
+          <div class="propiedad-form-row">
+            <div class="propiedad-form-field">
+              <label for="ubicacion" class="propiedad-form-label">Ubicación *</label>
+              <input
+                id="ubicacion"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="fieldError('ubicacion')"
+                formControlName="ubicacion"
+              />
+              @if (fieldError('ubicacion'); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+
+            <div class="propiedad-form-field">
+              <label for="precio" class="propiedad-form-label">Precio *</label>
+              <div class="input-group propiedad-form-price" [class.is-invalid]="fieldError('precio')">
+                <span class="input-group-text">$</span>
+                <input
+                  id="precio"
+                  type="number"
+                  min="1"
+                  class="form-control"
+                  [class.is-invalid]="fieldError('precio')"
+                  formControlName="precio"
+                />
+                <span class="input-group-text">COP</span>
               </div>
-            }
+              @if (fieldError('precio'); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
 
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              multiple
-              class="form-control mt-2"
-              (change)="onFotosAdicionalesSelected($event)"
-            />
-            @if (fotoAdicionalError(); as err) {
-              <div class="form-error">{{ err }}</div>
-            }
+            <div class="propiedad-form-field">
+              <label class="propiedad-form-label">Tipo *</label>
+              <ng-select
+                [items]="tipoOptions"
+                bindLabel="label"
+                bindValue="value"
+                [clearable]="false"
+                [appendTo]="'body'"
+                formControlName="tipo"
+              ></ng-select>
+            </div>
           </div>
-        }
+        </section>
 
-        <button type="submit" class="btn btn-success" [disabled]="form.invalid || loading()">
-          @if (loading()) {
-            <span class="spinner-border spinner-border-sm me-2"></span>
+        <hr class="propiedad-form-divider" />
+
+        <section class="propiedad-form-section">
+          <h2 class="propiedad-form-section-title">Fotos</h2>
+
+          @if (!isEditMode) {
+            <div class="propiedad-form-field">
+              <label class="propiedad-form-label">Foto principal *</label>
+
+              @if (fotoPrincipalPreview(); as preview) {
+                <div class="propiedad-form-dropzone propiedad-form-dropzone-filled" (click)="fotoPrincipalInput.click()">
+                  <img [src]="preview" alt="Vista previa de la foto principal" />
+                  <div class="propiedad-form-dropzone-overlay">Cambiar foto</div>
+                </div>
+                <button type="button" class="propiedad-form-clear" (click)="onRemoveFotoPrincipalSeleccionada(); $event.stopPropagation()">
+                  Quitar selección
+                </button>
+              } @else {
+                <div
+                  class="propiedad-form-dropzone"
+                  [class.is-dragover]="fotoPrincipalDragOver()"
+                  [class.has-error]="fotoPrincipalError()"
+                  (click)="fotoPrincipalInput.click()"
+                  (dragover)="onFotoPrincipalDragOver($event)"
+                  (dragleave)="onFotoPrincipalDragLeave($event)"
+                  (drop)="onFotoPrincipalDrop($event)"
+                >
+                  <svg class="propiedad-form-dropzone-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 16V4" />
+                    <path d="M7 9l5-5 5 5" />
+                    <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                  </svg>
+                  <p class="propiedad-form-dropzone-text">Arrastra una imagen o haz clic para seleccionar</p>
+                  <p class="propiedad-form-dropzone-hint">JPEG, PNG o WEBP · máx. 5MB</p>
+                </div>
+              }
+
+              <input
+                #fotoPrincipalInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                class="visually-hidden"
+                (change)="onFotoPrincipalSelected($event)"
+              />
+              @if (fotoPrincipalError(); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
           }
-          {{ isEditMode ? 'Guardar cambios' : 'Crear propiedad' }}
-        </button>
-      </form>
+
+          @if (isEditMode && selected(); as propiedad) {
+            <div class="propiedad-form-field">
+              <label class="propiedad-form-label">Foto principal</label>
+              <div class="propiedad-form-dropzone propiedad-form-dropzone-filled" (click)="fotoPrincipalEditInput.click()">
+                <img [src]="propiedad.foto_principal_url" [alt]="propiedad.nombre" />
+                <div class="propiedad-form-dropzone-overlay">Cambiar foto</div>
+              </div>
+              <input
+                #fotoPrincipalEditInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                class="visually-hidden"
+                (change)="onFotoPrincipalSelected($event)"
+              />
+              @if (fotoPrincipalError(); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+
+            <div class="propiedad-form-field">
+              <label class="propiedad-form-label">
+                Fotos adicionales
+                @if (propiedad.fotos.length > 0) {
+                  <span class="propiedad-form-count">{{ propiedad.fotos.length }}</span>
+                }
+              </label>
+
+              @if (propiedad.fotos.length > 0) {
+                <div class="propiedad-form-fotos-grid">
+                  @for (foto of propiedad.fotos; track foto.id) {
+                    <div class="propiedad-form-foto-item">
+                      <img [src]="foto.url" alt="Foto adicional" />
+                      <button
+                        type="button"
+                        class="propiedad-form-foto-remove"
+                        (click)="onRemoveFoto(foto.id)"
+                        aria-label="Eliminar foto"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+
+              <div
+                class="propiedad-form-dropzone propiedad-form-dropzone-compact"
+                [class.is-dragover]="fotoAdicionalDragOver()"
+                [class.has-error]="fotoAdicionalError()"
+                (click)="fotosAdicionalesInput.click()"
+                (dragover)="onFotoAdicionalDragOver($event)"
+                (dragleave)="onFotoAdicionalDragLeave($event)"
+                (drop)="onFotosAdicionalesDrop($event)"
+              >
+                <svg class="propiedad-form-dropzone-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 16V4" />
+                  <path d="M7 9l5-5 5 5" />
+                  <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                </svg>
+                <p class="propiedad-form-dropzone-text">Agregar más fotos</p>
+              </div>
+              <input
+                #fotosAdicionalesInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                class="visually-hidden"
+                (change)="onFotosAdicionalesSelected($event)"
+              />
+              @if (fotoAdicionalError(); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+          }
+        </section>
+      </div>
+
+      <div class="propiedad-form-actions">
+        <span class="propiedad-form-required-hint">* Campos obligatorios</span>
+        <div class="propiedad-form-actions-buttons">
+          <a routerLink="/admin/propiedades" class="btn btn-soft-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-success" [disabled]="form.invalid || loading()">
+            @if (loading()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            {{ isEditMode ? 'Guardar cambios' : 'Crear propiedad' }}
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
+  </form>
 </div>
