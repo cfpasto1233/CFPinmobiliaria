@@ -1,0 +1,124 @@
+<app-navbar />
+
+<section class="propiedades-hero">
+  <p class="propiedades-hero-eyebrow">Catálogo completo</p>
+  <h1 class="propiedades-hero-title">Todas las propiedades</h1>
+  <p class="propiedades-hero-subtitle">
+    Filtra por tipo, ubicación o presupuesto para encontrar la propiedad que estás buscando.
+  </p>
+</section>
+
+<section class="propiedades-page">
+  <aside class="propiedades-filters">
+    <div class="propiedades-filter-block">
+      <span class="propiedades-filter-label">Tipo</span>
+      <div class="propiedades-tipo-tabs">
+        <button type="button" class="propiedades-tipo-tab" [class.is-active]="tipo() === 'todas'" (click)="setTipo('todas')">
+          Todas
+        </button>
+        <button type="button" class="propiedades-tipo-tab" [class.is-active]="tipo() === 'venta'" (click)="setTipo('venta')">
+          Venta
+        </button>
+        <button
+          type="button"
+          class="propiedades-tipo-tab"
+          [class.is-active]="tipo() === 'arriendo'"
+          (click)="setTipo('arriendo')"
+        >
+          Arriendo
+        </button>
+      </div>
+    </div>
+
+    <div class="propiedades-filter-block">
+      <label for="busqueda" class="propiedades-filter-label">Buscar</label>
+      <div class="propiedades-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+        <input
+          id="busqueda"
+          type="text"
+          class="form-control"
+          placeholder="Nombre o ubicación"
+          [value]="busqueda()"
+          (input)="onBusquedaInput($event)"
+        />
+      </div>
+    </div>
+
+    <div class="propiedades-filter-block">
+      <span class="propiedades-filter-label">Precio (COP)</span>
+      <div class="propiedades-price-range">
+        <input
+          type="number"
+          min="0"
+          class="form-control"
+          placeholder="Mínimo"
+          [value]="precioMin() ?? ''"
+          (input)="onPrecioMinInput($event)"
+        />
+        <span class="propiedades-price-sep">—</span>
+        <input
+          type="number"
+          min="0"
+          class="form-control"
+          placeholder="Máximo"
+          [value]="precioMax() ?? ''"
+          (input)="onPrecioMaxInput($event)"
+        />
+      </div>
+    </div>
+
+    <div class="propiedades-filter-block">
+      <span class="propiedades-filter-label">Ordenar por</span>
+      <ng-select
+        [items]="ordenOptions"
+        bindLabel="label"
+        bindValue="value"
+        [clearable]="false"
+        [searchable]="false"
+        [appendTo]="'body'"
+        [ngModel]="orden()"
+        (ngModelChange)="orden.set($event)"
+      ></ng-select>
+    </div>
+
+    @if (hasActiveFilters()) {
+      <button type="button" class="propiedades-clear-filters" (click)="clearFilters()">Limpiar filtros</button>
+    }
+  </aside>
+
+  <div class="propiedades-results">
+    <p class="propiedades-results-count">
+      @if (loading() && items().length === 0) {
+        Cargando propiedades…
+      } @else {
+        {{ filtered().length }} {{ filtered().length === 1 ? 'propiedad encontrada' : 'propiedades encontradas' }}
+      }
+    </p>
+
+    @if (loading() && items().length === 0) {
+      <div class="propiedades-state">
+        <div class="spinner-border text-primary"></div>
+      </div>
+    } @else if (filtered().length === 0) {
+      <div class="propiedades-state propiedades-empty">
+        <p class="propiedades-empty-title">No encontramos propiedades con esos filtros</p>
+        <p class="propiedades-empty-text">Prueba ajustar el tipo, la ubicación o el rango de precio.</p>
+        @if (hasActiveFilters()) {
+          <button type="button" class="btn btn-outline-primary" (click)="clearFilters()">Limpiar filtros</button>
+        }
+      </div>
+    } @else {
+      <div class="property-grid">
+        @for (property of filtered(); track property.id) {
+          <app-property-card [property]="property" />
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<app-footer />

@@ -10,10 +10,11 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
+import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems } from '../../store/Propiedades/propiedades.selectors';
 
@@ -37,7 +38,7 @@ interface StatsCtaOption {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, CurrencyPipe],
+  imports: [NavbarComponent, FooterComponent, RouterLink, PropertyCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './landing.html',
   styleUrl: './landing.scss',

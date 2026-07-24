@@ -1,0 +1,226 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+// ─── Hero ───────────────────────────────────────────────────────────────────
+
+.propiedades-hero {
+  padding: 6rem 1.5rem 2.5rem;
+  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+  text-align: center;
+}
+
+.propiedades-hero-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 0.5rem;
+}
+
+.propiedades-hero-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-4xl;
+  color: $cfpasto-white;
+  margin-bottom: 0.5rem;
+}
+
+.propiedades-hero-subtitle {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  color: rgba($cfpasto-white, 0.85);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+// ─── Layout ─────────────────────────────────────────────────────────────────
+
+.propiedades-page {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+
+  @media (max-width: 991.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Filtros ────────────────────────────────────────────────────────────────
+
+.propiedades-filters {
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: $cfpasto-white;
+  border: 1px solid $cfpasto-border;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-md;
+
+  @media (min-width: 992px) {
+    position: sticky;
+    // 6rem despeja la navbar fixed-top (misma referencia que .propiedades-hero) + 0.5rem de aire.
+    top: 6.5rem;
+  }
+}
+
+.propiedades-filter-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.propiedades-filter-label {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 600;
+  color: $cfpasto-text-dark;
+}
+
+.propiedades-tipo-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.propiedades-tipo-tab {
+  flex: 1;
+  padding: 0.45rem 0.6rem;
+  border-radius: $cfpasto-radius;
+  border: 1px solid $cfpasto-border;
+  background: $cfpasto-bg-subtle;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: $cfpasto-primary-light;
+    color: $cfpasto-text-dark;
+  }
+
+  &.is-active {
+    background: $cfpasto-primary;
+    border-color: $cfpasto-primary;
+    color: $cfpasto-white;
+  }
+}
+
+.propiedades-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  svg {
+    position: absolute;
+    left: 0.75rem;
+    color: $cfpasto-text-light;
+    pointer-events: none;
+  }
+
+  .form-control {
+    padding-left: 2.25rem;
+  }
+}
+
+.propiedades-price-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .form-control {
+    min-width: 0;
+  }
+}
+
+.propiedades-price-sep {
+  color: $cfpasto-text-light;
+  flex-shrink: 0;
+}
+
+.propiedades-clear-filters {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: $cfpasto-error;
+  }
+}
+
+// ─── Resultados ─────────────────────────────────────────────────────────────
+
+.propiedades-results-count {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin-bottom: 1.25rem;
+}
+
+.propiedades-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  text-align: center;
+}
+
+.propiedades-empty {
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 2rem;
+  background: $cfpasto-bg-subtle;
+  border: 1px solid $cfpasto-border-light;
+  border-radius: $cfpasto-radius-lg;
+}
+
+.propiedades-empty-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 600;
+  font-size: $cfpasto-text-lg;
+  color: $cfpasto-text-dark;
+  margin: 0;
+}
+
+.propiedades-empty-text {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin: 0 0 0.5rem;
+}
+
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 1199.98px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+}

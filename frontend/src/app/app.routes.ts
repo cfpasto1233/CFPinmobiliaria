@@ -8,6 +8,13 @@ export const routes: Routes = [
       import('./features/landing/landing').then((m) => m.Landing),
   },
   {
+    path: 'propiedades',
+    loadComponent: () =>
+      import('./features/propiedades/propiedades-listado.component').then(
+        (m) => m.PropiedadesListadoComponent,
+      ),
+  },
+  {
     path: 'auth/login',
     loadComponent: () =>
       import('./features/auth/login/login').then((m) => m.LoginComponent),
