@@ -52,7 +52,7 @@ export class AuthenticationEffects {
       this.actions$.pipe(
         ofType(AuthActions.loginSuccess),
         tap(({ user }) => {
-          void this.router.navigateByUrl(user.is_superuser ? '/admin' : '/dashboard');
+          void this.router.navigateByUrl(user.is_superuser ? '/admin/propiedades' : '/dashboard');
         }),
       ),
     { dispatch: false },

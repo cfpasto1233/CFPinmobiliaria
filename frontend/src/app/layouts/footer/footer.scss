@@ -98,3 +98,10 @@
   color: rgba(255, 255, 255, 0.45);
   margin: 0;
 }
+
+// Acceso al login del superadmin: el "." final de la frase es el enlace,
+// sin ninguna señal visual — solo quien ya sabe que está ahí lo encuentra.
+.footer-copyright-dot {
+  color: inherit;
+  text-decoration: none;
+}

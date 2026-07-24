@@ -36,6 +36,11 @@ export const routes: Routes = [
       ),
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'propiedades',
+      },
+      {
         path: 'propiedades',
         loadComponent: () =>
           import('./features/admin/propiedades/propiedades-list/propiedades-list.component').then(
