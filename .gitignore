@@ -13,6 +13,9 @@ node_modules/
 dist/
 .angular/
 
+# Generated API client (regenerar con bun run generate:client)
+frontend/src/client/
+
 # Env
 .env
 

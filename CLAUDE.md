@@ -111,7 +111,10 @@ contra `develop`, no contra `main`.
 ## Reglas críticas
 - **No SQLModel** — SQLAlchemy 2.x puro (`Mapped`, `mapped_column`).
 - **No SignalStore** — NgRx clásico (actions, reducer, effects, selectors).
-- **Nunca editar `frontend/src/client/`** — se regenera y sobreescribe con `generate:client`.
+- **Nunca editar `frontend/src/client/`** — se regenera y sobreescribe con `generate:client`. Está
+  en `.gitignore` (no se comitea): cualquier cambio de contrato backend debe terminar con el
+  cliente regenerado localmente (`bun run generate:client`) antes de levantar el frontend, pero
+  esos archivos no van al repo.
 - **No `<select>` nativo** — usar `ng-select` con `[appendTo]="'body'"`, especialmente en modales.
 - **Todo dato de API vive en NgRx Store** — componentes despachan actions y leen via `selectSignal`, la lógica HTTP vive en Effects.
 - **Contract-first, flujo vertical obligatorio, sin saltarse pasos:**
