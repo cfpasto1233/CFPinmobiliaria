@@ -73,7 +73,7 @@ cd backend
 uv sync
 uv run ruff check .
 uv run ruff format .
-uv run mypy app
+uv run mypy app                        # mypy no-strict; ruff line-length=100, E501 ignorado (ver pyproject.toml)
 POSTGRES_SERVER=localhost REDIS_HOST=localhost uv run fastapi run --reload app/main.py
 ```
 
