@@ -14,7 +14,7 @@ dist/
 .angular/
 
 # Generated API client (regenerar con bun run generate:client)
-frontend/src/client/
+frontend/src/client
 
 # Env
 .env
