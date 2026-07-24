@@ -13,11 +13,13 @@ from app.crud.propiedad import (
     get_propiedad_by_id,
     get_propiedad_foto_by_id,
     list_propiedades,
+    reorder_propiedades,
     replace_foto_principal,
     update_propiedad,
 )
 from app.schemas.propiedad import (
     PropiedadesPublic,
+    PropiedadesReorder,
     PropiedadForm,
     PropiedadPublic,
     PropiedadUpdate,
@@ -31,6 +33,16 @@ router = APIRouter(prefix="/propiedades", tags=["propiedades"])
 @router.get("/", response_model=PropiedadesPublic)
 def read_propiedades(session: SessionDep, skip: int = 0, limit: int = 100) -> PropiedadesPublic:
     items, count = list_propiedades(session=session, skip=skip, limit=limit)
+    return PropiedadesPublic(data=list(items), count=count)
+
+
+@router.patch("/orden", response_model=PropiedadesPublic)
+def reorder_propiedades_endpoint(
+    session: SessionDep,
+    _: SuperUser,
+    reorder_in: PropiedadesReorder,
+) -> PropiedadesPublic:
+    items, count = reorder_propiedades(session=session, ids=reorder_in.ids)
     return PropiedadesPublic(data=list(items), count=count)
 
 

@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { PropiedadForm, PropiedadPublic, PropiedadUpdate } from '../../../client';
+import { PropiedadPublic, PropiedadUpdate } from '../../../client';
+import { PropiedadForm } from './propiedad-form.model';
 
 export const PropiedadesActions = {
   load: createAction('[Propiedades] Load'),
@@ -57,4 +58,11 @@ export const PropiedadesActions = {
     '[Propiedades] Replace Foto Principal Failure',
     props<{ error: string }>(),
   ),
+
+  reorder: createAction('[Propiedades] Reorder', props<{ ids: string[] }>()),
+  reorderSuccess: createAction(
+    '[Propiedades] Reorder Success',
+    props<{ items: PropiedadPublic[]; count: number }>(),
+  ),
+  reorderFailure: createAction('[Propiedades] Reorder Failure', props<{ error: string }>()),
 };

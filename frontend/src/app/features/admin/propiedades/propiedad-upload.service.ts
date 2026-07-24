@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BASE_PATH_DEFAULT, PropiedadForm, PropiedadPublic } from '../../../../client';
+import { BASE_PATH_DEFAULT, PropiedadPublic } from '../../../../client';
+import { PropiedadForm } from '../../../store/Propiedades/propiedad-form.model';
 
 /**
  * El cliente ng-openapi generado no arma correctamente el body multipart para estos

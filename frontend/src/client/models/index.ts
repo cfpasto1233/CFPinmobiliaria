@@ -13,7 +13,11 @@ export interface BodyAddFotoEndpointApiV1Propiedades_PropiedadId_FotosPost {
 }
 
 export interface BodyCreatePropiedadEndpointApiV1Propiedades_Post {
-    form: PropiedadForm;
+    nombre: string;
+    descripcion: string;
+    ubicacion: string;
+    precio: number | string;
+    tipo: 'venta' | 'arriendo';
     foto_principal: string;
 }
 
@@ -34,14 +38,6 @@ export interface HTTPValidationError {
     detail?: Array<ValidationError>;
 }
 
-export interface PropiedadForm {
-    nombre: string;
-    descripcion: string;
-    ubicacion: string;
-    precio: number | string;
-    tipo: 'venta' | 'arriendo';
-}
-
 export interface PropiedadFotoPublic {
     id: string;
     orden: number;
@@ -55,6 +51,7 @@ export interface PropiedadPublic {
     ubicacion: string;
     precio: string;
     tipo: string;
+    orden: number;
     foto_principal_url: string;
     fotos: Array<PropiedadFotoPublic>;
 }
@@ -70,6 +67,10 @@ export interface PropiedadUpdate {
 export interface PropiedadesPublic {
     data: Array<PropiedadPublic>;
     count: number;
+}
+
+export interface PropiedadesReorder {
+    ids: Array<string>;
 }
 
 export interface Token {

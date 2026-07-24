@@ -12,7 +12,7 @@ import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { BASE_PATH_DEFAULT, CLIENT_CONTEXT_TOKEN_DEFAULT } from "../tokens";
 import { HttpParamsBuilder } from "../utils/http-params-builder";
-import { RequestOptions, PropiedadesPublic, PropiedadForm, PropiedadPublic, PropiedadUpdate } from "../models";
+import { RequestOptions, PropiedadesPublic, PropiedadPublic, PropiedadesReorder, PropiedadUpdate } from "../models";
 
 @Injectable({ providedIn: "root" })
 export class PropiedadesService {
@@ -60,10 +60,10 @@ export class PropiedadesService {
         });
     }
 
-    createPropiedadEndpointApiV1PropiedadesPost(form: PropiedadForm, foto_principal: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<PropiedadPublic>;
-    createPropiedadEndpointApiV1PropiedadesPost(form: PropiedadForm, foto_principal: string, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<PropiedadPublic>>;
-    createPropiedadEndpointApiV1PropiedadesPost(form: PropiedadForm, foto_principal: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<PropiedadPublic>>;
-    createPropiedadEndpointApiV1PropiedadesPost(form: PropiedadForm, foto_principal: string, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+    createPropiedadEndpointApiV1PropiedadesPost(nombre: string, descripcion: string, ubicacion: string, precio: any, tipo: 'venta' | 'arriendo', foto_principal: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<PropiedadPublic>;
+    createPropiedadEndpointApiV1PropiedadesPost(nombre: string, descripcion: string, ubicacion: string, precio: any, tipo: 'venta' | 'arriendo', foto_principal: string, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<PropiedadPublic>>;
+    createPropiedadEndpointApiV1PropiedadesPost(nombre: string, descripcion: string, ubicacion: string, precio: any, tipo: 'venta' | 'arriendo', foto_principal: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<PropiedadPublic>>;
+    createPropiedadEndpointApiV1PropiedadesPost(nombre: string, descripcion: string, ubicacion: string, precio: any, tipo: 'venta' | 'arriendo', foto_principal: string, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
         const url = `${this.basePath}/api/v1/propiedades/`;
 
         let headers: HttpHeaders;
@@ -80,8 +80,20 @@ export class PropiedadesService {
         headers = headers.delete('Content-Type');
 
         const formData = new FormData();
-        if (form !== undefined) {
-            formData.append('form', String(form));
+        if (nombre !== undefined) {
+            formData.append('nombre', String(nombre));
+        }
+        if (descripcion !== undefined) {
+            formData.append('descripcion', String(descripcion));
+        }
+        if (ubicacion !== undefined) {
+            formData.append('ubicacion', String(ubicacion));
+        }
+        if (precio !== undefined) {
+            formData.append('precio', String(precio));
+        }
+        if (tipo !== undefined) {
+            formData.append('tipo', String(tipo));
         }
         if (foto_principal !== undefined) {
             formData.append('foto_principal', String(foto_principal));
@@ -89,6 +101,37 @@ export class PropiedadesService {
 
         return this.httpClient.request('post', url, {
             body: formData,
+            observe,
+            headers,
+            reportProgress: options?.reportProgress,
+            withCredentials: options?.withCredentials,
+            context: this.createContextWithClientId(options?.context)
+        });
+    }
+
+    reorderPropiedadesEndpointApiV1PropiedadesOrdenPatch(propiedadesReorder: PropiedadesReorder, observe?: 'body', options?: RequestOptions<'json'>): Observable<PropiedadesPublic>;
+    reorderPropiedadesEndpointApiV1PropiedadesOrdenPatch(propiedadesReorder: PropiedadesReorder, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<PropiedadesPublic>>;
+    reorderPropiedadesEndpointApiV1PropiedadesOrdenPatch(propiedadesReorder: PropiedadesReorder, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<PropiedadesPublic>>;
+    reorderPropiedadesEndpointApiV1PropiedadesOrdenPatch(propiedadesReorder: PropiedadesReorder, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+        const url = `${this.basePath}/api/v1/propiedades/orden`;
+
+        let headers: HttpHeaders;
+        if (options?.headers instanceof HttpHeaders) {
+            headers = options.headers;
+        } else {
+            headers = new HttpHeaders(options?.headers);
+        }
+        // Advertise the response content type declared in the spec
+        if (!headers.has('Accept')) {
+            headers = headers.set('Accept', 'application/json');
+        }
+        // Set Content-Type for JSON requests if not already set
+        if (!headers.has('Content-Type')) {
+            headers = headers.set('Content-Type', 'application/json');
+        }
+
+        return this.httpClient.request('patch', url, {
+            body: propiedadesReorder,
             observe,
             headers,
             reportProgress: options?.reportProgress,

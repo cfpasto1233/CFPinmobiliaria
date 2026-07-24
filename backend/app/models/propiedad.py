@@ -2,7 +2,7 @@ import uuid
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Numeric, String, Text
+from sqlalchemy import Integer, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, TimestampMixin
@@ -21,6 +21,7 @@ class Propiedad(TimestampMixin, Base):
     precio: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
     tipo: Mapped[str] = mapped_column(String(20), nullable=False)
     foto_principal_key: Mapped[str] = mapped_column(String(500), nullable=False)
+    orden: Mapped[int] = mapped_column(Integer, default=0, nullable=False, server_default="0")
 
     fotos: Mapped[list["PropiedadFoto"]] = relationship(
         cascade="all, delete-orphan",

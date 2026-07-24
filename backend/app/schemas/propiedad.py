@@ -38,6 +38,7 @@ class PropiedadPublic(BaseModel):
     ubicacion: str
     precio: Decimal
     tipo: str
+    orden: int
     foto_principal_url: str
     fotos: list[PropiedadFotoPublic]
 
@@ -47,3 +48,7 @@ class PropiedadPublic(BaseModel):
 class PropiedadesPublic(BaseModel):
     data: list[PropiedadPublic]
     count: int
+
+
+class PropiedadesReorder(BaseModel):
+    ids: list[uuid.UUID]

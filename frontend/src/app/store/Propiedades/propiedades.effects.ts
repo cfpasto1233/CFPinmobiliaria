@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, map, of, tap } from 'rxjs';
+import { catchError, exhaustMap, map, of, switchMap, tap } from 'rxjs';
 import { PropiedadesService } from '../../../client';
 import { PropiedadUploadService } from '../../features/admin/propiedades/propiedad-upload.service';
 import { extractErrorMessage } from '../../core/http/http-error.util';
@@ -171,6 +171,26 @@ export class PropiedadesEffects {
             of(
               PropiedadesActions.replaceFotoPrincipalFailure({
                 error: extractErrorMessage(error, 'No pudimos reemplazar la foto principal.'),
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  // switchMap (no exhaustMap): cada nuevo drag debe cancelar el guardado anterior en curso,
+  // si no la respuesta de un reorder viejo podría llegar después y pisar el orden más reciente.
+  reorder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PropiedadesActions.reorder),
+      switchMap(({ ids }) =>
+        this.propiedadesService.reorderPropiedadesEndpointApiV1PropiedadesOrdenPatch({ ids }).pipe(
+          map((response) => PropiedadesActions.reorderSuccess({ items: response.data, count: response.count })),
+          catchError((error) =>
+            of(
+              PropiedadesActions.reorderFailure({
+                error: extractErrorMessage(error, 'No pudimos guardar el nuevo orden.'),
               }),
             ),
           ),

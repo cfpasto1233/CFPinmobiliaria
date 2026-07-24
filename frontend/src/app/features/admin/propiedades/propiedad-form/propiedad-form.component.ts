@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PropiedadForm } from '../../../../../client';
+import { PropiedadForm } from '../../../../store/Propiedades/propiedad-form.model';
 import { PropiedadesActions } from '../../../../store/Propiedades/propiedades.actions';
 import {
   selectPropiedadSelected,

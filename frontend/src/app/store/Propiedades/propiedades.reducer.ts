@@ -96,4 +96,23 @@ export const propiedadesReducer = createReducer(
     selected: item,
   })),
   on(PropiedadesActions.replaceFotoPrincipalFailure, (state, { error }) => ({ ...state, error })),
+
+  // Reordena de inmediato en el cliente (drag & drop debe sentirse instantáneo);
+  // reorderSuccess reconcilia con el orden confirmado por el backend.
+  on(PropiedadesActions.reorder, (state, { ids }) => {
+    const byId = new Map(state.items.map((item) => [item.id, item]));
+    const reordered = ids.flatMap((id) => {
+      const item = byId.get(id);
+      return item ? [item] : [];
+    });
+    const remaining = state.items.filter((item) => !ids.includes(item.id));
+    return { ...state, items: [...reordered, ...remaining], error: null };
+  }),
+  on(PropiedadesActions.reorderSuccess, (state, { items, count }) => ({
+    ...state,
+    items,
+    count,
+    error: null,
+  })),
+  on(PropiedadesActions.reorderFailure, (state, { error }) => ({ ...state, error })),
 );

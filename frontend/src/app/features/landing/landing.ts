@@ -5,6 +5,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+  computed,
   inject,
   signal,
   ViewChild,
@@ -46,7 +47,8 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly store = inject(Store);
 
-  protected readonly featuredProperties = this.store.selectSignal(selectPropiedadesItems);
+  private readonly propiedades = this.store.selectSignal(selectPropiedadesItems);
+  protected readonly featuredProperties = computed(() => this.propiedades().slice(0, 4));
 
   ngOnInit(): void {
     this.store.dispatch(PropiedadesActions.load());

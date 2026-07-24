@@ -9,6 +9,7 @@ from app.schemas.propiedad import PropiedadForm, PropiedadUpdate
 
 
 def create_propiedad(*, session: Session, form: PropiedadForm, foto_principal_key: str) -> Propiedad:
+    max_orden = session.scalar(select(func.max(Propiedad.orden))) or 0
     db_obj = Propiedad(
         nombre=form.nombre,
         descripcion=form.descripcion,
@@ -16,6 +17,7 @@ def create_propiedad(*, session: Session, form: PropiedadForm, foto_principal_ke
         precio=form.precio,
         tipo=form.tipo,
         foto_principal_key=foto_principal_key,
+        orden=max_orden + 1,
     )
     session.add(db_obj)
     session.commit()
@@ -35,8 +37,21 @@ def update_propiedad(*, session: Session, db_obj: Propiedad, obj_in: PropiedadUp
 
 def list_propiedades(*, session: Session, skip: int = 0, limit: int = 100) -> tuple[list[Propiedad], int]:
     count = session.scalar(select(func.count()).select_from(Propiedad))
-    items = session.scalars(select(Propiedad).offset(skip).limit(limit)).all()
+    items = session.scalars(
+        select(Propiedad).order_by(Propiedad.orden.asc(), Propiedad.created_at.asc()).offset(skip).limit(limit)
+    ).all()
     return list(items), count or 0
+
+
+def reorder_propiedades(*, session: Session, ids: list[uuid.UUID]) -> tuple[list[Propiedad], int]:
+    propiedades = session.scalars(select(Propiedad).where(Propiedad.id.in_(ids))).all()
+    by_id = {propiedad.id: propiedad for propiedad in propiedades}
+    for index, propiedad_id in enumerate(ids):
+        propiedad = by_id.get(propiedad_id)
+        if propiedad is not None:
+            propiedad.orden = index
+    session.commit()
+    return list_propiedades(session=session)
 
 
 def get_propiedad_by_id(*, session: Session, propiedad_id: uuid.UUID) -> Propiedad | None:
