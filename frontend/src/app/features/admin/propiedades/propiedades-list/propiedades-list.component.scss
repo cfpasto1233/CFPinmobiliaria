@@ -1,0 +1,34 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.propiedades-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.propiedades-list-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-text-dark;
+  margin: 0;
+}
+
+.propiedades-list-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: $cfpasto-radius-sm;
+  object-fit: cover;
+}
+
+.card {
+  border-radius: $cfpasto-radius-xl;
+  overflow: hidden;
+  box-shadow: $cfpasto-shadow-md;
+}

@@ -65,6 +65,7 @@ class Settings(BaseSettings):
     # MinIO / Storage
     STORAGE_BACKEND: Literal["local", "minio", "s3"] = "local"
     MINIO_ENDPOINT: str = "minio:9000"
+    MINIO_PUBLIC_URL: str = "http://localhost:9100"
     MINIO_ROOT_USER: str = "minioadmin"
     MINIO_ROOT_PASSWORD: str = ""
     MINIO_BUCKET: str = "cfpasto"

@@ -1,0 +1,93 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.propiedad-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.propiedad-form-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-text-dark;
+  margin: 0;
+}
+
+.card {
+  border-radius: $cfpasto-radius-xl;
+  overflow: hidden;
+  box-shadow: $cfpasto-shadow-md;
+  max-width: 720px;
+}
+
+.propiedad-form-field {
+  margin-bottom: 1.25rem;
+}
+
+.propiedad-form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.propiedad-form-preview {
+  display: block;
+  margin-top: 0.75rem;
+  width: 160px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: $cfpasto-radius;
+  border: 1px solid $cfpasto-border;
+}
+
+.propiedad-form-fotos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.propiedad-form-foto-item {
+  position: relative;
+  aspect-ratio: 1;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: $cfpasto-radius-sm;
+    border: 1px solid $cfpasto-border;
+  }
+}
+
+.propiedad-form-foto-remove {
+  position: absolute;
+  top: -0.4rem;
+  right: -0.4rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: none;
+  background: $cfpasto-error;
+  color: $cfpasto-white;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.form-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-error;
+  margin-top: 0.35rem;
+}

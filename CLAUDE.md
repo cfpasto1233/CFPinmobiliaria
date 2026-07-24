@@ -41,16 +41,19 @@ backend/app/
   db/base.py    # Base (DeclarativeBase), TimestampMixin
   models/       # Modelos SQLAlchemy (registrar en models/__init__.py para Alembic)
   schemas/      # Esquemas Pydantic (*Create, *Update, *Public, *sPublic)
-  services/     # Lógica de negocio compleja (vacío por ahora)
+  services/     # storage.py (cliente boto3/MinIO); resto vacío por ahora
   alembic/      # env.py, versions/
 
 frontend/src/app/
   core/auth/          # auth.guard.ts, auth.interceptor.ts, refresh.interceptor.ts, auth.service.ts
   core/notifications/ # NotificationService
-  features/           # landing (público), auth (login/register), dashboard, design-system
-  layouts/            # navbar, footer, admin-layout (sidebar + topbar, shell del superadmin)
+  features/           # landing (público), auth (login/register), dashboard, design-system,
+                       # admin/propiedades (CRUD superadmin: propiedades-list, propiedad-form,
+                       # propiedad-upload.service.ts)
+  layouts/            # navbar, footer, admin-layout (sidebar + topbar del superadmin)
   shared/components/  # Toast, modales, reutilizables
   store/Authentication/ # feature key "auth"
+  store/Propiedades/    # feature key "propiedades" — compartido entre landing y admin
 frontend/src/client/  # generado por ng-openapi — NUNCA editar a mano
 ```
 
@@ -134,10 +137,14 @@ usuarios en `PRODUCT.md`.
 | Log de decisiones técnicas / hitos de avance | `docs/DECISIONS.md`, `docs/MILESTONES.md` |
 
 ## Estado actual
-Backend: auth (login/refresh/logout) + CRUD de usuarios. No asumir que existen entidades más
-allá de `User` — modelos, schemas y CRUD del backend siguen limitados a auth/usuarios.
-Frontend: landing pública + login/register + dashboard + `features/design-system` (showcase de
-componentes UI). El área superadmin (`layouts/admin-layout`, ruta `/admin`) es un shell vacío
-(sidebar + topbar sin nav items) a la espera de que se definan los módulos reales — no asumir
-que existen páginas de "Resumen" o "Usuarios" ahí. Módulos de negocio del dominio inmobiliario
-están pendientes de definir/construir.
+Backend: auth (login/refresh/logout) + CRUD de usuarios + CRUD de propiedades (lectura pública,
+escritura superadmin, fotos en MinIO vía `app/services/storage.py`). No asumir que existen más
+entidades de negocio que `User` y `Propiedad`/`PropiedadFoto`.
+Frontend: landing pública (conectada a `/api/v1/propiedades` real, ya no hardcodeada) +
+login/register + dashboard + `features/design-system` (showcase de componentes UI). El área
+superadmin (`layouts/admin-layout`, ruta `/admin`) tiene el módulo "Propiedades"
+(`features/admin/propiedades`, store compartido `store/Propiedades`) — es el primer módulo real
+del panel. El upload de fotos usa un servicio manual con `HttpClient`/`FormData`
+(`propiedad-upload.service.ts`) porque el cliente ng-openapi generado no arma bien el body
+multipart; el resto de operaciones (list/get/update/delete) sí usan el cliente generado. Módulos
+de negocio adicionales del dominio inmobiliario siguen pendientes de definir/construir.

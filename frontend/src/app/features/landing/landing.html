@@ -139,6 +139,7 @@
   </div>
 </section>
 
+@if (featuredProperties().length > 0) {
 <section class="featured-properties">
   <div class="featured-header">
     <span class="campaign-pill">
@@ -153,27 +154,27 @@
   </div>
 
   <div class="property-grid">
-    @for (property of featuredProperties; track property.title) {
+    @for (property of featuredProperties(); track property.id) {
     <article class="property-card">
       <div class="property-media">
+        <img [src]="property.foto_principal_url" [alt]="property.nombre" class="property-media-img" />
         <span
           class="property-badge property-badge-type"
-          [class.is-rent]="property.type === 'arriendo'"
+          [class.is-rent]="property.tipo === 'arriendo'"
         >
-          {{ property.type === 'venta' ? 'Venta' : 'Arriendo' }}
+          {{ property.tipo === 'venta' ? 'Venta' : 'Arriendo' }}
         </span>
-        <span class="property-badge property-badge-campaign">Campaña</span>
       </div>
 
       <div class="property-body">
-        <p class="property-location">{{ property.location }}</p>
-        <h3 class="property-name">{{ property.title }}</h3>
+        <p class="property-location">{{ property.ubicacion }}</p>
+        <h3 class="property-name">{{ property.nombre }}</h3>
         <p
           class="property-price"
-          [class.is-rent]="property.type === 'arriendo'"
+          [class.is-rent]="property.tipo === 'arriendo'"
         >
-          {{ property.price }}<span class="property-price-suffix"
-            >{{ property.type === 'arriendo' ? '/mes' : '' }}</span
+          {{ property.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}<span class="property-price-suffix"
+            >{{ property.tipo === 'arriendo' ? '/mes' : '' }}</span
           >
         </p>
       </div>
@@ -181,6 +182,7 @@
     }
   </div>
 </section>
+}
 
 <section class="tips">
   <div class="tips-header">

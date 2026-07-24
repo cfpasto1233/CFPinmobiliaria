@@ -4,18 +4,17 @@ import {
   Component,
   ElementRef,
   OnDestroy,
+  OnInit,
+  inject,
   signal,
   ViewChild,
 } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import { Store } from '@ngrx/store';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
-
-interface FeaturedProperty {
-  location: string;
-  title: string;
-  price: string;
-  type: 'venta' | 'arriendo';
-}
+import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
+import { selectPropiedadesItems } from '../../store/Propiedades/propiedades.selectors';
 
 interface RealEstateTip {
   number: string;
@@ -37,21 +36,21 @@ interface StatsCtaOption {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent],
+  imports: [NavbarComponent, FooterComponent, CurrencyPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './landing.html',
   styleUrl: './landing.scss',
 })
-export class Landing implements AfterViewInit, OnDestroy {
+export class Landing implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('heroVideo') private readonly heroVideo?: ElementRef<HTMLVideoElement>;
 
-  // Datos visuales de ejemplo: aún no existe módulo de propiedades/backend.
-  protected readonly featuredProperties: readonly FeaturedProperty[] = [
-    { location: 'Cartagena, Bolívar', title: 'Apartamento Vista al Mar', price: '$450.000.000', type: 'venta' },
-    { location: 'Sopó, Cundinamarca', title: 'Casa Campestre con Piscina', price: '$1.200.000.000', type: 'venta' },
-    { location: 'Chapinero, Bogotá', title: 'Oficina Centro Empresarial', price: '$4.500.000', type: 'arriendo' },
-    { location: 'El Poblado, Medellín', title: 'Penthouse Moderno', price: '$890.000.000', type: 'venta' },
-  ];
+  private readonly store = inject(Store);
+
+  protected readonly featuredProperties = this.store.selectSignal(selectPropiedadesItems);
+
+  ngOnInit(): void {
+    this.store.dispatch(PropiedadesActions.load());
+  }
 
   protected readonly tips: readonly RealEstateTip[] = [
     {

@@ -1,0 +1,125 @@
+<div class="propiedad-form">
+  <div class="propiedad-form-header">
+    <h1 class="propiedad-form-title">{{ isEditMode ? 'Editar propiedad' : 'Nueva propiedad' }}</h1>
+    <a routerLink="/admin/propiedades" class="btn btn-soft-secondary">Volver</a>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="propiedad-form-field">
+          <label for="nombre" class="form-label">Nombre *</label>
+          <input id="nombre" type="text" class="form-control" formControlName="nombre" />
+        </div>
+
+        <div class="propiedad-form-field">
+          <label for="descripcion" class="form-label">Descripción *</label>
+          <textarea id="descripcion" class="form-control" rows="4" formControlName="descripcion"></textarea>
+        </div>
+
+        <div class="propiedad-form-row">
+          <div class="propiedad-form-field">
+            <label for="ubicacion" class="form-label">Ubicación *</label>
+            <input id="ubicacion" type="text" class="form-control" formControlName="ubicacion" />
+          </div>
+
+          <div class="propiedad-form-field">
+            <label for="precio" class="form-label">Precio (COP) *</label>
+            <input id="precio" type="number" min="1" class="form-control" formControlName="precio" />
+          </div>
+
+          <div class="propiedad-form-field">
+            <label class="form-label">Tipo *</label>
+            <ng-select
+              [items]="tipoOptions"
+              bindLabel="label"
+              bindValue="value"
+              [clearable]="false"
+              [appendTo]="'body'"
+              formControlName="tipo"
+            ></ng-select>
+          </div>
+        </div>
+
+        @if (!isEditMode) {
+          <div class="propiedad-form-field">
+            <label class="form-label">Foto principal *</label>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              class="form-control"
+              (change)="onFotoPrincipalSelected($event)"
+            />
+            @if (fotoPrincipalError(); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+            @if (fotoPrincipalPreview(); as preview) {
+              <img [src]="preview" alt="Vista previa de la foto principal" class="propiedad-form-preview" />
+            }
+          </div>
+        }
+
+        @if (isEditMode && selected(); as propiedad) {
+          <div class="propiedad-form-field">
+            <label class="form-label">Foto principal</label>
+            <img [src]="propiedad.foto_principal_url" [alt]="propiedad.nombre" class="propiedad-form-preview" />
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              class="form-control mt-2"
+              (change)="onFotoPrincipalSelected($event)"
+            />
+            <div class="form-text">Selecciona un archivo para reemplazar la foto principal.</div>
+            @if (fotoPrincipalError(); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+          </div>
+
+          <div class="propiedad-form-field">
+            <label class="form-label">Fotos adicionales</label>
+
+            @if (propiedad.fotos.length > 0) {
+              <div class="propiedad-form-fotos-grid">
+                @for (foto of propiedad.fotos; track foto.id) {
+                  <div class="propiedad-form-foto-item">
+                    <img [src]="foto.url" alt="Foto adicional" />
+                    <button
+                      type="button"
+                      class="propiedad-form-foto-remove"
+                      (click)="onRemoveFoto(foto.id)"
+                      aria-label="Eliminar foto"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              class="form-control mt-2"
+              (change)="onFotosAdicionalesSelected($event)"
+            />
+            @if (fotoAdicionalError(); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+          </div>
+        }
+
+        <button type="submit" class="btn btn-success" [disabled]="form.invalid || loading()">
+          @if (loading()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          {{ isEditMode ? 'Guardar cambios' : 'Crear propiedad' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

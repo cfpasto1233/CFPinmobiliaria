@@ -1,0 +1,61 @@
+<div class="propiedades-list">
+  <div class="propiedades-list-header">
+    <h1 class="propiedades-list-title">Propiedades</h1>
+    <a routerLink="/admin/propiedades/nueva" class="btn btn-success">+ Nueva propiedad</a>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      @if (loading() && items().length === 0) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary"></div>
+        </div>
+      } @else if (items().length === 0) {
+        <div class="text-center py-5 text-muted">Sin propiedades registradas.</div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th>Ubicación</th>
+                <th>Tipo</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of items(); track item.id) {
+                <tr>
+                  <td>
+                    <img [src]="item.foto_principal_url" [alt]="item.nombre" class="propiedades-list-thumb" />
+                  </td>
+                  <td>{{ item.nombre }}</td>
+                  <td>{{ item.ubicacion }}</td>
+                  <td>{{ item.tipo === 'venta' ? 'Venta' : 'Arriendo' }}</td>
+                  <td>{{ item.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+                  <td>
+                    <a
+                      [routerLink]="['/admin/propiedades', item.id, 'editar']"
+                      class="btn btn-sm btn-soft-secondary me-1"
+                    >
+                      Editar
+                    </a>
+                    <button type="button" class="btn btn-sm btn-soft-danger" (click)="onDelete(item.id)">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</div>

@@ -9,5 +9,6 @@
 */
 export { AuthService } from "./auth.service";
 export { LoginService } from "./login.service";
+export { PropiedadesService } from "./propiedades.service";
 export { UsersService } from "./users.service";
 export { UtilsService } from "./utils.service";

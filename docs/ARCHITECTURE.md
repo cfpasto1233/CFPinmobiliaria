@@ -23,6 +23,7 @@ Internet → Nginx (frontend) → Angular
 
 - **Auth**: login, logout, refresh token
 - **Users**: perfil del usuario (email, nombre, avatar)
+- **Propiedades**: catálogo de inmuebles (lectura pública, escritura superadmin), fotos en MinIO
 - **[Módulos de negocio]**: se agregarán según evolucione el proyecto
 
 ## Autenticación
@@ -45,6 +46,14 @@ POST /api/v1/users/                → Crear usuario (superuser)
 GET  /api/v1/users/{id}            → Ver usuario (superuser)
 PATCH /api/v1/users/{id}           → Editar usuario (superuser)
 DELETE /api/v1/users/{id}          → Eliminar usuario (superuser)
+GET  /api/v1/propiedades/          → Listar propiedades (público)
+GET  /api/v1/propiedades/{id}      → Ver propiedad (público)
+POST /api/v1/propiedades/          → Crear propiedad + foto principal (superuser)
+PATCH /api/v1/propiedades/{id}     → Editar propiedad (superuser)
+DELETE /api/v1/propiedades/{id}    → Eliminar propiedad y sus fotos (superuser)
+POST /api/v1/propiedades/{id}/foto-principal → Reemplazar foto principal (superuser)
+POST /api/v1/propiedades/{id}/fotos          → Agregar foto adicional (superuser)
+DELETE /api/v1/propiedades/{id}/fotos/{foto_id} → Eliminar foto adicional (superuser)
 GET  /api/v1/utils/health-check/   → Health check
 ```
 

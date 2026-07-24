@@ -34,6 +34,29 @@ export const routes: Routes = [
       import('./layouts/admin-layout/admin-layout.component').then(
         (m) => m.AdminLayoutComponent,
       ),
+    children: [
+      {
+        path: 'propiedades',
+        loadComponent: () =>
+          import('./features/admin/propiedades/propiedades-list/propiedades-list.component').then(
+            (m) => m.PropiedadesListComponent,
+          ),
+      },
+      {
+        path: 'propiedades/nueva',
+        loadComponent: () =>
+          import('./features/admin/propiedades/propiedad-form/propiedad-form.component').then(
+            (m) => m.PropiedadFormComponent,
+          ),
+      },
+      {
+        path: 'propiedades/:id/editar',
+        loadComponent: () =>
+          import('./features/admin/propiedades/propiedad-form/propiedad-form.component').then(
+            (m) => m.PropiedadFormComponent,
+          ),
+      },
+    ],
   },
   {
     path: 'design-system',
