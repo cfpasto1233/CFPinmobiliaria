@@ -13,13 +13,18 @@
   color: $cfpasto-accent;
 }
 
-%no-motion-transition {
+// Mixins (no placeholders) por la misma razón que responsive-grid-cols más
+// abajo: con @extend, el media query de prefers-reduced-motion quedaría antes
+// en el CSS final que la propiedad "transition" base de cada regla, y con
+// igual especificidad la base ganaría siempre — dejando prefers-reduced-motion
+// silenciosamente roto.
+@mixin no-motion-transition {
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
 }
 
-%no-motion-transition-hover {
+@mixin no-motion-transition-hover {
   @media (prefers-reduced-motion: reduce) {
     transition: none;
 
@@ -53,7 +58,13 @@
   color: $cfpasto-text-dark;
 }
 
-%responsive-grid-cols {
+// Mixin (no placeholder): con @extend, Sass inserta la regla combinada donde
+// se DEFINE el placeholder (aquí arriba, antes de .hero) en vez de donde se
+// usa — entonces la media query queda antes en el CSS final que la regla base
+// (repeat(4,1fr) más abajo) y, con igual especificidad, la base siempre gana
+// sin importar el ancho de pantalla. @include copia el bloque en el lugar de
+// uso y preserva el orden de cascada correcto.
+@mixin responsive-grid-cols {
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -167,7 +178,7 @@
     transform: translateY(-1px);
   }
 
-  @extend %no-motion-transition-hover;
+  @include no-motion-transition-hover;
 }
 
 .search-option-label {
@@ -193,7 +204,7 @@
     transform: rotate(180deg);
   }
 
-  @extend %no-motion-transition;
+  @include no-motion-transition;
 }
 
 .search-submenu {
@@ -233,7 +244,7 @@
     background: rgba(255, 255, 255, 0.08);
   }
 
-  @extend %no-motion-transition;
+  @include no-motion-transition;
 }
 
 .search-submenu-title {
@@ -304,7 +315,7 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  @extend %responsive-grid-cols;
+  @include responsive-grid-cols;
 }
 
 // ─── Tips Inmobiliarios ──────────────────────────────────────────────────────
@@ -344,7 +355,7 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  @extend %responsive-grid-cols;
+  @include responsive-grid-cols;
 }
 
 .tip-card {
@@ -385,7 +396,7 @@
     transform: rotate(180deg);
   }
 
-  @extend %no-motion-transition;
+  @include no-motion-transition;
 }
 
 .tip-title {
@@ -494,7 +505,7 @@
     background: $cfpasto-accent;
   }
 
-  @extend %no-motion-transition;
+  @include no-motion-transition;
 }
 
 .stats-cta-row {
@@ -528,9 +539,15 @@
     text-align: right;
   }
 
+  // :first-child/:last-child pesan más que .stats-cta-item sola — el override
+  // de abajo debe repetir esos mismos selectores para poder ganarles en móvil.
   @media (max-width: 767.98px) {
-    align-items: center;
-    text-align: center;
+    &,
+    &:first-child,
+    &:last-child {
+      align-items: center;
+      text-align: center;
+    }
   }
 }
 

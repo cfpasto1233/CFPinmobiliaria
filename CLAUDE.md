@@ -55,7 +55,7 @@ frontend/src/app/
                        # propiedad-upload.service.ts)
   layouts/            # navbar, footer, admin-layout (shell /admin), sidebar, topbar
                        # (sidebar y topbar son componentes propios, usados por admin-layout)
-  shared/components/  # Toast, property-card, modales, reutilizables
+  shared/components/  # toast-container, property-card, property-gallery-modal, reutilizables
   store/Authentication/ # feature key "auth"
   store/Propiedades/    # feature key "propiedades" — compartido entre landing/propiedades y admin
 frontend/src/client/  # generado por ng-openapi — NUNCA editar a mano
