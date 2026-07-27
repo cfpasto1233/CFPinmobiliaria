@@ -3,6 +3,7 @@ from decimal import Decimal
 from typing import Annotated
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from pydantic import ValidationError
 
 from app.api.deps import SessionDep, SuperUser
 from app.crud.propiedad import (
@@ -23,11 +24,16 @@ from app.schemas.propiedad import (
     PropiedadForm,
     PropiedadPublic,
     PropiedadUpdate,
+    TipoInmueble,
     TipoPropiedad,
 )
 from app.services import storage
 
 router = APIRouter(prefix="/propiedades", tags=["propiedades"])
+
+
+def _mensaje_error_validacion(exc: ValidationError) -> str:
+    return " ".join(error["msg"].removeprefix("Value error, ") for error in exc.errors())
 
 
 @router.get("/", response_model=PropiedadesPublic)
@@ -50,7 +56,7 @@ def reorder_propiedades_endpoint(
 def read_propiedad_by_id(propiedad_id: uuid.UUID, session: SessionDep) -> PropiedadPublic:
     propiedad = get_propiedad_by_id(session=session, propiedad_id=propiedad_id)
     if not propiedad:
-        raise HTTPException(status_code=404, detail="Propiedad not found")
+        raise HTTPException(status_code=404, detail="Propiedad no encontrada.")
     return propiedad
 
 
@@ -58,14 +64,45 @@ def read_propiedad_by_id(propiedad_id: uuid.UUID, session: SessionDep) -> Propie
 def create_propiedad_endpoint(
     session: SessionDep,
     _: SuperUser,
-    nombre: Annotated[str, Form()],
-    descripcion: Annotated[str, Form()],
-    ubicacion: Annotated[str, Form()],
-    precio: Annotated[Decimal, Form()],
+    # Los mismos límites que PropiedadForm, declarados aquí para que FastAPI los valide
+    # como parte del request (422 con detalle por campo) antes de construir el schema:
+    # si se dejan solo en PropiedadForm, un valor inválido revienta como ValidationError
+    # sin capturar dentro del handler y termina en un 500 genérico.
+    nombre: Annotated[str, Form(min_length=1, max_length=255)],
+    descripcion: Annotated[str, Form(min_length=1)],
+    ubicacion: Annotated[str, Form(min_length=1, max_length=255)],
+    precio: Annotated[Decimal, Form(gt=0)],
     tipo: Annotated[TipoPropiedad, Form()],
+    tipo_inmueble: Annotated[TipoInmueble, Form()],
     foto_principal: Annotated[UploadFile, File()],
+    banos: Annotated[int | None, Form(ge=0)] = None,
+    habitaciones: Annotated[int | None, Form(ge=0)] = None,
+    tiene_parqueadero: Annotated[bool, Form()] = False,
+    num_parqueaderos: Annotated[int | None, Form(ge=0)] = None,
+    area_construida: Annotated[Decimal | None, Form(gt=0)] = None,
+    antiguedad: Annotated[int | None, Form(ge=0)] = None,
 ) -> PropiedadPublic:
-    form = PropiedadForm(nombre=nombre, descripcion=descripcion, ubicacion=ubicacion, precio=precio, tipo=tipo)
+    # baños/habitaciones/área/antigüedad son obligatorios solo si tipo_inmueble es
+    # casa o apartamento — esa regla cruzada vive en el model_validator de
+    # PropiedadForm y no se puede expresar con Form(), así que se captura acá y se
+    # traduce a un 422 con mensaje claro en vez de dejarlo reventar como 500.
+    try:
+        form = PropiedadForm(
+            nombre=nombre,
+            descripcion=descripcion,
+            ubicacion=ubicacion,
+            precio=precio,
+            tipo=tipo,
+            tipo_inmueble=tipo_inmueble,
+            banos=banos,
+            habitaciones=habitaciones,
+            tiene_parqueadero=tiene_parqueadero,
+            num_parqueaderos=num_parqueaderos,
+            area_construida=area_construida,
+            antiguedad=antiguedad,
+        )
+    except ValidationError as exc:
+        raise HTTPException(status_code=422, detail=_mensaje_error_validacion(exc)) from exc
     storage.validate_image(foto_principal)
     key = storage.upload_image(foto_principal, folder="propiedades")
     return create_propiedad(session=session, form=form, foto_principal_key=key)
@@ -80,7 +117,7 @@ def update_propiedad_endpoint(
 ) -> PropiedadPublic:
     propiedad = get_propiedad_by_id(session=session, propiedad_id=propiedad_id)
     if not propiedad:
-        raise HTTPException(status_code=404, detail="Propiedad not found")
+        raise HTTPException(status_code=404, detail="Propiedad no encontrada.")
     return update_propiedad(session=session, db_obj=propiedad, obj_in=propiedad_in)
 
 
@@ -92,7 +129,7 @@ def delete_propiedad_endpoint(
 ) -> dict[str, str]:
     propiedad = get_propiedad_by_id(session=session, propiedad_id=propiedad_id)
     if not propiedad:
-        raise HTTPException(status_code=404, detail="Propiedad not found")
+        raise HTTPException(status_code=404, detail="Propiedad no encontrada.")
     keys = delete_propiedad(session=session, db_obj=propiedad)
     for key in keys:
         storage.delete_object(key)
@@ -108,7 +145,7 @@ def replace_foto_principal_endpoint(
 ) -> PropiedadPublic:
     propiedad = get_propiedad_by_id(session=session, propiedad_id=propiedad_id)
     if not propiedad:
-        raise HTTPException(status_code=404, detail="Propiedad not found")
+        raise HTTPException(status_code=404, detail="Propiedad no encontrada.")
     storage.validate_image(file)
     key = storage.upload_image(file, folder="propiedades")
     old_key = replace_foto_principal(session=session, propiedad=propiedad, key=key)
@@ -125,7 +162,7 @@ def add_foto_endpoint(
 ) -> PropiedadPublic:
     propiedad = get_propiedad_by_id(session=session, propiedad_id=propiedad_id)
     if not propiedad:
-        raise HTTPException(status_code=404, detail="Propiedad not found")
+        raise HTTPException(status_code=404, detail="Propiedad no encontrada.")
     storage.validate_image(file)
     key = storage.upload_image(file, folder="propiedades")
     add_propiedad_foto(session=session, propiedad=propiedad, key=key, orden=len(propiedad.fotos))
@@ -142,10 +179,10 @@ def delete_foto_endpoint(
 ) -> PropiedadPublic:
     propiedad = get_propiedad_by_id(session=session, propiedad_id=propiedad_id)
     if not propiedad:
-        raise HTTPException(status_code=404, detail="Propiedad not found")
+        raise HTTPException(status_code=404, detail="Propiedad no encontrada.")
     foto = get_propiedad_foto_by_id(session=session, foto_id=foto_id)
     if not foto or foto.propiedad_id != propiedad_id:
-        raise HTTPException(status_code=404, detail="Foto not found")
+        raise HTTPException(status_code=404, detail="Foto no encontrada.")
     key = delete_propiedad_foto(session=session, db_obj=foto)
     storage.delete_object(key)
     session.refresh(propiedad)

@@ -1,4 +1,11 @@
-<article class="property-card">
+<article
+  class="property-card"
+  role="button"
+  tabindex="0"
+  (click)="openGallery()"
+  (keydown.enter)="openGallery()"
+  (keydown.space)="openGallery(); $event.preventDefault()"
+>
   <div class="property-media">
     <img [src]="property().foto_principal_url" [alt]="property().nombre" class="property-media-img" />
     <span class="property-badge property-badge-type" [class.is-rent]="property().tipo === 'arriendo'">
@@ -16,3 +23,7 @@
     </p>
   </div>
 </article>
+
+@if (galleryOpen()) {
+  <app-property-gallery-modal [property]="property()" (closed)="closeGallery()" />
+}

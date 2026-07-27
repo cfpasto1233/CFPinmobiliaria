@@ -47,13 +47,17 @@ backend/app/
 frontend/src/app/
   core/auth/          # auth.guard.ts, auth.interceptor.ts, refresh.interceptor.ts, auth.service.ts
   core/notifications/ # NotificationService
-  features/           # landing (público), auth (login/register), dashboard, design-system,
+  core/http/           # http-error.util.ts (extrae mensaje de HttpErrorResponse)
+  core/whatsapp/        # whatsapp.util.ts (arma links wa.me con mensaje precargado)
+  features/           # landing (público), propiedades (listado público /propiedades),
+                       # auth (login/register), dashboard, design-system,
                        # admin/propiedades (CRUD superadmin: propiedades-list, propiedad-form,
                        # propiedad-upload.service.ts)
-  layouts/            # navbar, footer, admin-layout (sidebar + topbar del superadmin)
-  shared/components/  # Toast, modales, reutilizables
+  layouts/            # navbar, footer, admin-layout (shell /admin), sidebar, topbar
+                       # (sidebar y topbar son componentes propios, usados por admin-layout)
+  shared/components/  # toast-container, property-card, property-gallery-modal, reutilizables
   store/Authentication/ # feature key "auth"
-  store/Propiedades/    # feature key "propiedades" — compartido entre landing y admin
+  store/Propiedades/    # feature key "propiedades" — compartido entre landing/propiedades y admin
 frontend/src/client/  # generado por ng-openapi — NUNCA editar a mano
 ```
 
@@ -143,11 +147,13 @@ usuarios en `PRODUCT.md`.
 Backend: auth (login/refresh/logout) + CRUD de usuarios + CRUD de propiedades (lectura pública,
 escritura superadmin, fotos en MinIO vía `app/services/storage.py`). No asumir que existen más
 entidades de negocio que `User` y `Propiedad`/`PropiedadFoto`.
-Frontend: landing pública (conectada a `/api/v1/propiedades` real, ya no hardcodeada) +
-login/register + dashboard + `features/design-system` (showcase de componentes UI). El área
-superadmin (`layouts/admin-layout`, ruta `/admin`) tiene el módulo "Propiedades"
-(`features/admin/propiedades`, store compartido `store/Propiedades`) — es el primer módulo real
-del panel. El upload de fotos usa un servicio manual con `HttpClient`/`FormData`
+Frontend: landing pública (conectada a `/api/v1/propiedades` real, ya no hardcodeada) + página de
+listado público completo en `/propiedades` (`features/propiedades`) + contacto vía WhatsApp
+(`core/whatsapp/whatsapp.util.ts`, usado en landing y navbar) + login/register + dashboard +
+`features/design-system` (showcase de componentes UI). El área superadmin (`layouts/admin-layout`,
+ruta `/admin`, con `layouts/sidebar` y `layouts/topbar` como componentes propios) tiene el módulo
+"Propiedades" (`features/admin/propiedades`, store compartido `store/Propiedades`) — es el primer
+módulo real del panel. El upload de fotos usa un servicio manual con `HttpClient`/`FormData`
 (`propiedad-upload.service.ts`) porque el cliente ng-openapi generado no arma bien el body
 multipart; el resto de operaciones (list/get/update/delete) sí usan el cliente generado. Módulos
 de negocio adicionales del dominio inmobiliario siguen pendientes de definir/construir.

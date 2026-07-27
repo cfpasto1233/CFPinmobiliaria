@@ -28,7 +28,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       withPreloading(PreloadAllModules),
       withRouterConfig({ paramsInheritanceStrategy: 'always' }),
-      withInMemoryScrolling({ anchorScrolling: 'enabled' }),
+      withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'top' }),
     ),
 
     provideHttpClient(withInterceptorsFromDi()),

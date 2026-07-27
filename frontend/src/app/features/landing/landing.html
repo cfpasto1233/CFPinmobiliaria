@@ -24,6 +24,10 @@
       <p class="search-card-label">¿Qué estás buscando?</p>
 
       <!-- Visual únicamente por ahora: aún no existe módulo de propiedades/backend -->
+      <button type="button" class="search-option">
+        <span class="search-option-label">Ventas</span>
+      </button>
+
       <div class="search-option-wrap">
         <button
           type="button"
@@ -74,14 +78,6 @@
         }
       </div>
 
-      <button type="button" class="search-option">
-        <span class="search-option-label">Ventas</span>
-      </button>
-
-      <button type="button" class="search-option">
-        <span class="search-option-label">Proyectos</span>
-      </button>
-
       <div class="search-option-wrap">
         <button
           type="button"
@@ -127,6 +123,10 @@
         </div>
         }
       </div>
+
+      <button type="button" class="search-option">
+        <span class="search-option-label">Proyectos</span>
+      </button>
 
       <button type="button" class="search-option">
         <span class="search-option-label">Publica tu propiedad</span>
@@ -234,11 +234,15 @@
     </button>
 
     <div class="carousel-content">
-      <p class="carousel-value">{{ statSlides[activeStatIndex()].value }}</p>
+      @if (statSlides[activeStatIndex()].image; as image) {
+        <img [src]="image" alt="" class="carousel-image" />
+      } @else if (statSlides[activeStatIndex()].value; as value) {
+        <p class="carousel-value">{{ value }}</p>
+      }
       <h3 class="carousel-label">{{ statSlides[activeStatIndex()].label }}</h3>
-      <p class="carousel-description">
-        {{ statSlides[activeStatIndex()].description }}
-      </p>
+      @if (statSlides[activeStatIndex()].description; as description) {
+        <p class="carousel-description">{{ description }}</p>
+      }
 
       <div class="carousel-dots">
         @for (slide of statSlides; track slide.label; let i = $index) {

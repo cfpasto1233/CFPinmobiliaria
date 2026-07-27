@@ -13,13 +13,18 @@
   color: $cfpasto-accent;
 }
 
-%no-motion-transition {
+// Mixins (no placeholders) por la misma razón que responsive-grid-cols más
+// abajo: con @extend, el media query de prefers-reduced-motion quedaría antes
+// en el CSS final que la propiedad "transition" base de cada regla, y con
+// igual especificidad la base ganaría siempre — dejando prefers-reduced-motion
+// silenciosamente roto.
+@mixin no-motion-transition {
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
 }
 
-%no-motion-transition-hover {
+@mixin no-motion-transition-hover {
   @media (prefers-reduced-motion: reduce) {
     transition: none;
 
@@ -53,7 +58,13 @@
   color: $cfpasto-text-dark;
 }
 
-%responsive-grid-cols {
+// Mixin (no placeholder): con @extend, Sass inserta la regla combinada donde
+// se DEFINE el placeholder (aquí arriba, antes de .hero) en vez de donde se
+// usa — entonces la media query queda antes en el CSS final que la regla base
+// (repeat(4,1fr) más abajo) y, con igual especificidad, la base siempre gana
+// sin importar el ancho de pantalla. @include copia el bloque en el lugar de
+// uso y preserva el orden de cascada correcto.
+@mixin responsive-grid-cols {
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -167,7 +178,7 @@
     transform: translateY(-1px);
   }
 
-  @extend %no-motion-transition-hover;
+  @include no-motion-transition-hover;
 }
 
 .search-option-label {
@@ -193,7 +204,7 @@
     transform: rotate(180deg);
   }
 
-  @extend %no-motion-transition;
+  @include no-motion-transition;
 }
 
 .search-submenu {
@@ -233,7 +244,7 @@
     background: rgba(255, 255, 255, 0.08);
   }
 
-  @extend %no-motion-transition;
+  @include no-motion-transition;
 }
 
 .search-submenu-title {
@@ -304,7 +315,7 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  @extend %responsive-grid-cols;
+  @include responsive-grid-cols;
 }
 
 // ─── Tips Inmobiliarios ──────────────────────────────────────────────────────
@@ -344,7 +355,7 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  @extend %responsive-grid-cols;
+  @include responsive-grid-cols;
 }
 
 .tip-card {
@@ -385,7 +396,7 @@
     transform: rotate(180deg);
   }
 
-  @extend %no-motion-transition;
+  @include no-motion-transition;
 }
 
 .tip-title {
@@ -413,11 +424,19 @@
   position: relative;
   max-width: 900px;
   margin: 0 auto;
-  padding-bottom: 3rem;
+  padding: 2.5rem 2rem;
+  margin-bottom: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
+  background: $cfpasto-white;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+
+  @media (max-width: 575.98px) {
+    padding: 2rem 1.25rem;
+  }
 }
 
 .carousel-arrow {
@@ -428,15 +447,15 @@
   width: 2.75rem;
   height: 2.75rem;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid $cfpasto-border;
   border-radius: $cfpasto-radius;
-  color: $cfpasto-white;
+  color: $cfpasto-primary;
   cursor: pointer;
   transition: background-color 0.25s ease, border-color 0.25s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: $cfpasto-bg-subtle;
+    border-color: $cfpasto-primary-light;
   }
 
   @media (max-width: 767.98px) {
@@ -458,16 +477,24 @@
   margin-bottom: 0.5rem;
 }
 
+.carousel-image {
+  display: block;
+  margin: 0 auto 0.75rem;
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+}
+
 .carousel-label {
   @extend %heading-bold;
   font-size: $cfpasto-text-2xl;
-  color: $cfpasto-white;
+  color: $cfpasto-primary;
   margin-bottom: 0.75rem;
 }
 
 .carousel-description {
   @extend %body-text;
-  color: rgba(255, 255, 255, 0.65);
+  color: $cfpasto-text-muted;
   max-width: 480px;
   margin: 0 auto 1.5rem;
 }
@@ -485,7 +512,7 @@
   padding: 0;
   border: none;
   border-radius: 50rem;
-  background: rgba(255, 255, 255, 0.3);
+  background: $cfpasto-border;
   cursor: pointer;
   transition: width 0.25s ease, background-color 0.25s ease;
 
@@ -494,7 +521,7 @@
     background: $cfpasto-accent;
   }
 
-  @extend %no-motion-transition;
+  @include no-motion-transition;
 }
 
 .stats-cta-row {
@@ -528,9 +555,15 @@
     text-align: right;
   }
 
+  // :first-child/:last-child pesan más que .stats-cta-item sola — el override
+  // de abajo debe repetir esos mismos selectores para poder ganarles en móvil.
   @media (max-width: 767.98px) {
-    align-items: center;
-    text-align: center;
+    &,
+    &:first-child,
+    &:last-child {
+      align-items: center;
+      text-align: center;
+    }
   }
 }
 

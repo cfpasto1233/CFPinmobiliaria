@@ -18,6 +18,13 @@ def create_propiedad(*, session: Session, form: PropiedadForm, foto_principal_ke
         tipo=form.tipo,
         foto_principal_key=foto_principal_key,
         orden=max_orden + 1,
+        tipo_inmueble=form.tipo_inmueble,
+        banos=form.banos,
+        habitaciones=form.habitaciones,
+        tiene_parqueadero=form.tiene_parqueadero,
+        num_parqueaderos=form.num_parqueaderos,
+        area_construida=form.area_construida,
+        antiguedad=form.antiguedad,
     )
     session.add(db_obj)
     session.commit()

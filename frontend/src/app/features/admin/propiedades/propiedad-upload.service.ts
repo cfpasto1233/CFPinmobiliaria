@@ -23,6 +23,13 @@ export class PropiedadUploadService {
     body.append('ubicacion', form.ubicacion);
     body.append('precio', String(form.precio));
     body.append('tipo', form.tipo);
+    body.append('tipo_inmueble', form.tipo_inmueble);
+    body.append('tiene_parqueadero', String(form.tiene_parqueadero));
+    if (form.banos !== null) body.append('banos', String(form.banos));
+    if (form.habitaciones !== null) body.append('habitaciones', String(form.habitaciones));
+    if (form.num_parqueaderos !== null) body.append('num_parqueaderos', String(form.num_parqueaderos));
+    if (form.area_construida !== null) body.append('area_construida', String(form.area_construida));
+    if (form.antiguedad !== null) body.append('antiguedad', String(form.antiguedad));
     body.append('foto_principal', fotoPrincipal);
 
     return this.httpClient.post<PropiedadPublic>(`${this.basePath}/api/v1/propiedades/`, body);

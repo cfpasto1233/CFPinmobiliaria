@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, effect, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PropiedadForm } from '../../../../store/Propiedades/propiedad-form.model';
+import { PropiedadForm, TipoInmueble } from '../../../../store/Propiedades/propiedad-form.model';
 import { PropiedadesActions } from '../../../../store/Propiedades/propiedades.actions';
 import {
   selectPropiedadSelected,
@@ -13,8 +14,20 @@ import {
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
+const TIPOS_INMUEBLE_CON_DETALLE: TipoInmueble[] = ['casa', 'apartamento'];
 
-type FormFieldName = 'nombre' | 'descripcion' | 'ubicacion' | 'precio' | 'tipo';
+type FormFieldName =
+  | 'nombre'
+  | 'descripcion'
+  | 'ubicacion'
+  | 'precio'
+  | 'tipo'
+  | 'tipoInmueble'
+  | 'banos'
+  | 'habitaciones'
+  | 'numParqueaderos'
+  | 'areaConstruida'
+  | 'antiguedad';
 
 const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   nombre: 'El nombre es obligatorio.',
@@ -22,6 +35,18 @@ const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   ubicacion: 'La ubicación es obligatoria.',
   precio: 'El precio es obligatorio.',
   tipo: 'Selecciona un tipo.',
+  tipoInmueble: 'Selecciona el tipo de inmueble.',
+  banos: 'Indica el número de baños.',
+  habitaciones: 'Indica el número de habitaciones.',
+  numParqueaderos: 'Indica el número de parqueaderos.',
+  areaConstruida: 'Indica el área construida.',
+  antiguedad: 'Indica la antigüedad.',
+};
+
+const MIN_MESSAGES: Partial<Record<FormFieldName, string>> = {
+  precio: 'El precio debe ser mayor a 0.',
+  areaConstruida: 'El área construida debe ser mayor a 0.',
+  numParqueaderos: 'Debe ser al menos 1.',
 };
 
 @Component({
@@ -50,12 +75,38 @@ export class PropiedadFormComponent implements OnInit {
     { value: 'arriendo', label: 'Arriendo' },
   ];
 
+  protected readonly tipoInmuebleOptions: { value: TipoInmueble; label: string }[] = [
+    { value: 'casa', label: 'Casa' },
+    { value: 'apartamento', label: 'Apartamento' },
+    { value: 'lote', label: 'Lote' },
+  ];
+
   protected readonly form = this.fb.group({
     nombre: ['', [Validators.required, Validators.maxLength(255)]],
     descripcion: ['', Validators.required],
     ubicacion: ['', [Validators.required, Validators.maxLength(255)]],
     precio: [null as number | null, [Validators.required, Validators.min(1)]],
     tipo: ['venta' as 'venta' | 'arriendo', Validators.required],
+    tipoInmueble: ['casa' as TipoInmueble, Validators.required],
+    banos: [null as number | null],
+    habitaciones: [null as number | null],
+    tieneParqueadero: [false],
+    numParqueaderos: [null as number | null],
+    areaConstruida: [null as number | null],
+    antiguedad: [null as number | null],
+  });
+
+  // Signals derivados de los controles para poder mostrar/ocultar secciones del
+  // template reactivamente (OnPush) sin suscribirse manualmente en la vista.
+  private readonly tipoInmuebleValue = toSignal(this.form.controls.tipoInmueble.valueChanges, {
+    initialValue: this.form.controls.tipoInmueble.value,
+  });
+  protected readonly mostrarDetalleInmueble = computed(() =>
+    TIPOS_INMUEBLE_CON_DETALLE.includes(this.tipoInmuebleValue() ?? 'casa'),
+  );
+
+  protected readonly tieneParqueaderoValue = toSignal(this.form.controls.tieneParqueadero.valueChanges, {
+    initialValue: this.form.controls.tieneParqueadero.value,
   });
 
   protected readonly fotoPrincipalFile = signal<File | null>(null);
@@ -75,9 +126,26 @@ export class PropiedadFormComponent implements OnInit {
           ubicacion: item.ubicacion,
           precio: Number(item.precio),
           tipo: item.tipo === 'arriendo' ? 'arriendo' : 'venta',
+          tipoInmueble: (item.tipo_inmueble as TipoInmueble | undefined) ?? 'casa',
+          banos: item.banos,
+          habitaciones: item.habitaciones,
+          tieneParqueadero: item.tiene_parqueadero,
+          numParqueaderos: item.num_parqueaderos,
+          areaConstruida: item.area_construida !== null ? Number(item.area_construida) : null,
+          antiguedad: item.antiguedad,
         });
       }
     });
+
+    // Baños/habitaciones/área/antigüedad son obligatorios solo si el inmueble es casa
+    // o apartamento; el número de parqueaderos solo si hay parqueadero. Se actualizan
+    // los validators en caliente en vez de duplicar la condición en el template.
+    this.form.controls.tipoInmueble.valueChanges.subscribe((tipo) => this.updateDetalleValidators(tipo));
+    this.form.controls.tieneParqueadero.valueChanges.subscribe((tiene) =>
+      this.updateParqueaderoValidators(tiene),
+    );
+    this.updateDetalleValidators(this.form.controls.tipoInmueble.value);
+    this.updateParqueaderoValidators(this.form.controls.tieneParqueadero.value);
   }
 
   ngOnInit(): void {
@@ -91,7 +159,7 @@ export class PropiedadFormComponent implements OnInit {
     if (!control || !control.invalid || !(control.dirty || control.touched)) return null;
     if (control.hasError('required')) return REQUIRED_MESSAGES[name];
     if (control.hasError('maxlength')) return 'Máximo 255 caracteres.';
-    if (control.hasError('min')) return 'El precio debe ser mayor a 0.';
+    if (control.hasError('min')) return MIN_MESSAGES[name] ?? 'El valor no puede ser negativo.';
     return null;
   }
 
@@ -158,12 +226,20 @@ export class PropiedadFormComponent implements OnInit {
     }
 
     const raw = this.form.getRawValue();
+    const esCasaOApartamento = TIPOS_INMUEBLE_CON_DETALLE.includes(raw.tipoInmueble ?? 'casa');
     const form: PropiedadForm = {
       nombre: raw.nombre ?? '',
       descripcion: raw.descripcion ?? '',
       ubicacion: raw.ubicacion ?? '',
       precio: raw.precio ?? 0,
       tipo: raw.tipo ?? 'venta',
+      tipo_inmueble: raw.tipoInmueble ?? 'casa',
+      banos: esCasaOApartamento ? raw.banos : null,
+      habitaciones: esCasaOApartamento ? raw.habitaciones : null,
+      tiene_parqueadero: esCasaOApartamento ? (raw.tieneParqueadero ?? false) : false,
+      num_parqueaderos: esCasaOApartamento && raw.tieneParqueadero ? raw.numParqueaderos : null,
+      area_construida: esCasaOApartamento ? raw.areaConstruida : null,
+      antiguedad: esCasaOApartamento ? raw.antiguedad : null,
     };
 
     if (this.isEditMode && this.propiedadId) {
@@ -177,6 +253,25 @@ export class PropiedadFormComponent implements OnInit {
     }
 
     this.store.dispatch(PropiedadesActions.create({ form, fotoPrincipal: this.fotoPrincipalFile()! }));
+  }
+
+  private updateDetalleValidators(tipo: TipoInmueble | null): void {
+    const requerido = TIPOS_INMUEBLE_CON_DETALLE.includes(tipo ?? 'casa') ? [Validators.required] : [];
+    this.form.controls.banos.setValidators([...requerido, Validators.min(0)]);
+    this.form.controls.habitaciones.setValidators([...requerido, Validators.min(0)]);
+    this.form.controls.areaConstruida.setValidators([...requerido, Validators.min(0.01)]);
+    this.form.controls.antiguedad.setValidators([...requerido, Validators.min(0)]);
+    this.form.controls.banos.updateValueAndValidity({ emitEvent: false });
+    this.form.controls.habitaciones.updateValueAndValidity({ emitEvent: false });
+    this.form.controls.areaConstruida.updateValueAndValidity({ emitEvent: false });
+    this.form.controls.antiguedad.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private updateParqueaderoValidators(tieneParqueadero: boolean | null): void {
+    this.form.controls.numParqueaderos.setValidators(
+      tieneParqueadero ? [Validators.required, Validators.min(1)] : [],
+    );
+    this.form.controls.numParqueaderos.updateValueAndValidity({ emitEvent: false });
   }
 
   private handleFotoPrincipal(file: File | null): void {

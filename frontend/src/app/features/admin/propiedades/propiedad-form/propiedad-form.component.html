@@ -107,6 +107,118 @@
         <hr class="propiedad-form-divider" />
 
         <section class="propiedad-form-section">
+          <h2 class="propiedad-form-section-title">Detalles del inmueble</h2>
+
+          <div class="propiedad-form-field">
+            <label class="propiedad-form-label">Tipo de inmueble *</label>
+            <ng-select
+              [items]="tipoInmuebleOptions"
+              bindLabel="label"
+              bindValue="value"
+              [clearable]="false"
+              [appendTo]="'body'"
+              formControlName="tipoInmueble"
+            ></ng-select>
+          </div>
+
+          @if (mostrarDetalleInmueble()) {
+            <div class="propiedad-form-row">
+              <div class="propiedad-form-field">
+                <label for="banos" class="propiedad-form-label">Baños *</label>
+                <input
+                  id="banos"
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  [class.is-invalid]="fieldError('banos')"
+                  formControlName="banos"
+                />
+                @if (fieldError('banos'); as err) {
+                  <div class="form-error">{{ err }}</div>
+                }
+              </div>
+
+              <div class="propiedad-form-field">
+                <label for="habitaciones" class="propiedad-form-label">Habitaciones *</label>
+                <input
+                  id="habitaciones"
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  [class.is-invalid]="fieldError('habitaciones')"
+                  formControlName="habitaciones"
+                />
+                @if (fieldError('habitaciones'); as err) {
+                  <div class="form-error">{{ err }}</div>
+                }
+              </div>
+
+              <div class="propiedad-form-field">
+                <label for="antiguedad" class="propiedad-form-label">Antigüedad (años) *</label>
+                <input
+                  id="antiguedad"
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  [class.is-invalid]="fieldError('antiguedad')"
+                  formControlName="antiguedad"
+                />
+                @if (fieldError('antiguedad'); as err) {
+                  <div class="form-error">{{ err }}</div>
+                }
+              </div>
+            </div>
+
+            <div class="propiedad-form-field">
+              <label for="areaConstruida" class="propiedad-form-label">Área construida (m²) *</label>
+              <input
+                id="areaConstruida"
+                type="number"
+                min="0.01"
+                step="0.01"
+                class="form-control"
+                [class.is-invalid]="fieldError('areaConstruida')"
+                formControlName="areaConstruida"
+              />
+              @if (fieldError('areaConstruida'); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+
+            <div class="propiedad-form-field">
+              <div class="form-check">
+                <input
+                  id="tieneParqueadero"
+                  type="checkbox"
+                  class="form-check-input"
+                  formControlName="tieneParqueadero"
+                />
+                <label for="tieneParqueadero" class="form-check-label">Tiene parqueadero</label>
+              </div>
+            </div>
+
+            @if (tieneParqueaderoValue()) {
+              <div class="propiedad-form-field">
+                <label for="numParqueaderos" class="propiedad-form-label">Número de parqueaderos *</label>
+                <input
+                  id="numParqueaderos"
+                  type="number"
+                  min="1"
+                  class="form-control"
+                  [class.is-invalid]="fieldError('numParqueaderos')"
+                  formControlName="numParqueaderos"
+                />
+                @if (fieldError('numParqueaderos'); as err) {
+                  <div class="form-error">{{ err }}</div>
+                }
+              </div>
+            }
+          }
+        </section>
+
+        <hr class="propiedad-form-divider" />
+
+        <section class="propiedad-form-section">
           <h2 class="propiedad-form-section-title">Fotos</h2>
 
           @if (!isEditMode) {

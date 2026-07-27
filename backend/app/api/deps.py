@@ -4,6 +4,7 @@ import jwt
 from fastapi import Cookie, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
@@ -27,16 +28,18 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
         token_data = TokenPayload(**payload)
         if token_data.type != "access":
             raise InvalidTokenError("Not an access token")
-    except (InvalidTokenError, Exception):
+    except (InvalidTokenError, ValidationError):
+        # 401 (no 403): así el frontend distingue "sesión vencida" (puede refrescar/redirigir
+        # a login) de "sin permisos" (usuario válido pero sin rol suficiente).
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate credentials",
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="No pudimos validar tu sesión. Inicia sesión nuevamente.",
         )
     user = get_user_by_id(session=session, user_id=token_data.sub)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
     if not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
+        raise HTTPException(status_code=400, detail="Tu cuenta está inactiva. Contacta a un administrador.")
     return user
 
 
@@ -47,7 +50,7 @@ def get_current_active_superuser(current_user: CurrentUser) -> User:
     if not current_user.is_superuser:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="The user doesn't have enough privileges",
+            detail="No tienes permisos de superadministrador para realizar esta acción.",
         )
     return current_user
 
@@ -61,7 +64,7 @@ def get_refresh_token_from_cookie(
     if not refresh_token:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Refresh token missing",
+            detail="Tu sesión expiró. Inicia sesión nuevamente.",
         )
     return refresh_token
 
