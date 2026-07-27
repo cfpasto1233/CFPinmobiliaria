@@ -165,10 +165,15 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
       label: 'Miembros de Afianzar de Nariño',
       description: 'Con +15 años en el mercado inmobiliario respaldando contratos de arrendamiento.',
     },
+    {
+      label: 'Soluciones integrales con respaldo legal y público',
+      description:
+        'Ante entidades como IGAC, SNR y empresas de servicios públicos para respaldar tu propiedad y que todo se encuentre en orden.',
+    },
   ];
 
   protected readonly statsCtaOptions: readonly StatsCtaOption[] = [
-    { question: '¿Tienes una propiedad?', actionLabel: 'Publícala gratis' },
+    { question: '¿Tienes una propiedad?', actionLabel: 'Publícala aquí' },
     { question: '¿Buscas casa o apartamento?', actionLabel: 'Ver propiedades' },
     {
       question: '¿Necesitas orientación?',

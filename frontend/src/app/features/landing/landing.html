@@ -236,8 +236,8 @@
     <div class="carousel-content">
       @if (statSlides[activeStatIndex()].image; as image) {
         <img [src]="image" alt="" class="carousel-image" />
-      } @else {
-        <p class="carousel-value">{{ statSlides[activeStatIndex()].value }}</p>
+      } @else if (statSlides[activeStatIndex()].value; as value) {
+        <p class="carousel-value">{{ value }}</p>
       }
       <h3 class="carousel-label">{{ statSlides[activeStatIndex()].label }}</h3>
       @if (statSlides[activeStatIndex()].description; as description) {
