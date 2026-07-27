@@ -26,9 +26,10 @@ interface RealEstateTip {
 }
 
 interface StatSlide {
-  value: string;
+  value?: string;
+  image?: string;
   label: string;
-  description: string;
+  description?: string;
 }
 
 interface StatsCtaOption {
@@ -146,19 +147,23 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
       description: 'Nuestra tasa de satisfacción nos posiciona como referentes de confianza en el sector.',
     },
     {
-      value: '15 años',
+      value: '3 años',
       label: 'De experiencia',
-      description: 'Desde 2009 acompañamos a familias y empresas a encontrar el inmueble perfecto.',
-    },
-    {
-      value: '32',
-      label: 'Ciudades en Colombia',
-      description: 'Presencia nacional con agentes especializados en las principales ciudades del país.',
+      description: 'Acompañamos a las familias desde 2023 con confianza y respaldo.',
     },
     {
       value: '$0',
       label: 'Costo de asesoría inicial',
       description: 'La primera consulta con nuestros asesores es completamente gratuita y sin compromiso.',
+    },
+    {
+      image: 'images/RedInmo.webp',
+      label: 'Miembros de la Red Inmobiliaria de Nariño',
+    },
+    {
+      image: 'images/Afianzar.webp',
+      label: 'Miembros de Afianzar de Nariño',
+      description: 'Con +15 años en el mercado inmobiliario respaldando contratos de arrendamiento.',
     },
   ];
 
@@ -203,7 +208,7 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if (!reducedMotion) {
-      this.statAutoplayId = setInterval(() => this.nextStat(), 6000);
+      this.statAutoplayId = setInterval(() => this.nextStat(), 9000);
     }
   }
 

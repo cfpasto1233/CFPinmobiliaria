@@ -424,11 +424,19 @@
   position: relative;
   max-width: 900px;
   margin: 0 auto;
-  padding-bottom: 3rem;
+  padding: 2.5rem 2rem;
+  margin-bottom: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
+  background: $cfpasto-white;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+
+  @media (max-width: 575.98px) {
+    padding: 2rem 1.25rem;
+  }
 }
 
 .carousel-arrow {
@@ -439,15 +447,15 @@
   width: 2.75rem;
   height: 2.75rem;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid $cfpasto-border;
   border-radius: $cfpasto-radius;
-  color: $cfpasto-white;
+  color: $cfpasto-primary;
   cursor: pointer;
   transition: background-color 0.25s ease, border-color 0.25s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: $cfpasto-bg-subtle;
+    border-color: $cfpasto-primary-light;
   }
 
   @media (max-width: 767.98px) {
@@ -469,16 +477,24 @@
   margin-bottom: 0.5rem;
 }
 
+.carousel-image {
+  display: block;
+  margin: 0 auto 0.75rem;
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+}
+
 .carousel-label {
   @extend %heading-bold;
   font-size: $cfpasto-text-2xl;
-  color: $cfpasto-white;
+  color: $cfpasto-primary;
   margin-bottom: 0.75rem;
 }
 
 .carousel-description {
   @extend %body-text;
-  color: rgba(255, 255, 255, 0.65);
+  color: $cfpasto-text-muted;
   max-width: 480px;
   margin: 0 auto 1.5rem;
 }
@@ -496,7 +512,7 @@
   padding: 0;
   border: none;
   border-radius: 50rem;
-  background: rgba(255, 255, 255, 0.3);
+  background: $cfpasto-border;
   cursor: pointer;
   transition: width 0.25s ease, background-color 0.25s ease;
 

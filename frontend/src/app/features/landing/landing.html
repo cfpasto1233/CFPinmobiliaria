@@ -234,11 +234,15 @@
     </button>
 
     <div class="carousel-content">
-      <p class="carousel-value">{{ statSlides[activeStatIndex()].value }}</p>
+      @if (statSlides[activeStatIndex()].image; as image) {
+        <img [src]="image" alt="" class="carousel-image" />
+      } @else {
+        <p class="carousel-value">{{ statSlides[activeStatIndex()].value }}</p>
+      }
       <h3 class="carousel-label">{{ statSlides[activeStatIndex()].label }}</h3>
-      <p class="carousel-description">
-        {{ statSlides[activeStatIndex()].description }}
-      </p>
+      @if (statSlides[activeStatIndex()].description; as description) {
+        <p class="carousel-description">{{ description }}</p>
+      }
 
       <div class="carousel-dots">
         @for (slide of statSlides; track slide.label; let i = $index) {
