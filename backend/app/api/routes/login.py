@@ -25,9 +25,9 @@ def login_access_token(
         session=session, email=form_data.username, password=form_data.password
     )
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect email or password")
+        raise HTTPException(status_code=400, detail="Correo o contraseña incorrectos.")
     if not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
+        raise HTTPException(status_code=400, detail="Tu cuenta está inactiva. Contacta a un administrador.")
 
     access_token = create_access_token(
         subject=str(user.id),

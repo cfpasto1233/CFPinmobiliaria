@@ -3,6 +3,7 @@ from datetime import timedelta
 import jwt
 from fastapi import APIRouter, HTTPException, Response, status
 from jwt.exceptions import InvalidTokenError
+from pydantic import ValidationError
 
 from app.api.deps import CurrentUser, RefreshTokenDep, SessionDep
 from app.core.config import settings
@@ -24,14 +25,14 @@ def refresh_token(
         token_data = TokenPayload(**payload)
         if token_data.type != "refresh":
             raise InvalidTokenError("Not a refresh token")
-    except (InvalidTokenError, Exception):
+    except (InvalidTokenError, ValidationError):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired refresh token",
+            detail="Tu sesión expiró. Inicia sesión nuevamente.",
         )
     user = get_user_by_id(session=session, user_id=token_data.sub)
     if not user or not user.is_active:
-        raise HTTPException(status_code=401, detail="User not found or inactive")
+        raise HTTPException(status_code=401, detail="Usuario no encontrado o inactivo.")
 
     access_token = create_access_token(
         subject=str(user.id),

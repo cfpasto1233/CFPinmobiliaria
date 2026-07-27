@@ -1,0 +1,82 @@
+<div class="gallery-modal-overlay" (click)="close()">
+  <div class="gallery-modal" (click)="$event.stopPropagation()">
+    <button type="button" class="gallery-modal-close" aria-label="Cerrar" (click)="close()">&times;</button>
+
+    <div class="gallery-modal-media">
+      <img [src]="photos()[activeIndex()]" [alt]="property().nombre" class="gallery-modal-img" />
+
+      @if (photos().length > 1) {
+        <button type="button" class="gallery-nav gallery-nav-prev" aria-label="Foto anterior" (click)="prev()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button type="button" class="gallery-nav gallery-nav-next" aria-label="Foto siguiente" (click)="next()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <span class="gallery-counter">{{ activeIndex() + 1 }} / {{ photos().length }}</span>
+      }
+    </div>
+
+    @if (photos().length > 1) {
+      <div class="gallery-thumbs">
+        @for (photo of photos(); track photo; let i = $index) {
+          <button type="button" class="gallery-thumb" [class.is-active]="i === activeIndex()" (click)="goTo(i)">
+            <img [src]="photo" [alt]="property().nombre + ' foto ' + (i + 1)" />
+          </button>
+        }
+      </div>
+    }
+
+    <div class="gallery-modal-info">
+      <div class="gallery-modal-info-header">
+        <div>
+          <p class="gallery-modal-location">{{ property().ubicacion }} · {{ tipoInmuebleLabel() }}</p>
+          <h3 class="gallery-modal-name">{{ property().nombre }}</h3>
+        </div>
+        <span class="gallery-modal-badge" [class.is-rent]="property().tipo === 'arriendo'">
+          {{ property().tipo === 'venta' ? 'Venta' : 'Arriendo' }}
+        </span>
+      </div>
+
+      <p class="gallery-modal-price" [class.is-rent]="property().tipo === 'arriendo'">
+        {{ property().precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}<span class="gallery-modal-price-suffix">{{
+          property().tipo === 'arriendo' ? '/mes' : ''
+        }}</span>
+      </p>
+
+      @if (specs().length > 0) {
+        <ul class="gallery-modal-specs">
+          @for (spec of specs(); track spec) {
+            <li>{{ spec }}</li>
+          }
+        </ul>
+      }
+
+      <p class="gallery-modal-description">{{ property().descripcion }}</p>
+    </div>
+  </div>
+</div>
