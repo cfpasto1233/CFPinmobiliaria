@@ -15,6 +15,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'ventas',
+    loadComponent: () =>
+      import('./features/ventas/ventas.component').then((m) => m.VentasComponent),
+  },
+  {
     path: 'auth/login',
     loadComponent: () =>
       import('./features/auth/login/login').then((m) => m.LoginComponent),

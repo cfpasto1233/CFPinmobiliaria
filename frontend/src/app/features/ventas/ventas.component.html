@@ -1,0 +1,115 @@
+<app-navbar />
+
+<section class="ventas">
+  <div class="ventas-header">
+    <p class="ventas-eyebrow">Equipo comercial</p>
+    <h1 class="ventas-title">Cuéntanos qué estás buscando</h1>
+    <p class="ventas-subtitle">
+      Completa tus datos y un asesor te contactará para ayudarte a encontrar la propiedad ideal.
+    </p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="ventas-card">
+      <h2 class="ventas-card-title">Datos del comprador</h2>
+
+      <div class="ventas-row">
+        <div class="ventas-field">
+          <label for="nombreCompleto" class="ventas-label">Nombre completo *</label>
+          <input
+            id="nombreCompleto"
+            type="text"
+            class="ventas-input"
+            [class.is-invalid]="fieldError('nombreCompleto')"
+            formControlName="nombreCompleto"
+          />
+          @if (fieldError('nombreCompleto'); as err) {
+            <div class="ventas-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="ventas-field">
+          <label for="celular" class="ventas-label">Celular *</label>
+          <input
+            id="celular"
+            type="tel"
+            class="ventas-input"
+            [class.is-invalid]="fieldError('celular')"
+            formControlName="celular"
+          />
+          @if (fieldError('celular'); as err) {
+            <div class="ventas-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="ventas-field">
+        <label for="sectoresInteres" class="ventas-label">Sectores de interés *</label>
+        <input
+          id="sectoresInteres"
+          type="text"
+          class="ventas-input"
+          placeholder="Ej. Chapinero, Cedritos, Usaquén"
+          [class.is-invalid]="fieldError('sectoresInteres')"
+          formControlName="sectoresInteres"
+        />
+        @if (fieldError('sectoresInteres'); as err) {
+          <div class="ventas-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="ventas-field">
+        <label for="presupuestoTotal" class="ventas-label">Presupuesto total *</label>
+        <input
+          id="presupuestoTotal"
+          type="text"
+          class="ventas-input"
+          placeholder="Ej. $250.000.000"
+          [class.is-invalid]="fieldError('presupuestoTotal')"
+          formControlName="presupuestoTotal"
+        />
+        @if (fieldError('presupuestoTotal'); as err) {
+          <div class="ventas-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="ventas-field">
+        <label class="ventas-label">Forma de pago *</label>
+        <ng-select
+          class="ventas-select"
+          [items]="formaPagoOptions"
+          bindLabel="label"
+          bindValue="value"
+          [clearable]="false"
+          placeholder="Selecciona una opción"
+          formControlName="formaPago"
+        ></ng-select>
+        @if (fieldError('formaPago'); as err) {
+          <div class="ventas-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="ventas-field">
+        <label for="valorDisponibleCredito" class="ventas-label">Valor disponible a crédito *</label>
+        <input
+          id="valorDisponibleCredito"
+          type="text"
+          class="ventas-input"
+          placeholder="Ej. $150.000.000"
+          [class.is-invalid]="fieldError('valorDisponibleCredito')"
+          formControlName="valorDisponibleCredito"
+        />
+        @if (fieldError('valorDisponibleCredito'); as err) {
+          <div class="ventas-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="ventas-actions">
+        <span class="ventas-required-hint">* Campos obligatorios</span>
+        <button type="submit" class="btn btn-secondary">Registrar comprador</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<app-footer />
