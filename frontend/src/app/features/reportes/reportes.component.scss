@@ -1,0 +1,227 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.reportes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rem 1.5rem 4rem;
+  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+
+  @media (max-width: 767.98px) {
+    padding: 7rem 1.25rem 3rem;
+  }
+}
+
+.reportes-header {
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.reportes-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $cfpasto-white;
+  }
+}
+
+.reportes-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 0.75rem;
+}
+
+.reportes-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  color: $cfpasto-white;
+  margin: 0 0 0.75rem;
+}
+
+.reportes-subtitle {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.reportes-card {
+  width: 100%;
+  max-width: 640px;
+  padding: 2rem;
+  background: rgba($cfpasto-primary-dark, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+
+  @media (max-width: 575.98px) {
+    padding: 1.5rem;
+  }
+}
+
+.reportes-card-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-lg;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin: 0 0 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.reportes-field {
+  margin-bottom: 1.5rem;
+}
+
+.reportes-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 0.5rem;
+}
+
+.reportes-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: $cfpasto-radius-lg;
+  color: $cfpasto-white;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $cfpasto-accent;
+    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
+  }
+
+  &.is-invalid {
+    border-color: $cfpasto-error-light;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+    }
+  }
+}
+
+.reportes-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.reportes-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: #ffb4b4;
+  margin-top: 0.4rem;
+}
+
+.reportes-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+  @media (max-width: 575.98px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.reportes-required-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+// --- ng-select sobre fondo oscuro ---
+// Sin [appendTo]="'body'" el panel queda dentro del árbol del componente,
+// así que ::ng-deep con el atributo de encapsulación de Angular sí lo alcanza.
+
+:host ::ng-deep .reportes-select {
+  .ng-select-container {
+    min-height: 0;
+    padding: 0.35rem 0.25rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: $cfpasto-radius-lg;
+    color: $cfpasto-white;
+  }
+
+  &.ng-select-focused .ng-select-container {
+    border-color: $cfpasto-accent;
+    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
+  }
+
+  .ng-value,
+  .ng-input > input {
+    color: $cfpasto-white;
+  }
+
+  .ng-placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .ng-arrow-wrapper .ng-arrow {
+    border-top-color: rgba(255, 255, 255, 0.55);
+  }
+
+  .ng-dropdown-panel {
+    background: $cfpasto-primary-dark;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: $cfpasto-radius-lg;
+    box-shadow: $cfpasto-shadow-lg;
+    margin-top: 0.35rem;
+    overflow: hidden;
+
+    .ng-dropdown-panel-items .ng-option {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.85);
+
+      &.ng-option-marked {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      &.ng-option-selected {
+        background: rgba($cfpasto-accent, 0.16);
+        color: $cfpasto-accent;
+        font-weight: 600;
+      }
+    }
+  }
+}

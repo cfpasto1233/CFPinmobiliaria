@@ -4,7 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 interface AdminNavItem {
   label: string;
   path: string;
-  icon: 'overview' | 'users' | 'properties';
+  icon: 'overview' | 'users' | 'properties' | 'projects';
 }
 
 @Component({
@@ -20,5 +20,6 @@ export class SidebarComponent {
 
   protected readonly navItems: readonly AdminNavItem[] = [
     { label: 'Propiedades', path: '/admin/propiedades', icon: 'properties' },
+    { label: 'Proyectos', path: '/admin/proyectos', icon: 'projects' },
   ];
 }

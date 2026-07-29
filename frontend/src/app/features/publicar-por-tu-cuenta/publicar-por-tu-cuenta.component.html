@@ -1,0 +1,109 @@
+<app-navbar />
+
+<section class="publicar-cuenta">
+  <div class="publicar-cuenta-header">
+    <a routerLink="/" class="publicar-cuenta-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5" />
+        <path d="M12 19l-7-7 7-7" />
+      </svg>
+      Volver al inicio
+    </a>
+
+    <p class="publicar-cuenta-eyebrow">Autogestión</p>
+    <h1 class="publicar-cuenta-title">Publica tu propiedad por tu cuenta</h1>
+    <p class="publicar-cuenta-subtitle">
+      Cuéntanos sobre tu propiedad y te contactaremos para darte acceso y ayudarte a publicarla
+      directamente en la plataforma.
+    </p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="publicar-cuenta-card">
+      <h2 class="publicar-cuenta-card-title">Datos de tu propiedad</h2>
+
+      <div class="publicar-cuenta-field">
+        <label for="nombreCompleto" class="publicar-cuenta-label">Nombre completo *</label>
+        <input
+          id="nombreCompleto"
+          type="text"
+          class="publicar-cuenta-input"
+          placeholder="Tu nombre"
+          [class.is-invalid]="fieldError('nombreCompleto')"
+          formControlName="nombreCompleto"
+        />
+        @if (fieldError('nombreCompleto'); as err) {
+          <div class="publicar-cuenta-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="publicar-cuenta-field">
+        <label for="numeroContacto" class="publicar-cuenta-label">Número de contacto *</label>
+        <input
+          id="numeroContacto"
+          type="tel"
+          class="publicar-cuenta-input"
+          placeholder="+57 300 000 0000"
+          [class.is-invalid]="fieldError('numeroContacto')"
+          formControlName="numeroContacto"
+        />
+        @if (fieldError('numeroContacto'); as err) {
+          <div class="publicar-cuenta-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="publicar-cuenta-field">
+        <label class="publicar-cuenta-label">Tipo de operación *</label>
+        <ng-select
+          class="publicar-cuenta-select"
+          [items]="tipoOperacionOptions"
+          bindLabel="label"
+          bindValue="value"
+          [clearable]="false"
+          placeholder="Seleccionar..."
+          formControlName="tipoOperacion"
+        ></ng-select>
+        @if (fieldError('tipoOperacion'); as err) {
+          <div class="publicar-cuenta-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="publicar-cuenta-field">
+        <label for="direccionInmueble" class="publicar-cuenta-label">Dirección o sector del inmueble *</label>
+        <input
+          id="direccionInmueble"
+          type="text"
+          class="publicar-cuenta-input"
+          placeholder="Cra 15 #80-20, Bogotá"
+          [class.is-invalid]="fieldError('direccionInmueble')"
+          formControlName="direccionInmueble"
+        />
+        @if (fieldError('direccionInmueble'); as err) {
+          <div class="publicar-cuenta-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="publicar-cuenta-field">
+        <label for="observaciones" class="publicar-cuenta-label">Observaciones</label>
+        <textarea
+          id="observaciones"
+          rows="3"
+          class="publicar-cuenta-input publicar-cuenta-textarea"
+          placeholder="Áreas, estado, restricciones..."
+          [class.is-invalid]="fieldError('observaciones')"
+          formControlName="observaciones"
+        ></textarea>
+        @if (fieldError('observaciones'); as err) {
+          <div class="publicar-cuenta-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="publicar-cuenta-actions">
+        <span class="publicar-cuenta-required-hint">* Campos obligatorios</span>
+        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<app-footer />

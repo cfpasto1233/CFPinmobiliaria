@@ -1,0 +1,108 @@
+<app-navbar />
+
+<section class="reportes">
+  <div class="reportes-header">
+    <a routerLink="/" class="reportes-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5" />
+        <path d="M12 19l-7-7 7-7" />
+      </svg>
+      Volver al inicio
+    </a>
+
+    <p class="reportes-eyebrow">Reportes para clientes</p>
+    <h1 class="reportes-title">Solicita tu reporte</h1>
+    <p class="reportes-subtitle">
+      Pide tu estado de cuenta, certificado de pagos o historial de arriendo. Te lo enviaremos por el medio que prefieras.
+    </p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="reportes-card">
+      <h2 class="reportes-card-title">Datos de la solicitud</h2>
+
+      <div class="reportes-field">
+        <label for="nombreCompleto" class="reportes-label">Nombre completo *</label>
+        <input
+          id="nombreCompleto"
+          type="text"
+          class="reportes-input"
+          placeholder="Tu nombre"
+          [class.is-invalid]="fieldError('nombreCompleto')"
+          formControlName="nombreCompleto"
+        />
+        @if (fieldError('nombreCompleto'); as err) {
+          <div class="reportes-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reportes-field">
+        <label for="contacto" class="reportes-label">Correo o celular de contacto *</label>
+        <input
+          id="contacto"
+          type="text"
+          class="reportes-input"
+          placeholder="tucorreo@ejemplo.com o +57 300 000 0000"
+          [class.is-invalid]="fieldError('contacto')"
+          formControlName="contacto"
+        />
+        @if (fieldError('contacto'); as err) {
+          <div class="reportes-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reportes-field">
+        <label class="reportes-label">Tipo de reporte *</label>
+        <ng-select
+          class="reportes-select"
+          [items]="tipoReporteOptions"
+          bindLabel="label"
+          bindValue="value"
+          [clearable]="false"
+          placeholder="Seleccionar..."
+          formControlName="tipoReporte"
+        ></ng-select>
+        @if (fieldError('tipoReporte'); as err) {
+          <div class="reportes-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reportes-field">
+        <label for="periodo" class="reportes-label">Periodo o rango de fechas</label>
+        <input
+          id="periodo"
+          type="text"
+          class="reportes-input"
+          placeholder="Ej: últimos 3 meses, 2025"
+          [class.is-invalid]="fieldError('periodo')"
+          formControlName="periodo"
+        />
+        @if (fieldError('periodo'); as err) {
+          <div class="reportes-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reportes-field">
+        <label for="mensaje" class="reportes-label">Mensaje adicional</label>
+        <textarea
+          id="mensaje"
+          rows="3"
+          class="reportes-input reportes-textarea"
+          placeholder="Detalles adicionales sobre tu solicitud..."
+          [class.is-invalid]="fieldError('mensaje')"
+          formControlName="mensaje"
+        ></textarea>
+        @if (fieldError('mensaje'); as err) {
+          <div class="reportes-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reportes-actions">
+        <span class="reportes-required-hint">* Campos obligatorios</span>
+        <button type="submit" class="btn btn-secondary">Solicitar reporte</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<app-footer />

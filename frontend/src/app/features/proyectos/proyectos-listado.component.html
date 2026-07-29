@@ -1,0 +1,38 @@
+<app-navbar />
+
+<section class="proyectos-hero">
+  <a routerLink="/" class="proyectos-hero-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5" />
+      <path d="M12 19l-7-7 7-7" />
+    </svg>
+    Volver al inicio
+  </a>
+
+  <p class="proyectos-hero-eyebrow">Nuevos desarrollos</p>
+  <h1 class="proyectos-hero-title">Proyectos</h1>
+  <p class="proyectos-hero-subtitle">
+    Conoce los proyectos inmobiliarios en preventa, construcción y entrega inmediata.
+  </p>
+</section>
+
+<section class="proyectos-page">
+  @if (loading() && items().length === 0) {
+    <div class="proyectos-state">
+      <div class="spinner-border text-primary"></div>
+    </div>
+  } @else if (items().length === 0) {
+    <div class="proyectos-state">
+      <p class="proyectos-empty-title">Aún no tenemos proyectos publicados</p>
+      <p class="proyectos-empty-text">Vuelve pronto para conocer nuestros próximos desarrollos.</p>
+    </div>
+  } @else {
+    <div class="project-grid">
+      @for (project of items(); track project.id) {
+        <app-project-card [project]="project" />
+      }
+    </div>
+  }
+</section>
+
+<app-footer />

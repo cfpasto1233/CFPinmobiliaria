@@ -1,0 +1,99 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.proyectos-hero {
+  padding: 6rem 1.5rem 2.5rem;
+  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+  text-align: center;
+}
+
+.proyectos-hero-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $cfpasto-white;
+  }
+}
+
+.proyectos-hero-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 0.5rem;
+}
+
+.proyectos-hero-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-4xl;
+  color: $cfpasto-white;
+  margin-bottom: 0.5rem;
+}
+
+.proyectos-hero-subtitle {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  color: rgba($cfpasto-white, 0.85);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.proyectos-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.proyectos-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.proyectos-empty-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 600;
+  font-size: $cfpasto-text-lg;
+  color: $cfpasto-text-dark;
+  margin: 0;
+}
+
+.proyectos-empty-text {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin: 0;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 1199.98px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+}

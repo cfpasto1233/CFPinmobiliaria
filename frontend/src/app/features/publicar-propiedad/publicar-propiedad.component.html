@@ -1,0 +1,179 @@
+<app-navbar />
+
+<section class="publicar-propiedad-hero">
+  <a routerLink="/" class="publicar-propiedad-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5" />
+      <path d="M12 19l-7-7 7-7" />
+    </svg>
+    Volver al inicio
+  </a>
+
+  <p class="publicar-propiedad-eyebrow">Servicio asistido</p>
+  <h1 class="publicar-propiedad-title">Publica tu propiedad con CFP Inmobiliaria</h1>
+  <p class="publicar-propiedad-subtitle">
+    Elige el plan que mejor se ajuste a lo que necesitas. Nuestro equipo se encarga de fotografiar,
+    publicar y promocionar tu propiedad.
+  </p>
+</section>
+
+<section class="plans">
+  <div class="plans-grid">
+    @for (plan of plans; track plan.id) {
+      <div class="plan-card" [class.is-highlighted]="plan.highlighted">
+        @if (plan.badge) {
+          <div class="plan-badge">{{ plan.badge }}</div>
+        }
+
+        <div class="plan-card-body">
+          <p class="plan-eyebrow">{{ plan.eyebrow }}</p>
+
+          <p class="plan-price">
+            {{ plan.price }}<span class="plan-price-suffix">{{ plan.priceSuffix }}</span>
+          </p>
+
+          <ul class="plan-features">
+            @for (feature of plan.features; track feature) {
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                {{ feature }}
+              </li>
+            }
+          </ul>
+
+          <button type="button" class="plan-cta" [class.is-solid]="plan.highlighted" (click)="selectPlan(plan.id)">
+            {{ plan.ctaLabel }}
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="publicar-propiedad-form-section" #formSection>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="publicar-propiedad-card">
+      <h2 class="publicar-propiedad-card-title">Datos de tu propiedad</h2>
+
+      <div class="publicar-propiedad-row">
+        <div class="publicar-propiedad-field">
+          <label for="nombreCompleto" class="publicar-propiedad-label">Nombre completo *</label>
+          <input
+            id="nombreCompleto"
+            type="text"
+            class="publicar-propiedad-input"
+            placeholder="Tu nombre"
+            [class.is-invalid]="fieldError('nombreCompleto')"
+            formControlName="nombreCompleto"
+          />
+          @if (fieldError('nombreCompleto'); as err) {
+            <div class="publicar-propiedad-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="publicar-propiedad-field">
+          <label for="numeroContacto" class="publicar-propiedad-label">Número de contacto *</label>
+          <input
+            id="numeroContacto"
+            type="tel"
+            class="publicar-propiedad-input"
+            placeholder="+57 300 000 0000"
+            [class.is-invalid]="fieldError('numeroContacto')"
+            formControlName="numeroContacto"
+          />
+          @if (fieldError('numeroContacto'); as err) {
+            <div class="publicar-propiedad-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="publicar-propiedad-field">
+        <label for="direccionInmueble" class="publicar-propiedad-label">Dirección del inmueble *</label>
+        <input
+          id="direccionInmueble"
+          type="text"
+          class="publicar-propiedad-input"
+          placeholder="Cra 15 #80-20, Bogotá"
+          [class.is-invalid]="fieldError('direccionInmueble')"
+          formControlName="direccionInmueble"
+        />
+        @if (fieldError('direccionInmueble'); as err) {
+          <div class="publicar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="publicar-propiedad-row">
+        <div class="publicar-propiedad-field">
+          <label for="sectorBarrio" class="publicar-propiedad-label">Sector / Barrio *</label>
+          <input
+            id="sectorBarrio"
+            type="text"
+            class="publicar-propiedad-input"
+            placeholder="Ej: Rosales, Santa Bárbara..."
+            [class.is-invalid]="fieldError('sectorBarrio')"
+            formControlName="sectorBarrio"
+          />
+          @if (fieldError('sectorBarrio'); as err) {
+            <div class="publicar-propiedad-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="publicar-propiedad-field">
+          <label class="publicar-propiedad-label">Tipo de operación *</label>
+          <ng-select
+            class="publicar-propiedad-select"
+            [items]="tipoOperacionOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            placeholder="Seleccionar..."
+            formControlName="tipoOperacion"
+          ></ng-select>
+          @if (fieldError('tipoOperacion'); as err) {
+            <div class="publicar-propiedad-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="publicar-propiedad-field">
+        <label class="publicar-propiedad-label">Plan de interés *</label>
+        <ng-select
+          class="publicar-propiedad-select"
+          [items]="planOptions"
+          bindLabel="label"
+          bindValue="value"
+          [clearable]="false"
+          placeholder="Seleccionar..."
+          formControlName="planInteres"
+        ></ng-select>
+        @if (fieldError('planInteres'); as err) {
+          <div class="publicar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="publicar-propiedad-field">
+        <label for="observaciones" class="publicar-propiedad-label">Observaciones</label>
+        <textarea
+          id="observaciones"
+          rows="3"
+          class="publicar-propiedad-input publicar-propiedad-textarea"
+          placeholder="Áreas, estado, restricciones..."
+          [class.is-invalid]="fieldError('observaciones')"
+          formControlName="observaciones"
+        ></textarea>
+        @if (fieldError('observaciones'); as err) {
+          <div class="publicar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="publicar-propiedad-actions">
+        <span class="publicar-propiedad-required-hint">* Campos obligatorios</span>
+        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<app-footer />

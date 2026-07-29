@@ -1,0 +1,141 @@
+<div class="proyecto-form">
+  <div class="proyecto-form-header">
+    <div>
+      <a routerLink="/admin/proyectos" class="proyecto-form-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5" />
+          <path d="M12 19l-7-7 7-7" />
+        </svg>
+        Proyectos
+      </a>
+      <h1 class="proyecto-form-title">{{ isEditMode ? 'Editar proyecto' : 'Nuevo proyecto' }}</h1>
+    </div>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="card border-0">
+      <div class="card-body p-4 p-lg-5">
+        <div class="proyecto-form-field">
+          <label for="nombre" class="proyecto-form-label">Nombre *</label>
+          <input
+            id="nombre"
+            type="text"
+            class="form-control"
+            [class.is-invalid]="fieldError('nombre')"
+            formControlName="nombre"
+          />
+          @if (fieldError('nombre'); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="proyecto-form-field">
+          <label for="descripcion" class="proyecto-form-label">Descripción *</label>
+          <textarea
+            id="descripcion"
+            class="form-control"
+            rows="4"
+            [class.is-invalid]="fieldError('descripcion')"
+            formControlName="descripcion"
+          ></textarea>
+          @if (fieldError('descripcion'); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="proyecto-form-row">
+          <div class="proyecto-form-field">
+            <label for="ubicacion" class="proyecto-form-label">Ubicación *</label>
+            <input
+              id="ubicacion"
+              type="text"
+              class="form-control"
+              [class.is-invalid]="fieldError('ubicacion')"
+              formControlName="ubicacion"
+            />
+            @if (fieldError('ubicacion'); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+          </div>
+
+          <div class="proyecto-form-field">
+            <label class="proyecto-form-label">Estado *</label>
+            <ng-select
+              [items]="estadoOptions"
+              bindLabel="label"
+              bindValue="value"
+              [clearable]="false"
+              [appendTo]="'body'"
+              formControlName="estado"
+            ></ng-select>
+          </div>
+        </div>
+
+        <div class="proyecto-form-field">
+          <label class="proyecto-form-label">Foto de portada {{ isEditMode ? '' : '*' }}</label>
+
+          @if (fotoPortadaPreview(); as preview) {
+            <div class="proyecto-form-dropzone proyecto-form-dropzone-filled" (click)="fotoPortadaInput.click()">
+              <img [src]="preview" alt="Vista previa de la foto de portada" />
+              <div class="proyecto-form-dropzone-overlay">Cambiar foto</div>
+            </div>
+            <button type="button" class="proyecto-form-clear" (click)="onRemoveFotoPortadaSeleccionada(); $event.stopPropagation()">
+              Quitar selección
+            </button>
+          } @else if (isEditMode && selected(); as proyecto) {
+            <div class="proyecto-form-dropzone proyecto-form-dropzone-filled" (click)="fotoPortadaInput.click()">
+              <img [src]="proyecto.foto_portada_url" [alt]="proyecto.nombre" />
+              <div class="proyecto-form-dropzone-overlay">Cambiar foto</div>
+            </div>
+          } @else {
+            <div
+              class="proyecto-form-dropzone"
+              [class.is-dragover]="fotoPortadaDragOver()"
+              [class.has-error]="fotoPortadaError()"
+              (click)="fotoPortadaInput.click()"
+              (dragover)="onFotoPortadaDragOver($event)"
+              (dragleave)="onFotoPortadaDragLeave($event)"
+              (drop)="onFotoPortadaDrop($event)"
+            >
+              <svg class="proyecto-form-dropzone-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 16V4" />
+                <path d="M7 9l5-5 5 5" />
+                <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+              </svg>
+              <p class="proyecto-form-dropzone-text">Arrastra una imagen o haz clic para seleccionar</p>
+              <p class="proyecto-form-dropzone-hint">JPEG, PNG o WEBP · máx. 5MB</p>
+            </div>
+          }
+
+          <input
+            #fotoPortadaInput
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            class="visually-hidden"
+            (change)="onFotoPortadaSelected($event)"
+          />
+          @if (fotoPortadaError(); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="proyecto-form-actions">
+        <span class="proyecto-form-required-hint">* Campos obligatorios</span>
+        <div class="proyecto-form-actions-buttons">
+          <a routerLink="/admin/proyectos" class="btn btn-soft-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-success" [disabled]="form.invalid || loading()">
+            @if (loading()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            {{ isEditMode ? 'Guardar cambios' : 'Crear proyecto' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

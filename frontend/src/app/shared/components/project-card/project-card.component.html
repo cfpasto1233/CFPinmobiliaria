@@ -1,0 +1,12 @@
+<article class="project-card">
+  <div class="project-media">
+    <img [src]="project().foto_portada_url" [alt]="project().nombre" class="project-media-img" />
+    <span class="project-badge">{{ estadoLabel() }}</span>
+  </div>
+
+  <div class="project-body">
+    <p class="project-location">{{ project().ubicacion }}</p>
+    <h3 class="project-name">{{ project().nombre }}</h3>
+    <p class="project-description">{{ project().descripcion }}</p>
+  </div>
+</article>
