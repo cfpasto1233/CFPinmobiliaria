@@ -54,14 +54,14 @@
 
         @if (isArriendosMenuOpen()) {
         <div class="search-submenu">
-          <button
-            type="button"
+          <a
+            routerLink="/arrendar"
             class="search-submenu-item"
             (click)="closeArriendosMenu()"
           >
             <span class="search-submenu-title">Quiero arrendar con CFP</span>
             <span class="search-submenu-subtitle">Para inquilinos</span>
-          </button>
+          </a>
 
           <button
             type="button"

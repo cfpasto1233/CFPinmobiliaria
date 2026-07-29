@@ -20,6 +20,11 @@ export const routes: Routes = [
       import('./features/ventas/ventas.component').then((m) => m.VentasComponent),
   },
   {
+    path: 'arrendar',
+    loadComponent: () =>
+      import('./features/arrendar/arrendar.component').then((m) => m.ArrendarComponent),
+  },
+  {
     path: 'auth/login',
     loadComponent: () =>
       import('./features/auth/login/login').then((m) => m.LoginComponent),
