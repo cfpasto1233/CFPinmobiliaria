@@ -42,7 +42,10 @@ def _public_read_policy() -> str:
                     "Effect": "Allow",
                     "Principal": "*",
                     "Action": ["s3:GetObject"],
-                    "Resource": [f"arn:aws:s3:::{settings.MINIO_BUCKET}/propiedades/*"],
+                    "Resource": [
+                        f"arn:aws:s3:::{settings.MINIO_BUCKET}/propiedades/*",
+                        f"arn:aws:s3:::{settings.MINIO_BUCKET}/proyectos/*",
+                    ],
                 }
             ],
         }
@@ -55,8 +58,9 @@ def ensure_bucket() -> None:
         client.head_bucket(Bucket=settings.MINIO_BUCKET)
     except ClientError:
         client.create_bucket(Bucket=settings.MINIO_BUCKET)
-    # Las fotos de propiedades se sirven directo desde el navegador (landing pública),
-    # así que ese prefijo necesita lectura anónima. El resto del bucket sigue privado.
+    # Las fotos de propiedades y proyectos se sirven directo desde el navegador (landing
+    # pública), así que esos prefijos necesitan lectura anónima. El resto del bucket
+    # sigue privado.
     client.put_bucket_policy(Bucket=settings.MINIO_BUCKET, Policy=_public_read_policy())
 
 

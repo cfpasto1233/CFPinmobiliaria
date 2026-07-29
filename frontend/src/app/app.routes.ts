@@ -42,6 +42,13 @@ export const routes: Routes = [
       import('./features/reportes/reportes.component').then((m) => m.ReportesComponent),
   },
   {
+    path: 'proyectos',
+    loadComponent: () =>
+      import('./features/proyectos/proyectos-listado.component').then(
+        (m) => m.ProyectosListadoComponent,
+      ),
+  },
+  {
     path: 'auth/login',
     loadComponent: () =>
       import('./features/auth/login/login').then((m) => m.LoginComponent),
@@ -93,6 +100,27 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/propiedades/propiedad-form/propiedad-form.component').then(
             (m) => m.PropiedadFormComponent,
+          ),
+      },
+      {
+        path: 'proyectos',
+        loadComponent: () =>
+          import('./features/admin/proyectos/proyectos-list/proyectos-list.component').then(
+            (m) => m.ProyectosListComponent,
+          ),
+      },
+      {
+        path: 'proyectos/nuevo',
+        loadComponent: () =>
+          import('./features/admin/proyectos/proyecto-form/proyecto-form.component').then(
+            (m) => m.ProyectoFormComponent,
+          ),
+      },
+      {
+        path: 'proyectos/:id/editar',
+        loadComponent: () =>
+          import('./features/admin/proyectos/proyecto-form/proyecto-form.component').then(
+            (m) => m.ProyectoFormComponent,
           ),
       },
     ],

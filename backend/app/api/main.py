@@ -1,10 +1,11 @@
 from fastapi import APIRouter
 
-from app.api.routes import auth, login, propiedades, users, utils
+from app.api.routes import auth, login, propiedades, proyectos, users, utils
 
 api_router = APIRouter()
 api_router.include_router(login.router)
 api_router.include_router(auth.router)
 api_router.include_router(users.router)
 api_router.include_router(propiedades.router)
+api_router.include_router(proyectos.router)
 api_router.include_router(utils.router)

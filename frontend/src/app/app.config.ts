@@ -16,6 +16,7 @@ import { AuthClientInterceptor } from './core/auth/auth.interceptor';
 import { RefreshInterceptor } from './core/auth/refresh.interceptor';
 import { AuthenticationEffects } from './store/Authentication/authentication.effects';
 import { PropiedadesEffects } from './store/Propiedades/propiedades.effects';
+import { ProyectosEffects } from './store/Proyectos/proyectos.effects';
 import { metaReducers, rootReducer } from './store';
 import { routes } from './app.routes';
 
@@ -40,7 +41,7 @@ export const appConfig: ApplicationConfig = {
     provideDefaultClient({ basePath: environment.apiUrl }),
 
     provideStore(rootReducer, { metaReducers }),
-    provideEffects([AuthenticationEffects, PropiedadesEffects]),
+    provideEffects([AuthenticationEffects, PropiedadesEffects, ProyectosEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };

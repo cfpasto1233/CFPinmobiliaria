@@ -1,0 +1,59 @@
+<div class="proyectos-list">
+  <div class="proyectos-list-header">
+    <h1 class="proyectos-list-title">Proyectos</h1>
+    <a routerLink="/admin/proyectos/nuevo" class="btn btn-success">+ Nuevo proyecto</a>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      @if (loading() && items().length === 0) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary"></div>
+        </div>
+      } @else if (items().length === 0) {
+        <div class="text-center py-5 text-muted">Sin proyectos registrados.</div>
+      } @else {
+        @if (items().length > 1) {
+          <p class="proyectos-list-hint">
+            Arrastra <span class="proyectos-list-hint-icon">⠿</span> para ordenar cómo se muestran en la sección pública de proyectos.
+          </p>
+        }
+
+        <div class="proyectos-table-scroll">
+          <div class="proyectos-grid proyectos-grid-head" role="row">
+            <span></span>
+            <span></span>
+            <span>Nombre</span>
+            <span>Ubicación</span>
+            <span>Estado</span>
+            <span>Acciones</span>
+          </div>
+
+          <div class="proyectos-grid-body" cdkDropList (cdkDropListDropped)="onDrop($event)">
+            @for (item of items(); track item.id) {
+              <div class="proyectos-grid proyectos-row" cdkDrag [cdkDragDisabled]="items().length < 2">
+                <span class="proyectos-drag-handle" cdkDragHandle aria-label="Arrastrar para reordenar">⠿</span>
+                <img [src]="item.foto_portada_url" [alt]="item.nombre" class="proyectos-list-thumb" />
+                <span class="proyectos-cell-nombre">{{ item.nombre }}</span>
+                <span>{{ item.ubicacion }}</span>
+                <span>{{ estadoLabel(item.estado) }}</span>
+                <span class="proyectos-row-actions">
+                  <a [routerLink]="['/admin/proyectos', item.id, 'editar']" class="btn btn-sm btn-soft-secondary me-1">
+                    Editar
+                  </a>
+                  <button type="button" class="btn btn-sm btn-soft-danger" (click)="onDelete(item.id)">
+                    Eliminar
+                  </button>
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
