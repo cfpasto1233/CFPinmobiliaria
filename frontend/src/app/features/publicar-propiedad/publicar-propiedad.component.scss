@@ -1,0 +1,379 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+// ─── Hero ───────────────────────────────────────────────────────────────────
+
+.publicar-propiedad-hero {
+  padding: 6rem 1.5rem 3rem;
+  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+  text-align: center;
+}
+
+.publicar-propiedad-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $cfpasto-white;
+  }
+}
+
+.publicar-propiedad-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 0.5rem;
+}
+
+.publicar-propiedad-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  color: $cfpasto-white;
+  margin-bottom: 0.75rem;
+}
+
+.publicar-propiedad-subtitle {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  color: rgba($cfpasto-white, 0.85);
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+// ─── Planes ─────────────────────────────────────────────────────────────────
+
+.plans {
+  background: $cfpasto-white;
+  padding: 4rem 1.5rem;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-card {
+  display: flex;
+  flex-direction: column;
+  background: $cfpasto-primary-dark;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $cfpasto-radius-xl;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &.is-highlighted {
+    border-color: $cfpasto-accent;
+    box-shadow: $cfpasto-shadow-lg;
+    transform: translateY(-0.5rem);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.plan-badge {
+  background: $cfpasto-accent;
+  color: $cfpasto-text-dark;
+  text-align: center;
+  padding: 0.6rem;
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.plan-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.75rem;
+}
+
+.plan-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin: 0 0 0.75rem;
+}
+
+.plan-price {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-3xl;
+  color: $cfpasto-white;
+  margin: 0 0 1.5rem;
+  line-height: 1.1;
+}
+
+.plan-price-suffix {
+  font-family: $cfpasto-font-body;
+  font-weight: 500;
+  font-size: $cfpasto-text-sm;
+  color: rgba(255, 255, 255, 0.55);
+  margin-left: 0.35rem;
+}
+
+.plan-features {
+  list-style: none;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  flex: 1;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-sm;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0.75rem;
+
+    svg {
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+      color: $cfpasto-accent;
+    }
+  }
+}
+
+.plan-cta {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: 1px solid $cfpasto-accent;
+  border-radius: $cfpasto-radius;
+  color: $cfpasto-accent;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: rgba($cfpasto-accent, 0.1);
+  }
+
+  &.is-solid {
+    background: $cfpasto-accent;
+    color: $cfpasto-text-dark;
+
+    &:hover {
+      background: $cfpasto-accent-dark;
+      color: $cfpasto-white;
+    }
+  }
+}
+
+// ─── Formulario ─────────────────────────────────────────────────────────────
+
+.publicar-propiedad-form-section {
+  display: flex;
+  justify-content: center;
+  padding: 5rem 1.5rem;
+  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+}
+
+.publicar-propiedad-card {
+  width: 100%;
+  max-width: 700px;
+  padding: 2rem;
+  background: rgba($cfpasto-primary-dark, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+
+  @media (max-width: 575.98px) {
+    padding: 1.5rem;
+  }
+}
+
+.publicar-propiedad-card-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-lg;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin: 0 0 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.publicar-propiedad-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.publicar-propiedad-field {
+  margin-bottom: 1.5rem;
+}
+
+.publicar-propiedad-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 0.5rem;
+}
+
+.publicar-propiedad-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: $cfpasto-radius-lg;
+  color: $cfpasto-white;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $cfpasto-accent;
+    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
+  }
+
+  &.is-invalid {
+    border-color: $cfpasto-error-light;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+    }
+  }
+}
+
+.publicar-propiedad-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.publicar-propiedad-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: #ffb4b4;
+  margin-top: 0.4rem;
+}
+
+.publicar-propiedad-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+  @media (max-width: 575.98px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.publicar-propiedad-required-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+// --- ng-select sobre fondo oscuro ---
+// Sin [appendTo]="'body'" el panel queda dentro del árbol del componente,
+// así que ::ng-deep con el atributo de encapsulación de Angular sí lo alcanza.
+
+:host ::ng-deep .publicar-propiedad-select {
+  .ng-select-container {
+    min-height: 0;
+    padding: 0.35rem 0.25rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: $cfpasto-radius-lg;
+    color: $cfpasto-white;
+  }
+
+  &.ng-select-focused .ng-select-container {
+    border-color: $cfpasto-accent;
+    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
+  }
+
+  .ng-value,
+  .ng-input > input {
+    color: $cfpasto-white;
+  }
+
+  .ng-placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .ng-arrow-wrapper .ng-arrow {
+    border-top-color: rgba(255, 255, 255, 0.55);
+  }
+
+  .ng-dropdown-panel {
+    background: $cfpasto-primary-dark;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: $cfpasto-radius-lg;
+    box-shadow: $cfpasto-shadow-lg;
+    margin-top: 0.35rem;
+    overflow: hidden;
+
+    .ng-dropdown-panel-items .ng-option {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.85);
+
+      &.ng-option-marked {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      &.ng-option-selected {
+        background: rgba($cfpasto-accent, 0.16);
+        color: $cfpasto-accent;
+        font-weight: 600;
+      }
+    }
+  }
+}

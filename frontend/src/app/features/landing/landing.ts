@@ -117,6 +117,16 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
     this.isClientesMenuOpen.set(false);
   }
 
+  protected readonly isPublicarMenuOpen = signal(false);
+
+  protected togglePublicarMenu(): void {
+    this.isPublicarMenuOpen.update((open) => !open);
+  }
+
+  protected closePublicarMenu(): void {
+    this.isPublicarMenuOpen.set(false);
+  }
+
   private readonly expandedTips = signal<ReadonlySet<number>>(new Set());
 
   protected isTipExpanded(index: number): boolean {

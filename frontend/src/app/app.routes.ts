@@ -49,6 +49,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'publicar-propiedad',
+    loadComponent: () =>
+      import('./features/publicar-propiedad/publicar-propiedad.component').then(
+        (m) => m.PublicarPropiedadComponent,
+      ),
+  },
+  {
+    path: 'publicar-por-tu-cuenta',
+    loadComponent: () =>
+      import('./features/publicar-por-tu-cuenta/publicar-por-tu-cuenta.component').then(
+        (m) => m.PublicarPorTuCuentaComponent,
+      ),
+  },
+  {
     path: 'auth/login',
     loadComponent: () =>
       import('./features/auth/login/login').then((m) => m.LoginComponent),

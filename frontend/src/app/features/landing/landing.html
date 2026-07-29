@@ -127,9 +127,53 @@
         <span class="search-option-label">Proyectos</span>
       </a>
 
-      <button type="button" class="search-option">
-        <span class="search-option-label">Publica tu propiedad</span>
-      </button>
+      <div class="search-option-wrap">
+        <button
+          type="button"
+          class="search-option"
+          [attr.aria-expanded]="isPublicarMenuOpen()"
+          (click)="togglePublicarMenu()"
+        >
+          <span class="search-option-label">Publica tu propiedad</span>
+          <svg
+            class="search-option-chevron"
+            [class.is-open]="isPublicarMenuOpen()"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        @if (isPublicarMenuOpen()) {
+        <div class="search-submenu">
+          <a
+            routerLink="/publicar-propiedad"
+            class="search-submenu-item"
+            (click)="closePublicarMenu()"
+          >
+            <span class="search-submenu-title">Con CFP Inmobiliaria</span>
+            <span class="search-submenu-subtitle">Servicio asistido, planes desde $0</span>
+          </a>
+
+          <a
+            routerLink="/publicar-por-tu-cuenta"
+            class="search-submenu-item"
+            (click)="closePublicarMenu()"
+          >
+            <span class="search-submenu-title">Por tu cuenta</span>
+            <span class="search-submenu-subtitle">Autogestiona tu publicación</span>
+          </a>
+        </div>
+        }
+      </div>
 
       <button type="button" class="search-option">
         <span class="search-option-label">Sugerencias</span>
