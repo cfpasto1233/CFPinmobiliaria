@@ -104,21 +104,21 @@
 
         @if (isClientesMenuOpen()) {
         <div class="search-submenu">
-          <button
-            type="button"
+          <a
+            routerLink="/recaudo"
             class="search-submenu-item"
             (click)="closeClientesMenu()"
           >
             <span class="search-submenu-title">Recaudo</span>
-          </button>
+          </a>
 
-          <button
-            type="button"
+          <a
+            routerLink="/reportes"
             class="search-submenu-item"
             (click)="closeClientesMenu()"
           >
             <span class="search-submenu-title">Reportes</span>
-          </button>
+          </a>
         </div>
         }
       </div>

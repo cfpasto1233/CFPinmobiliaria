@@ -32,6 +32,16 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'recaudo',
+    loadComponent: () =>
+      import('./features/recaudo/recaudo.component').then((m) => m.RecaudoComponent),
+  },
+  {
+    path: 'reportes',
+    loadComponent: () =>
+      import('./features/reportes/reportes.component').then((m) => m.ReportesComponent),
+  },
+  {
     path: 'auth/login',
     loadComponent: () =>
       import('./features/auth/login/login').then((m) => m.LoginComponent),
