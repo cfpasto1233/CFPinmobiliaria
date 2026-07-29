@@ -25,6 +25,13 @@ export const routes: Routes = [
       import('./features/arrendar/arrendar.component').then((m) => m.ArrendarComponent),
   },
   {
+    path: 'arrendar-propiedad',
+    loadComponent: () =>
+      import('./features/arrendar-propiedad/arrendar-propiedad.component').then(
+        (m) => m.ArrendarPropiedadComponent,
+      ),
+  },
+  {
     path: 'auth/login',
     loadComponent: () =>
       import('./features/auth/login/login').then((m) => m.LoginComponent),

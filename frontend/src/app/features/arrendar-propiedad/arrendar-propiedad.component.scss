@@ -1,0 +1,170 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.arrendar-propiedad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rem 1.5rem 4rem;
+  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+
+  @media (max-width: 767.98px) {
+    padding: 7rem 1.25rem 3rem;
+  }
+}
+
+.arrendar-propiedad-header {
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.arrendar-propiedad-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $cfpasto-white;
+  }
+}
+
+.arrendar-propiedad-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 0.75rem;
+}
+
+.arrendar-propiedad-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  color: $cfpasto-white;
+  margin: 0 0 0.75rem;
+}
+
+.arrendar-propiedad-subtitle {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.arrendar-propiedad-card {
+  width: 100%;
+  max-width: 640px;
+  padding: 2rem;
+  background: rgba($cfpasto-primary-dark, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+
+  @media (max-width: 575.98px) {
+    padding: 1.5rem;
+  }
+}
+
+.arrendar-propiedad-card-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-lg;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin: 0 0 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.arrendar-propiedad-field {
+  margin-bottom: 1.5rem;
+}
+
+.arrendar-propiedad-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin-bottom: 0.5rem;
+}
+
+.arrendar-propiedad-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: $cfpasto-radius-lg;
+  color: $cfpasto-white;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $cfpasto-accent;
+    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
+  }
+
+  &.is-invalid {
+    border-color: $cfpasto-error-light;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+    }
+  }
+}
+
+.arrendar-propiedad-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.arrendar-propiedad-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: #ffb4b4;
+  margin-top: 0.4rem;
+}
+
+.arrendar-propiedad-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+  @media (max-width: 575.98px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.arrendar-propiedad-required-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: rgba(255, 255, 255, 0.55);
+}

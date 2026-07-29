@@ -1,0 +1,122 @@
+<app-navbar />
+
+<section class="arrendar-propiedad">
+  <div class="arrendar-propiedad-header">
+    <a routerLink="/" class="arrendar-propiedad-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5" />
+        <path d="M12 19l-7-7 7-7" />
+      </svg>
+      Volver al inicio
+    </a>
+
+    <p class="arrendar-propiedad-eyebrow">Para propietarios</p>
+    <h1 class="arrendar-propiedad-title">Quiero que CFP arriende mi propiedad</h1>
+    <p class="arrendar-propiedad-subtitle">
+      Cuéntanos sobre tu inmueble y un asesor te contactará para gestionar el arriendo.
+    </p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="arrendar-propiedad-card">
+      <h2 class="arrendar-propiedad-card-title">Datos de tu propiedad</h2>
+
+      <div class="arrendar-propiedad-field">
+        <label for="nombrePropietario" class="arrendar-propiedad-label">Nombre del propietario *</label>
+        <input
+          id="nombrePropietario"
+          type="text"
+          class="arrendar-propiedad-input"
+          placeholder="Tu nombre"
+          [class.is-invalid]="fieldError('nombrePropietario')"
+          formControlName="nombrePropietario"
+        />
+        @if (fieldError('nombrePropietario'); as err) {
+          <div class="arrendar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="arrendar-propiedad-field">
+        <label for="numeroContacto" class="arrendar-propiedad-label">Número de contacto *</label>
+        <input
+          id="numeroContacto"
+          type="tel"
+          class="arrendar-propiedad-input"
+          placeholder="+57 300 000 0000"
+          [class.is-invalid]="fieldError('numeroContacto')"
+          formControlName="numeroContacto"
+        />
+        @if (fieldError('numeroContacto'); as err) {
+          <div class="arrendar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="arrendar-propiedad-field">
+        <label for="direccionInmueble" class="arrendar-propiedad-label">Dirección del inmueble *</label>
+        <input
+          id="direccionInmueble"
+          type="text"
+          class="arrendar-propiedad-input"
+          placeholder="Cra 15 #80-20, Bogotá"
+          [class.is-invalid]="fieldError('direccionInmueble')"
+          formControlName="direccionInmueble"
+        />
+        @if (fieldError('direccionInmueble'); as err) {
+          <div class="arrendar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="arrendar-propiedad-field">
+        <label for="sectorBarrio" class="arrendar-propiedad-label">Sector / Barrio *</label>
+        <input
+          id="sectorBarrio"
+          type="text"
+          class="arrendar-propiedad-input"
+          placeholder="Ej: Rosales, Santa Bárbara..."
+          [class.is-invalid]="fieldError('sectorBarrio')"
+          formControlName="sectorBarrio"
+        />
+        @if (fieldError('sectorBarrio'); as err) {
+          <div class="arrendar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="arrendar-propiedad-field">
+        <label for="canonEsperado" class="arrendar-propiedad-label">Canon esperado *</label>
+        <input
+          id="canonEsperado"
+          type="text"
+          class="arrendar-propiedad-input"
+          placeholder="Ej: $2.500.000/mes"
+          [class.is-invalid]="fieldError('canonEsperado')"
+          formControlName="canonEsperado"
+        />
+        @if (fieldError('canonEsperado'); as err) {
+          <div class="arrendar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="arrendar-propiedad-field">
+        <label for="observaciones" class="arrendar-propiedad-label">Observaciones</label>
+        <textarea
+          id="observaciones"
+          rows="3"
+          class="arrendar-propiedad-input arrendar-propiedad-textarea"
+          placeholder="Áreas, estado, restricciones..."
+          [class.is-invalid]="fieldError('observaciones')"
+          formControlName="observaciones"
+        ></textarea>
+        @if (fieldError('observaciones'); as err) {
+          <div class="arrendar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="arrendar-propiedad-actions">
+        <span class="arrendar-propiedad-required-hint">* Campos obligatorios</span>
+        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<app-footer />
