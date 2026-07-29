@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Store } from '@ngrx/store';
 import { PropiedadPublic } from '../../../client';
@@ -15,7 +16,7 @@ type OrdenFiltro = 'destacadas' | 'precio-asc' | 'precio-desc';
 @Component({
   selector: 'app-propiedades-listado',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, PropertyCardComponent, NgSelectModule, FormsModule],
+  imports: [NavbarComponent, FooterComponent, PropertyCardComponent, NgSelectModule, FormsModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './propiedades-listado.component.html',
   styleUrl: './propiedades-listado.component.scss',

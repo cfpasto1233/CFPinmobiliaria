@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NotificationService } from '../../core/notifications/notification.service';
 import { FooterComponent } from '../../layouts/footer/footer.component';
@@ -25,7 +26,7 @@ const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
 @Component({
   selector: 'app-ventas',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectModule, NavbarComponent, FooterComponent],
+  imports: [ReactiveFormsModule, NgSelectModule, NavbarComponent, FooterComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './ventas.component.html',
   styleUrl: './ventas.component.scss',
