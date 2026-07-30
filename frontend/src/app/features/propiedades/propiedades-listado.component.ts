@@ -7,6 +7,7 @@ import { PropiedadPublic } from '../../../client';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
+import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems, selectPropiedadesLoading } from '../../store/Propiedades/propiedades.selectors';
 
@@ -16,7 +17,15 @@ type OrdenFiltro = 'destacadas' | 'precio-asc' | 'precio-desc';
 @Component({
   selector: 'app-propiedades-listado',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, PropertyCardComponent, NgSelectModule, FormsModule, RouterLink],
+  imports: [
+    NavbarComponent,
+    FooterComponent,
+    PropertyCardComponent,
+    PublicarWhatsappFabComponent,
+    NgSelectModule,
+    FormsModule,
+    RouterLink,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './propiedades-listado.component.html',
   styleUrl: './propiedades-listado.component.scss',

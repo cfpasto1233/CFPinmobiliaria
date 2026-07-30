@@ -5,6 +5,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NotificationService } from '../../core/notifications/notification.service';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
+import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 
 interface PricingPlan {
   id: string;
@@ -38,7 +39,14 @@ const REQUIRED_MESSAGES: Partial<Record<FormFieldName, string>> = {
 @Component({
   selector: 'app-publicar-propiedad',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectModule, NavbarComponent, FooterComponent, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    NgSelectModule,
+    NavbarComponent,
+    FooterComponent,
+    RouterLink,
+    PublicarWhatsappFabComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './publicar-propiedad.component.html',
   styleUrl: './publicar-propiedad.component.scss',

@@ -16,6 +16,7 @@ import { whatsappLink } from '../../core/whatsapp/whatsapp.util';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
+import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 import { CampanaActions } from '../../store/Campana/campana.actions';
 import { selectCampanaItem } from '../../store/Campana/campana.selectors';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
@@ -45,7 +46,7 @@ interface StatsCtaOption {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, RouterLink, PropertyCardComponent],
+  imports: [NavbarComponent, FooterComponent, RouterLink, PropertyCardComponent, PublicarWhatsappFabComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './landing.html',
   styleUrl: './landing.scss',

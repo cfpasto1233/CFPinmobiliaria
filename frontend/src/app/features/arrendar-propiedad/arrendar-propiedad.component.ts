@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { NotificationService } from '../../core/notifications/notification.service';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
+import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 
 type FormFieldName =
   | 'nombrePropietario'
@@ -24,7 +25,7 @@ const REQUIRED_MESSAGES: Partial<Record<FormFieldName, string>> = {
 @Component({
   selector: 'app-arrendar-propiedad',
   standalone: true,
-  imports: [ReactiveFormsModule, NavbarComponent, FooterComponent, RouterLink],
+  imports: [ReactiveFormsModule, NavbarComponent, FooterComponent, RouterLink, PublicarWhatsappFabComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './arrendar-propiedad.component.html',
   styleUrl: './arrendar-propiedad.component.scss',
