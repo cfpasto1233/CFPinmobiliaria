@@ -51,65 +51,69 @@
         </div>
       </div>
 
-      <div class="ventas-field">
-        <label for="sectoresInteres" class="ventas-label">Sectores de interés *</label>
-        <input
-          id="sectoresInteres"
-          type="text"
-          class="ventas-input"
-          placeholder="Ej. Chapinero, Cedritos, Usaquén"
-          [class.is-invalid]="fieldError('sectoresInteres')"
-          formControlName="sectoresInteres"
-        />
-        @if (fieldError('sectoresInteres'); as err) {
-          <div class="ventas-error">{{ err }}</div>
-        }
+      <div class="ventas-row">
+        <div class="ventas-field">
+          <label for="sectoresInteres" class="ventas-label">Sectores de interés *</label>
+          <input
+            id="sectoresInteres"
+            type="text"
+            class="ventas-input"
+            placeholder="Ej. Chapinero, Cedritos, Usaquén"
+            [class.is-invalid]="fieldError('sectoresInteres')"
+            formControlName="sectoresInteres"
+          />
+          @if (fieldError('sectoresInteres'); as err) {
+            <div class="ventas-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="ventas-field">
+          <label for="presupuestoTotal" class="ventas-label">Presupuesto total *</label>
+          <input
+            id="presupuestoTotal"
+            type="text"
+            class="ventas-input"
+            placeholder="Ej. $250.000.000"
+            [class.is-invalid]="fieldError('presupuestoTotal')"
+            formControlName="presupuestoTotal"
+          />
+          @if (fieldError('presupuestoTotal'); as err) {
+            <div class="ventas-error">{{ err }}</div>
+          }
+        </div>
       </div>
 
-      <div class="ventas-field">
-        <label for="presupuestoTotal" class="ventas-label">Presupuesto total *</label>
-        <input
-          id="presupuestoTotal"
-          type="text"
-          class="ventas-input"
-          placeholder="Ej. $250.000.000"
-          [class.is-invalid]="fieldError('presupuestoTotal')"
-          formControlName="presupuestoTotal"
-        />
-        @if (fieldError('presupuestoTotal'); as err) {
-          <div class="ventas-error">{{ err }}</div>
-        }
-      </div>
+      <div class="ventas-row">
+        <div class="ventas-field">
+          <label class="ventas-label">Forma de pago *</label>
+          <ng-select
+            class="ventas-select"
+            [items]="formaPagoOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            placeholder="Selecciona una opción"
+            formControlName="formaPago"
+          ></ng-select>
+          @if (fieldError('formaPago'); as err) {
+            <div class="ventas-error">{{ err }}</div>
+          }
+        </div>
 
-      <div class="ventas-field">
-        <label class="ventas-label">Forma de pago *</label>
-        <ng-select
-          class="ventas-select"
-          [items]="formaPagoOptions"
-          bindLabel="label"
-          bindValue="value"
-          [clearable]="false"
-          placeholder="Selecciona una opción"
-          formControlName="formaPago"
-        ></ng-select>
-        @if (fieldError('formaPago'); as err) {
-          <div class="ventas-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="ventas-field">
-        <label for="valorDisponibleCredito" class="ventas-label">Valor disponible a crédito *</label>
-        <input
-          id="valorDisponibleCredito"
-          type="text"
-          class="ventas-input"
-          placeholder="Ej. $150.000.000"
-          [class.is-invalid]="fieldError('valorDisponibleCredito')"
-          formControlName="valorDisponibleCredito"
-        />
-        @if (fieldError('valorDisponibleCredito'); as err) {
-          <div class="ventas-error">{{ err }}</div>
-        }
+        <div class="ventas-field">
+          <label for="valorDisponibleCredito" class="ventas-label">Valor disponible a crédito *</label>
+          <input
+            id="valorDisponibleCredito"
+            type="text"
+            class="ventas-input"
+            placeholder="Ej. $150.000.000"
+            [class.is-invalid]="fieldError('valorDisponibleCredito')"
+            formControlName="valorDisponibleCredito"
+          />
+          @if (fieldError('valorDisponibleCredito'); as err) {
+            <div class="ventas-error">{{ err }}</div>
+          }
+        </div>
       </div>
 
       <div class="ventas-actions">
@@ -118,6 +122,51 @@
       </div>
     </div>
   </form>
+</section>
+
+<section class="ventas-listing">
+  <div class="ventas-listing-header">
+    <p class="ventas-listing-eyebrow">Disponibles ahora</p>
+    <h2 class="ventas-listing-title">Propiedades en venta</h2>
+  </div>
+
+  @if (loading()) {
+    <p class="ventas-listing-state">Cargando propiedades...</p>
+  } @else if (propiedadesVenta().length === 0) {
+    <p class="ventas-listing-state">Aún no tenemos propiedades en venta disponibles.</p>
+  } @else {
+    <div class="ventas-carousel">
+      <button
+        type="button"
+        class="ventas-carousel-arrow ventas-carousel-arrow-prev"
+        aria-label="Propiedad anterior"
+        (click)="scrollCarousel(-1)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <div class="ventas-carousel-track" #carouselTrack>
+        @for (property of propiedadesVenta(); track property.id) {
+          <div class="ventas-carousel-item">
+            <app-property-card [property]="property" />
+          </div>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="ventas-carousel-arrow ventas-carousel-arrow-next"
+        aria-label="Siguiente propiedad"
+        (click)="scrollCarousel(1)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  }
 </section>
 
 <app-footer />

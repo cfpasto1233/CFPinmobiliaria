@@ -1,11 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, computed, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Store } from '@ngrx/store';
 import { NotificationService } from '../../core/notifications/notification.service';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
+import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
 import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
+import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
+import { selectPropiedadesItems, selectPropiedadesLoading } from '../../store/Propiedades/propiedades.selectors';
 
 type FormFieldName =
   | 'nombreCompleto'
@@ -33,15 +37,23 @@ const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
     NavbarComponent,
     FooterComponent,
     RouterLink,
+    PropertyCardComponent,
     PublicarWhatsappFabComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './ventas.component.html',
   styleUrl: './ventas.component.scss',
 })
-export class VentasComponent {
+export class VentasComponent implements OnInit {
+  @ViewChild('carouselTrack') private readonly carouselTrack?: ElementRef<HTMLDivElement>;
+
   private readonly fb = inject(FormBuilder);
   private readonly notif = inject(NotificationService);
+  private readonly store = inject(Store);
+
+  protected readonly loading = this.store.selectSignal(selectPropiedadesLoading);
+  private readonly items = this.store.selectSignal(selectPropiedadesItems);
+  protected readonly propiedadesVenta = computed(() => this.items().filter((item) => item.tipo === 'venta'));
 
   protected readonly formaPagoOptions = [
     { value: 'contado', label: 'Contado' },
@@ -60,6 +72,10 @@ export class VentasComponent {
     valorDisponibleCredito: ['', [Validators.required, Validators.maxLength(100)]],
   });
 
+  ngOnInit(): void {
+    this.store.dispatch(PropiedadesActions.load());
+  }
+
   protected fieldError(name: FormFieldName): string | null {
     const control = this.form.get(name);
     if (!control || !control.invalid || !(control.dirty || control.touched)) return null;
@@ -77,5 +93,11 @@ export class VentasComponent {
 
     this.notif.success('Datos del comprador registrados correctamente.');
     this.form.reset();
+  }
+
+  protected scrollCarousel(direction: 1 | -1): void {
+    const el = this.carouselTrack?.nativeElement;
+    if (!el) return;
+    el.scrollBy({ left: direction * el.clientWidth * 0.9, behavior: 'smooth' });
   }
 }
