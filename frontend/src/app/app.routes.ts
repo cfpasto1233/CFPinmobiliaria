@@ -158,6 +158,13 @@ export const routes: Routes = [
             (m) => m.CampanaFormComponent,
           ),
       },
+      {
+        path: 'solicitudes-venta',
+        loadComponent: () =>
+          import('./features/admin/solicitudes-venta/solicitudes-venta-list.component').then(
+            (m) => m.SolicitudesVentaListComponent,
+          ),
+      },
     ],
   },
   {

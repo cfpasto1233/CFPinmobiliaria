@@ -1,31 +1,40 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, computed, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Store } from '@ngrx/store';
-import { NotificationService } from '../../core/notifications/notification.service';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
 import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems, selectPropiedadesLoading } from '../../store/Propiedades/propiedades.selectors';
+import { SolicitudesVentaActions } from '../../store/SolicitudesVenta/solicitudes-venta.actions';
+import { selectSolicitudesVentaLoading } from '../../store/SolicitudesVenta/solicitudes-venta.selectors';
+
+type MedioComunicacion = 'whatsapp' | 'llamada';
+type FormaPagoVenta = 'contado' | 'credito_hipotecario' | 'otros';
 
 type FormFieldName =
   | 'nombreCompleto'
-  | 'celular'
-  | 'sectoresInteres'
+  | 'medioComunicacion'
   | 'presupuestoTotal'
   | 'formaPago'
-  | 'valorDisponibleCredito';
+  | 'sectoresInteres'
+  | 'valorDisponibleCredito'
+  | 'valorDisponibleContado'
+  | 'formaPagoOtro';
 
 const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   nombreCompleto: 'El nombre completo es obligatorio.',
-  celular: 'El celular es obligatorio.',
-  sectoresInteres: 'Indica los sectores de interés.',
+  medioComunicacion: 'Selecciona un medio de comunicación.',
   presupuestoTotal: 'El presupuesto total es obligatorio.',
   formaPago: 'Selecciona una forma de pago.',
+  sectoresInteres: 'Indica los sectores de interés.',
   valorDisponibleCredito: 'Indica el valor disponible a crédito.',
+  valorDisponibleContado: 'Indica el valor disponible de contado (usa 0 si es todo a crédito).',
+  formaPagoOtro: 'Describe la forma de pago.',
 };
 
 @Component({
@@ -48,40 +57,49 @@ export class VentasComponent implements OnInit {
   @ViewChild('carouselTrack') private readonly carouselTrack?: ElementRef<HTMLDivElement>;
 
   private readonly fb = inject(FormBuilder);
-  private readonly notif = inject(NotificationService);
   private readonly store = inject(Store);
 
   protected readonly loading = this.store.selectSignal(selectPropiedadesLoading);
   private readonly items = this.store.selectSignal(selectPropiedadesItems);
   protected readonly propiedadesVenta = computed(() => this.items().filter((item) => item.tipo === 'venta'));
 
-  protected readonly formaPagoOptions = [
-    { value: 'contado', label: 'Contado' },
+  protected readonly submitting = this.store.selectSignal(selectSolicitudesVentaLoading);
+
+  protected readonly medioComunicacionOptions: { value: MedioComunicacion; label: string }[] = [
+    { value: 'whatsapp', label: 'WhatsApp' },
+    { value: 'llamada', label: 'Llamada' },
+  ];
+
+  protected readonly formaPagoOptions: { value: FormaPagoVenta; label: string }[] = [
+    { value: 'contado', label: 'De contado' },
     { value: 'credito_hipotecario', label: 'Crédito hipotecario' },
-    { value: 'leasing_habitacional', label: 'Leasing habitacional' },
-    { value: 'recursos_propios', label: 'Recursos propios' },
-    { value: 'combinado', label: 'Combinado (crédito + recursos propios)' },
+    { value: 'otros', label: 'Otra forma de pago' },
   ];
 
   protected readonly form = this.fb.group({
     nombreCompleto: ['', [Validators.required, Validators.maxLength(255)]],
-    celular: ['', [Validators.required, Validators.pattern(/^[0-9+\s()-]{7,20}$/)]],
-    sectoresInteres: ['', [Validators.required, Validators.maxLength(255)]],
+    medioComunicacion: [null as MedioComunicacion | null, Validators.required],
     presupuestoTotal: ['', [Validators.required, Validators.maxLength(100)]],
-    formaPago: [null as string | null, Validators.required],
-    valorDisponibleCredito: ['', [Validators.required, Validators.maxLength(100)]],
+    formaPago: [null as FormaPagoVenta | null, Validators.required],
+    sectoresInteres: ['', Validators.maxLength(255)],
+    valorDisponibleCredito: ['', Validators.maxLength(100)],
+    valorDisponibleContado: ['', Validators.maxLength(100)],
+    formaPagoOtro: [''],
   });
 
   ngOnInit(): void {
     this.store.dispatch(PropiedadesActions.load());
+
+    this.form.controls.formaPago.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((formaPago) => this.onFormaPagoChange(formaPago));
   }
 
   protected fieldError(name: FormFieldName): string | null {
     const control = this.form.get(name);
     if (!control || !control.invalid || !(control.dirty || control.touched)) return null;
     if (control.hasError('required')) return REQUIRED_MESSAGES[name];
-    if (control.hasError('maxlength')) return 'Máximo 255 caracteres.';
-    if (control.hasError('pattern')) return 'Ingresa un número de celular válido.';
+    if (control.hasError('maxlength')) return 'El texto es demasiado largo.';
     return null;
   }
 
@@ -91,13 +109,60 @@ export class VentasComponent implements OnInit {
       return;
     }
 
-    this.notif.success('Datos del comprador registrados correctamente.');
+    const raw = this.form.getRawValue();
+    this.store.dispatch(
+      SolicitudesVentaActions.create({
+        form: {
+          nombre_completo: raw.nombreCompleto ?? '',
+          medio_comunicacion: raw.medioComunicacion ?? 'whatsapp',
+          presupuesto_total: raw.presupuestoTotal ?? '',
+          forma_pago: raw.formaPago ?? 'contado',
+          sectores_interes: raw.sectoresInteres || undefined,
+          valor_disponible_credito: raw.valorDisponibleCredito || undefined,
+          valor_disponible_contado: raw.valorDisponibleContado || undefined,
+          forma_pago_otro: raw.formaPagoOtro || undefined,
+        },
+      }),
+    );
+
     this.form.reset();
+    this.onFormaPagoChange(null);
   }
 
   protected scrollCarousel(direction: 1 | -1): void {
     const el = this.carouselTrack?.nativeElement;
     if (!el) return;
     el.scrollBy({ left: direction * el.clientWidth * 0.9, behavior: 'smooth' });
+  }
+
+  private onFormaPagoChange(formaPago: FormaPagoVenta | null): void {
+    const sectoresInteres = this.form.controls.sectoresInteres;
+    const valorDisponibleCredito = this.form.controls.valorDisponibleCredito;
+    const valorDisponibleContado = this.form.controls.valorDisponibleContado;
+    const formaPagoOtro = this.form.controls.formaPagoOtro;
+
+    sectoresInteres.clearValidators();
+    valorDisponibleCredito.clearValidators();
+    valorDisponibleContado.clearValidators();
+    formaPagoOtro.clearValidators();
+
+    sectoresInteres.setValue('');
+    valorDisponibleCredito.setValue('');
+    valorDisponibleContado.setValue('');
+    formaPagoOtro.setValue('');
+
+    if (formaPago === 'contado') {
+      sectoresInteres.setValidators([Validators.required, Validators.maxLength(255)]);
+    } else if (formaPago === 'credito_hipotecario') {
+      valorDisponibleCredito.setValidators([Validators.required, Validators.maxLength(100)]);
+      valorDisponibleContado.setValidators([Validators.required, Validators.maxLength(100)]);
+    } else if (formaPago === 'otros') {
+      formaPagoOtro.setValidators([Validators.required]);
+    }
+
+    sectoresInteres.updateValueAndValidity();
+    valorDisponibleCredito.updateValueAndValidity();
+    valorDisponibleContado.updateValueAndValidity();
+    formaPagoOtro.updateValueAndValidity();
   }
 }

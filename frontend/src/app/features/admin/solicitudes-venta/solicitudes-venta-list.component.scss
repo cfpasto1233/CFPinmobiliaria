@@ -1,0 +1,89 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.solicitudes-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.solicitudes-list-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-text-dark;
+  margin: 0;
+}
+
+.card {
+  border-radius: $cfpasto-radius-xl;
+  overflow: hidden;
+  box-shadow: $cfpasto-shadow-md;
+}
+
+.solicitudes-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.solicitudes-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(160px, 1.2fr) 7rem minmax(120px, 1fr) minmax(140px, 1fr) minmax(200px, 1.6fr)
+    minmax(140px, 1fr) 8rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  min-width: 960px;
+}
+
+.solicitudes-grid-head {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $cfpasto-text-light;
+  background: $cfpasto-bg-subtle;
+  border-bottom: 1px solid $cfpasto-border-light;
+}
+
+.solicitudes-row {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-dark;
+  background: $cfpasto-surface;
+  border-bottom: 1px solid $cfpasto-border-light;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: $cfpasto-bg-subtle;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.solicitudes-cell-nombre {
+  font-weight: 500;
+}
+
+.solicitudes-cell-detalle {
+  color: $cfpasto-text-muted;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.solicitudes-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
+}

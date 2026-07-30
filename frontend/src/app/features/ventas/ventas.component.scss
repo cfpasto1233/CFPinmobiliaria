@@ -164,6 +164,18 @@
   margin-top: 0.4rem;
 }
 
+.ventas-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-muted;
+  margin-top: 0.4rem;
+}
+
+.ventas-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
 .ventas-actions {
   display: flex;
   align-items: center;

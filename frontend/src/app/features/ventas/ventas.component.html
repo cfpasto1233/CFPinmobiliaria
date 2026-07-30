@@ -37,36 +37,23 @@
         </div>
 
         <div class="ventas-field">
-          <label for="celular" class="ventas-label">Celular *</label>
-          <input
-            id="celular"
-            type="tel"
-            class="ventas-input"
-            [class.is-invalid]="fieldError('celular')"
-            formControlName="celular"
-          />
-          @if (fieldError('celular'); as err) {
+          <label class="ventas-label">Medio de comunicación *</label>
+          <ng-select
+            class="ventas-select"
+            [items]="medioComunicacionOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            placeholder="WhatsApp o llamada"
+            formControlName="medioComunicacion"
+          ></ng-select>
+          @if (fieldError('medioComunicacion'); as err) {
             <div class="ventas-error">{{ err }}</div>
           }
         </div>
       </div>
 
       <div class="ventas-row">
-        <div class="ventas-field">
-          <label for="sectoresInteres" class="ventas-label">Sectores de interés *</label>
-          <input
-            id="sectoresInteres"
-            type="text"
-            class="ventas-input"
-            placeholder="Ej. Chapinero, Cedritos, Usaquén"
-            [class.is-invalid]="fieldError('sectoresInteres')"
-            formControlName="sectoresInteres"
-          />
-          @if (fieldError('sectoresInteres'); as err) {
-            <div class="ventas-error">{{ err }}</div>
-          }
-        </div>
-
         <div class="ventas-field">
           <label for="presupuestoTotal" class="ventas-label">Presupuesto total *</label>
           <input
@@ -81,9 +68,7 @@
             <div class="ventas-error">{{ err }}</div>
           }
         </div>
-      </div>
 
-      <div class="ventas-row">
         <div class="ventas-field">
           <label class="ventas-label">Forma de pago *</label>
           <ng-select
@@ -99,26 +84,90 @@
             <div class="ventas-error">{{ err }}</div>
           }
         </div>
-
-        <div class="ventas-field">
-          <label for="valorDisponibleCredito" class="ventas-label">Valor disponible a crédito *</label>
-          <input
-            id="valorDisponibleCredito"
-            type="text"
-            class="ventas-input"
-            placeholder="Ej. $150.000.000"
-            [class.is-invalid]="fieldError('valorDisponibleCredito')"
-            formControlName="valorDisponibleCredito"
-          />
-          @if (fieldError('valorDisponibleCredito'); as err) {
-            <div class="ventas-error">{{ err }}</div>
-          }
-        </div>
       </div>
+
+      @switch (form.controls.formaPago.value) {
+        @case ('contado') {
+          <div class="ventas-row">
+            <div class="ventas-field">
+              <label for="sectoresInteres" class="ventas-label">Sectores de interés *</label>
+              <input
+                id="sectoresInteres"
+                type="text"
+                class="ventas-input"
+                placeholder="Ej. Chapinero, Cedritos, Usaquén"
+                [class.is-invalid]="fieldError('sectoresInteres')"
+                formControlName="sectoresInteres"
+              />
+              @if (fieldError('sectoresInteres'); as err) {
+                <div class="ventas-error">{{ err }}</div>
+              }
+            </div>
+          </div>
+        }
+        @case ('credito_hipotecario') {
+          <div class="ventas-row">
+            <div class="ventas-field">
+              <label for="valorDisponibleCredito" class="ventas-label">Valor disponible a crédito *</label>
+              <input
+                id="valorDisponibleCredito"
+                type="text"
+                class="ventas-input"
+                placeholder="Ej. $150.000.000"
+                [class.is-invalid]="fieldError('valorDisponibleCredito')"
+                formControlName="valorDisponibleCredito"
+              />
+              @if (fieldError('valorDisponibleCredito'); as err) {
+                <div class="ventas-error">{{ err }}</div>
+              }
+            </div>
+
+            <div class="ventas-field">
+              <label for="valorDisponibleContado" class="ventas-label">Valor disponible de contado *</label>
+              <input
+                id="valorDisponibleContado"
+                type="text"
+                class="ventas-input"
+                placeholder="Ej. $50.000.000"
+                [class.is-invalid]="fieldError('valorDisponibleContado')"
+                formControlName="valorDisponibleContado"
+              />
+              @if (fieldError('valorDisponibleContado'); as err) {
+                <div class="ventas-error">{{ err }}</div>
+              } @else {
+                <div class="ventas-hint">Si es por todo de crédito, escribe 0 en valor de contado.</div>
+              }
+            </div>
+          </div>
+        }
+        @case ('otros') {
+          <div class="ventas-row">
+            <div class="ventas-field">
+              <label for="formaPagoOtro" class="ventas-label">Describe la forma de pago *</label>
+              <textarea
+                id="formaPagoOtro"
+                rows="3"
+                class="ventas-input ventas-textarea"
+                placeholder="Cuéntanos cómo planeas pagar"
+                [class.is-invalid]="fieldError('formaPagoOtro')"
+                formControlName="formaPagoOtro"
+              ></textarea>
+              @if (fieldError('formaPagoOtro'); as err) {
+                <div class="ventas-error">{{ err }}</div>
+              }
+            </div>
+          </div>
+        }
+      }
 
       <div class="ventas-actions">
         <span class="ventas-required-hint">* Campos obligatorios</span>
-        <button type="submit" class="btn btn-secondary">Registrar comprador</button>
+        <button type="submit" class="btn btn-secondary" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Enviar solicitud
+        </button>
       </div>
     </div>
   </form>
