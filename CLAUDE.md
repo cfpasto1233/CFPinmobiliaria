@@ -163,8 +163,10 @@ tabla de fotos adicionales — más simple que Propiedad a propósito). No asumi
 Frontend: landing pública (conectada a `/api/v1/propiedades` y `/api/v1/proyectos` reales) + página
 de listado público completo en `/propiedades` y `/proyectos` (`features/propiedades`,
 `features/proyectos`) + formularios públicos de captura de leads sin backend propio (`/ventas`,
-`/arrendar`, `/arrendar-propiedad`, `/recaudo`, `/reportes` — enlazados desde el menú de búsqueda
-del hero) + contacto vía WhatsApp (`core/whatsapp/whatsapp.util.ts`, usado en landing y navbar) +
+`/arrendar`, `/arrendar-propiedad`, `/recaudo`, `/reportes`, `/credito-hipotecario`,
+`/reduccion-credito`, `/publicar-propiedad`, `/publicar-por-tu-cuenta` — enlazados desde el menú de
+búsqueda del hero o desde "Publica tu propiedad") + contacto vía WhatsApp
+(`core/whatsapp/whatsapp.util.ts`, usado en landing y navbar) +
 login/register + dashboard + `features/design-system` (showcase de componentes UI). El área
 superadmin (`layouts/admin-layout`, ruta `/admin`, con `layouts/sidebar` y `layouts/topbar` como
 componentes propios) tiene los módulos "Propiedades" y "Proyectos" (`features/admin/propiedades`,

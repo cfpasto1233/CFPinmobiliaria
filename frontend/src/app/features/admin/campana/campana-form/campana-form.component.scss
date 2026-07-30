@@ -1,0 +1,91 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.campana-form-header {
+  margin-bottom: 1.5rem;
+}
+
+.campana-form-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-text-dark;
+  margin: 0;
+}
+
+.campana-form-subtitle {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin: 0.35rem 0 0;
+}
+
+.card {
+  border-radius: $cfpasto-radius-xl;
+  overflow: hidden;
+  box-shadow: $cfpasto-shadow-md;
+  max-width: 760px;
+}
+
+.campana-form-field {
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.campana-form-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 600;
+  color: $cfpasto-text-dark;
+  margin-bottom: 0.4rem;
+}
+
+.campana-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+
+  .campana-form-field {
+    margin-bottom: 0;
+  }
+}
+
+.form-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-error;
+  margin-top: 0.35rem;
+}
+
+.campana-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: $cfpasto-bg-subtle;
+  border-top: 1px solid $cfpasto-border-light;
+
+  @media (max-width: 575.98px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.campana-form-required-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-light;
+}

@@ -151,6 +151,13 @@ export const routes: Routes = [
             (m) => m.ProyectoFormComponent,
           ),
       },
+      {
+        path: 'campana',
+        loadComponent: () =>
+          import('./features/admin/campana/campana-form/campana-form.component').then(
+            (m) => m.CampanaFormComponent,
+          ),
+      },
     ],
   },
   {

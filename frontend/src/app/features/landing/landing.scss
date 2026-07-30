@@ -313,6 +313,32 @@
   background: $cfpasto-text-dark;
 }
 
+.featured-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.campaign-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.6rem;
+  margin: 0;
+  font-family: $cfpasto-font-body;
+  color: $cfpasto-text-muted;
+}
+
+.campaign-dates {
+  font-size: $cfpasto-text-sm;
+  font-weight: 600;
+  color: $cfpasto-text-dark;
+}
+
+.campaign-description {
+  font-size: $cfpasto-text-sm;
+}
+
 .featured-cta {
   white-space: nowrap;
 }
