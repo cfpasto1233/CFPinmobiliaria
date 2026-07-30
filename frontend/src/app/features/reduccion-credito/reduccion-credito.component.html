@@ -1,0 +1,123 @@
+<app-navbar />
+
+<section class="reduccion">
+  <div class="reduccion-header">
+    <a routerLink="/" class="reduccion-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5" />
+        <path d="M12 19l-7-7 7-7" />
+      </svg>
+      Volver al inicio
+    </a>
+
+    <p class="reduccion-eyebrow">Reducción de crédito</p>
+    <h1 class="reduccion-title">Reduce la carga de tu crédito actual</h1>
+    <p class="reduccion-subtitle">
+      Cuéntanos sobre tu crédito vigente y evaluamos contigo alternativas de refinanciación o reestructuración.
+    </p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="reduccion-card">
+      <h2 class="reduccion-card-title">Datos de tu solicitud</h2>
+
+      <div class="reduccion-field">
+        <label for="nombreCompleto" class="reduccion-label">Nombre completo *</label>
+        <input
+          id="nombreCompleto"
+          type="text"
+          class="reduccion-input"
+          placeholder="Tu nombre"
+          [class.is-invalid]="fieldError('nombreCompleto')"
+          formControlName="nombreCompleto"
+        />
+        @if (fieldError('nombreCompleto'); as err) {
+          <div class="reduccion-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reduccion-field">
+        <label for="numeroContacto" class="reduccion-label">Número de contacto *</label>
+        <input
+          id="numeroContacto"
+          type="tel"
+          class="reduccion-input"
+          placeholder="+57 300 000 0000"
+          [class.is-invalid]="fieldError('numeroContacto')"
+          formControlName="numeroContacto"
+        />
+        @if (fieldError('numeroContacto'); as err) {
+          <div class="reduccion-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reduccion-field">
+        <label for="entidadFinanciera" class="reduccion-label">Entidad financiera actual *</label>
+        <input
+          id="entidadFinanciera"
+          type="text"
+          class="reduccion-input"
+          placeholder="Ej: Bancolombia, Davivienda..."
+          [class.is-invalid]="fieldError('entidadFinanciera')"
+          formControlName="entidadFinanciera"
+        />
+        @if (fieldError('entidadFinanciera'); as err) {
+          <div class="reduccion-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reduccion-field">
+        <label class="reduccion-label">Motivo de tu solicitud *</label>
+        <ng-select
+          class="reduccion-select"
+          [items]="motivoOptions"
+          bindLabel="label"
+          bindValue="value"
+          [clearable]="false"
+          placeholder="Seleccionar..."
+          formControlName="motivoSolicitud"
+        ></ng-select>
+        @if (fieldError('motivoSolicitud'); as err) {
+          <div class="reduccion-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reduccion-field">
+        <label for="saldoActual" class="reduccion-label">Saldo actual aproximado</label>
+        <input
+          id="saldoActual"
+          type="text"
+          class="reduccion-input"
+          placeholder="Ej: $95.000.000"
+          [class.is-invalid]="fieldError('saldoActual')"
+          formControlName="saldoActual"
+        />
+        @if (fieldError('saldoActual'); as err) {
+          <div class="reduccion-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reduccion-field">
+        <label for="mensaje" class="reduccion-label">Mensaje</label>
+        <textarea
+          id="mensaje"
+          rows="3"
+          class="reduccion-input reduccion-textarea"
+          placeholder="Cuéntanos más detalles de tu solicitud..."
+          [class.is-invalid]="fieldError('mensaje')"
+          formControlName="mensaje"
+        ></textarea>
+        @if (fieldError('mensaje'); as err) {
+          <div class="reduccion-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="reduccion-actions">
+        <span class="reduccion-required-hint">* Campos obligatorios</span>
+        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<app-footer />

@@ -42,6 +42,20 @@ export const routes: Routes = [
       import('./features/reportes/reportes.component').then((m) => m.ReportesComponent),
   },
   {
+    path: 'credito-hipotecario',
+    loadComponent: () =>
+      import('./features/credito-hipotecario/credito-hipotecario.component').then(
+        (m) => m.CreditoHipotecarioComponent,
+      ),
+  },
+  {
+    path: 'reduccion-credito',
+    loadComponent: () =>
+      import('./features/reduccion-credito/reduccion-credito.component').then(
+        (m) => m.ReduccionCreditoComponent,
+      ),
+  },
+  {
     path: 'proyectos',
     loadComponent: () =>
       import('./features/proyectos/proyectos-listado.component').then(
