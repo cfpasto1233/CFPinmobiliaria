@@ -24,8 +24,11 @@ from app.schemas.propiedad import (
     PropiedadForm,
     PropiedadPublic,
     PropiedadUpdate,
+    RuralUrbano,
     TipoInmueble,
+    TipoParqueadero,
     TipoPropiedad,
+    Vista,
 )
 from app.services import storage
 
@@ -79,13 +82,37 @@ def create_propiedad_endpoint(
     habitaciones: Annotated[int | None, Form(ge=0)] = None,
     tiene_parqueadero: Annotated[bool, Form()] = False,
     num_parqueaderos: Annotated[int | None, Form(ge=0)] = None,
+    tipo_parqueadero: Annotated[TipoParqueadero | None, Form()] = None,
     area_construida: Annotated[Decimal | None, Form(gt=0)] = None,
+    area_lote: Annotated[Decimal | None, Form(gt=0)] = None,
+    frente: Annotated[Decimal | None, Form(gt=0)] = None,
+    fondo: Annotated[Decimal | None, Form(gt=0)] = None,
     antiguedad: Annotated[int | None, Form(ge=0)] = None,
+    piso: Annotated[int | None, Form()] = None,
+    vista: Annotated[Vista | None, Form()] = None,
+    balcon: Annotated[bool, Form()] = False,
+    terraza: Annotated[bool, Form()] = False,
+    patio: Annotated[bool, Form()] = False,
+    bodega: Annotated[bool, Form()] = False,
+    zona_bbq: Annotated[bool, Form()] = False,
+    piscina: Annotated[bool, Form()] = False,
+    cocina: Annotated[bool, Form()] = False,
+    conjunto_cerrado: Annotated[bool, Form()] = False,
+    tiene_administracion: Annotated[bool, Form()] = False,
+    valor_administracion: Annotated[Decimal | None, Form(ge=0)] = None,
+    zonas_comunes: Annotated[str | None, Form()] = None,
+    actividad: Annotated[str | None, Form()] = None,
+    rural_urbano: Annotated[RuralUrbano | None, Form()] = None,
+    tiene_servicios: Annotated[bool, Form()] = False,
+    tiene_alcantarillado: Annotated[bool, Form()] = False,
+    tiene_acueducto: Annotated[bool, Form()] = False,
+    permite_permuta: Annotated[bool, Form()] = False,
+    adicionales: Annotated[str | None, Form()] = None,
 ) -> PropiedadPublic:
-    # baños/habitaciones/área/antigüedad son obligatorios solo si tipo_inmueble es
-    # casa o apartamento — esa regla cruzada vive en el model_validator de
-    # PropiedadForm y no se puede expresar con Form(), así que se captura acá y se
-    # traduce a un 422 con mensaje claro en vez de dejarlo reventar como 500.
+    # Qué campos son obligatorios/aplican depende de tipo_inmueble — esa matriz
+    # vive en el model_validator de PropiedadForm y no se puede expresar con
+    # Form(), así que se captura acá y se traduce a un 422 con mensaje claro en
+    # vez de dejarlo reventar como 500.
     try:
         form = PropiedadForm(
             nombre=nombre,
@@ -98,8 +125,32 @@ def create_propiedad_endpoint(
             habitaciones=habitaciones,
             tiene_parqueadero=tiene_parqueadero,
             num_parqueaderos=num_parqueaderos,
+            tipo_parqueadero=tipo_parqueadero,
             area_construida=area_construida,
+            area_lote=area_lote,
+            frente=frente,
+            fondo=fondo,
             antiguedad=antiguedad,
+            piso=piso,
+            vista=vista,
+            balcon=balcon,
+            terraza=terraza,
+            patio=patio,
+            bodega=bodega,
+            zona_bbq=zona_bbq,
+            piscina=piscina,
+            cocina=cocina,
+            conjunto_cerrado=conjunto_cerrado,
+            tiene_administracion=tiene_administracion,
+            valor_administracion=valor_administracion,
+            zonas_comunes=zonas_comunes,
+            actividad=actividad,
+            rural_urbano=rural_urbano,
+            tiene_servicios=tiene_servicios,
+            tiene_alcantarillado=tiene_alcantarillado,
+            tiene_acueducto=tiene_acueducto,
+            permite_permuta=permite_permuta,
+            adicionales=adicionales,
         )
     except ValidationError as exc:
         raise HTTPException(status_code=422, detail=_mensaje_error_validacion(exc)) from exc

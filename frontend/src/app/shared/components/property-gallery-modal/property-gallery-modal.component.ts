@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { PropiedadPublic } from '../../../../client';
 
-type SpecIcon = 'bed' | 'bath' | 'area' | 'age' | 'parking';
+type SpecIcon = 'bed' | 'bath' | 'area' | 'age' | 'parking' | 'check';
 
 interface SpecItem {
   icon: SpecIcon;
@@ -82,8 +82,24 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
     }
   });
 
-  // Baños/habitaciones/área/antigüedad/parqueadero existen para todos los tipos
-  // de inmueble excepto lote.
+  private tipoParqueaderoLabel(tipo: string): string {
+    switch (tipo) {
+      case 'interno':
+        return 'interno';
+      case 'externo':
+        return 'externo';
+      case 'carro':
+        return 'carro';
+      case 'moto':
+        return 'moto';
+      default:
+        return tipo;
+    }
+  }
+
+  // Qué campos aplican depende de tipo_inmueble — ver la matriz en
+  // backend/app/schemas/propiedad.py. Acá simplemente se muestra lo que venga
+  // con valor (los que no aplican llegan en null/false desde el backend).
   protected readonly specs = computed<SpecItem[]>(() => {
     const property = this.property();
     const items: SpecItem[] = [];
@@ -99,8 +115,20 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
         label: `${property.banos} ${property.banos === 1 ? 'baño' : 'baños'}`,
       });
     }
+    if (property.piso !== null) {
+      items.push({ icon: 'area', label: `Piso ${property.piso}` });
+    }
+    if (property.vista !== null) {
+      items.push({ icon: 'area', label: `Vista ${property.vista}` });
+    }
     if (property.area_construida !== null) {
       items.push({ icon: 'area', label: `${property.area_construida} m² construidos` });
+    }
+    if (property.area_lote !== null) {
+      items.push({ icon: 'area', label: `${property.area_lote} m² de lote` });
+    }
+    if (property.frente !== null && property.fondo !== null) {
+      items.push({ icon: 'area', label: `Frente ${property.frente} m × Fondo ${property.fondo} m` });
     }
     if (property.antiguedad !== null) {
       items.push({
@@ -111,15 +139,55 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
             : `${property.antiguedad} ${property.antiguedad === 1 ? 'año' : 'años'} de antigüedad`,
       });
     }
+    if (property.rural_urbano !== null) {
+      items.push({ icon: 'check', label: property.rural_urbano === 'rural' ? 'Rural' : 'Urbano' });
+    }
     if (property.tiene_parqueadero) {
+      const cantidad = property.num_parqueaderos
+        ? `${property.num_parqueaderos} ${property.num_parqueaderos === 1 ? 'parqueadero' : 'parqueaderos'}`
+        : 'Parqueadero';
+      const tipo = property.tipo_parqueadero ? ` (${this.tipoParqueaderoLabel(property.tipo_parqueadero)})` : '';
+      items.push({ icon: 'parking', label: `${cantidad}${tipo}` });
+    }
+    if (property.balcon) items.push({ icon: 'check', label: 'Balcón' });
+    if (property.terraza) {
+      items.push({ icon: 'check', label: property.tipo_inmueble === 'finca' ? 'Terraza y/o patio' : 'Terraza' });
+    }
+    if (property.patio) {
+      items.push({ icon: 'check', label: property.tipo_inmueble === 'local' ? 'Patio/zona de lavado' : 'Patio' });
+    }
+    if (property.bodega) items.push({ icon: 'check', label: 'Bodega' });
+    if (property.zona_bbq) items.push({ icon: 'check', label: 'Zona BBQ' });
+    if (property.piscina) items.push({ icon: 'check', label: 'Piscina' });
+    if (property.cocina) items.push({ icon: 'check', label: 'Cocina' });
+    if (property.conjunto_cerrado) items.push({ icon: 'check', label: 'Conjunto cerrado o edificio' });
+    if (property.valor_administracion !== null) {
       items.push({
-        icon: 'parking',
-        label: property.num_parqueaderos
-          ? `${property.num_parqueaderos} ${property.num_parqueaderos === 1 ? 'parqueadero' : 'parqueaderos'}`
-          : 'Parqueadero',
+        icon: 'check',
+        label: `Administración: ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(Number(property.valor_administracion))}`,
       });
     }
+    if (property.tiene_servicios) {
+      const servicios = [
+        property.tiene_alcantarillado ? 'alcantarillado' : null,
+        property.tiene_acueducto ? 'acueducto' : null,
+      ].filter((s): s is string => s !== null);
+      items.push({
+        icon: 'check',
+        label: servicios.length > 0 ? `Servicios: ${servicios.join(', ')}` : 'Servicios',
+      });
+    }
+    if (property.permite_permuta) items.push({ icon: 'check', label: 'Recibe permuta' });
     return items;
+  });
+
+  protected readonly notasAdicionales = computed(() => {
+    const property = this.property();
+    const notas: { label: string; texto: string }[] = [];
+    if (property.actividad) notas.push({ label: 'Actividad', texto: property.actividad });
+    if (property.zonas_comunes) notas.push({ label: 'Zonas comunes', texto: property.zonas_comunes });
+    if (property.adicionales) notas.push({ label: 'Adicionales', texto: property.adicionales });
+    return notas;
   });
 
   ngOnInit(): void {

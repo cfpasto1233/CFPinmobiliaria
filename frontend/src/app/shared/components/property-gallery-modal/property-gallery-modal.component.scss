@@ -355,6 +355,29 @@
   white-space: pre-line;
 }
 
+.gallery-modal-notas {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid $cfpasto-border-light;
+}
+
+.gallery-modal-nota {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin: 0 0 0.5rem;
+  white-space: pre-line;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.gallery-modal-nota-label {
+  font-weight: 600;
+  color: $cfpasto-text-dark;
+}
+
 @media (max-width: 576px) {
   .gallery-modal-overlay {
     padding: 0;

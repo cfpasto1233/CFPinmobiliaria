@@ -4,7 +4,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PropiedadForm, TipoInmueble } from '../../../../store/Propiedades/propiedad-form.model';
+import {
+  PropiedadForm,
+  RuralUrbano,
+  TipoInmueble,
+  TipoParqueadero,
+  Vista,
+} from '../../../../store/Propiedades/propiedad-form.model';
 import { PropiedadesActions } from '../../../../store/Propiedades/propiedades.actions';
 import {
   selectPropiedadSelected,
@@ -14,13 +20,119 @@ import {
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
-const TIPOS_INMUEBLE_CON_DETALLE: TipoInmueble[] = [
-  'casa',
-  'apartamento',
-  'local',
-  'finca',
-  'apartaestudio',
-  'oficina',
+
+// ─── Matriz de campos "detalle" por tipo de inmueble ────────────────────────
+// Espejo de la matriz en backend/app/schemas/propiedad.py — cualquier cambio acá
+// debe reflejarse allá (y viceversa) para que la validación del form coincida
+// con la del backend.
+
+type CampoDetalle =
+  | 'banos'
+  | 'habitaciones'
+  | 'areaConstruida'
+  | 'areaLote'
+  | 'frente'
+  | 'fondo'
+  | 'antiguedad'
+  | 'piso'
+  | 'vista'
+  | 'valorAdministracion'
+  | 'zonasComunes'
+  | 'actividad'
+  | 'ruralUrbano';
+
+const TODOS_LOS_CAMPOS_DETALLE: CampoDetalle[] = [
+  'banos',
+  'habitaciones',
+  'areaConstruida',
+  'areaLote',
+  'frente',
+  'fondo',
+  'antiguedad',
+  'piso',
+  'vista',
+  'valorAdministracion',
+  'zonasComunes',
+  'actividad',
+  'ruralUrbano',
+];
+
+const CAMPOS_REQUERIDOS: Record<TipoInmueble, CampoDetalle[]> = {
+  casa: ['banos', 'habitaciones', 'areaConstruida', 'areaLote'],
+  apartamento: ['banos', 'habitaciones', 'areaConstruida', 'piso', 'vista'],
+  apartaestudio: ['banos', 'habitaciones', 'areaConstruida'],
+  finca: ['banos', 'habitaciones', 'areaConstruida', 'areaLote'],
+  oficina: ['banos', 'areaConstruida', 'piso', 'vista'],
+  local: ['banos', 'frente', 'fondo', 'actividad'],
+  lote: ['frente', 'fondo', 'ruralUrbano'],
+};
+
+const CAMPOS_OPCIONALES: Record<TipoInmueble, CampoDetalle[]> = {
+  casa: ['antiguedad', 'valorAdministracion', 'zonasComunes'],
+  apartamento: ['antiguedad', 'valorAdministracion', 'zonasComunes'],
+  apartaestudio: ['valorAdministracion', 'zonasComunes'],
+  finca: ['valorAdministracion', 'zonasComunes'],
+  oficina: ['valorAdministracion'],
+  local: [],
+  lote: [],
+};
+
+// Checkboxes propios de cada tipo: siempre tienen valor, nunca son "obligatorios".
+const CAMPOS_BOOL_PROPIOS: Record<TipoInmueble, string[]> = {
+  casa: ['balcon', 'terraza', 'patio', 'conjuntoCerrado'],
+  apartamento: ['balcon', 'bodega', 'conjuntoCerrado', 'tieneAdministracion'],
+  apartaestudio: ['bodega', 'conjuntoCerrado', 'tieneAdministracion'],
+  finca: ['balcon', 'terraza', 'zonaBbq', 'piscina', 'conjuntoCerrado'],
+  oficina: ['cocina', 'patio', 'tieneAdministracion'],
+  local: ['cocina', 'patio'],
+  lote: ['tieneServicios', 'tieneAlcantarillado', 'tieneAcueducto'],
+};
+
+// Cotas mínimas por campo, espejo de los Field(ge=.../gt=...) del backend. Los
+// campos que no aparecen acá (vista, ruralUrbano, zonasComunes, actividad) no
+// llevan validador numérico.
+const CAMPOS_DETALLE_MIN: Partial<Record<CampoDetalle, number>> = {
+  banos: 0,
+  habitaciones: 0,
+  antiguedad: 0,
+  areaConstruida: 0.01,
+  areaLote: 0.01,
+  frente: 0.01,
+  fondo: 0.01,
+  valorAdministracion: 0,
+};
+
+const TIPOS_CON_PARQUEADERO_DETALLE: TipoInmueble[] = ['casa', 'apartamento', 'finca'];
+const TIPOS_CON_PARQUEADERO_SIMPLE: TipoInmueble[] = ['apartaestudio', 'oficina'];
+
+const OPCIONES_TIPO_PARQUEADERO: Partial<Record<TipoInmueble, { value: TipoParqueadero; label: string }[]>> = {
+  casa: [
+    { value: 'interno', label: 'Interno' },
+    { value: 'externo', label: 'Externo' },
+  ],
+  finca: [
+    { value: 'interno', label: 'Interno' },
+    { value: 'externo', label: 'Externo' },
+  ],
+  apartamento: [
+    { value: 'carro', label: 'Carro' },
+    { value: 'moto', label: 'Moto' },
+  ],
+};
+
+const TIPOS_CON_CONJUNTO_CERRADO: TipoInmueble[] = ['casa', 'apartamento', 'finca', 'apartaestudio'];
+const TIPOS_CON_ADMIN_ANIDADA: TipoInmueble[] = ['apartamento', 'apartaestudio'];
+const TIPOS_CON_ADMIN_DIRECTA: TipoInmueble[] = ['oficina'];
+const TIPOS_CON_FRENTE_FONDO: TipoInmueble[] = ['local', 'lote'];
+
+const VISTA_OPTIONS: { value: Vista; label: string }[] = [
+  { value: 'interna', label: 'Interna' },
+  { value: 'externa', label: 'Externa' },
+];
+
+const RURAL_URBANO_OPTIONS: { value: RuralUrbano; label: string }[] = [
+  { value: 'rural', label: 'Rural' },
+  { value: 'urbano', label: 'Urbano' },
 ];
 
 type FormFieldName =
@@ -33,8 +145,17 @@ type FormFieldName =
   | 'banos'
   | 'habitaciones'
   | 'numParqueaderos'
+  | 'tipoParqueadero'
   | 'areaConstruida'
-  | 'antiguedad';
+  | 'areaLote'
+  | 'frente'
+  | 'fondo'
+  | 'antiguedad'
+  | 'piso'
+  | 'vista'
+  | 'actividad'
+  | 'ruralUrbano'
+  | 'valorAdministracion';
 
 const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   nombre: 'El nombre es obligatorio.',
@@ -46,14 +167,27 @@ const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   banos: 'Indica el número de baños.',
   habitaciones: 'Indica el número de habitaciones.',
   numParqueaderos: 'Indica el número de parqueaderos.',
+  tipoParqueadero: 'Indica el tipo de parqueadero.',
   areaConstruida: 'Indica el área construida.',
+  areaLote: 'Indica el área de lote.',
+  frente: 'Indica el frente.',
+  fondo: 'Indica el fondo.',
   antiguedad: 'Indica la antigüedad.',
+  piso: 'Indica el piso.',
+  vista: 'Indica si la vista es interna o externa.',
+  actividad: 'Indica la actividad del local.',
+  ruralUrbano: 'Indica si el lote es rural o urbano.',
+  valorAdministracion: 'Indica el valor de administración.',
 };
 
 const MIN_MESSAGES: Partial<Record<FormFieldName, string>> = {
   precio: 'El precio debe ser mayor a 0.',
   areaConstruida: 'El área construida debe ser mayor a 0.',
+  areaLote: 'El área de lote debe ser mayor a 0.',
+  frente: 'El frente debe ser mayor a 0.',
+  fondo: 'El fondo debe ser mayor a 0.',
   numParqueaderos: 'Debe ser al menos 1.',
+  valorAdministracion: 'El valor de administración no puede ser negativo.',
 };
 
 @Component({
@@ -93,6 +227,9 @@ export class PropiedadFormComponent implements OnInit {
     { value: 'lote', label: 'Lote' },
   ];
 
+  protected readonly vistaOptions = VISTA_OPTIONS;
+  protected readonly ruralUrbanoOptions = RURAL_URBANO_OPTIONS;
+
   protected readonly form = this.fb.group({
     nombre: ['', [Validators.required, Validators.maxLength(255)]],
     descripcion: ['', Validators.required],
@@ -100,12 +237,41 @@ export class PropiedadFormComponent implements OnInit {
     precio: [null as number | null, [Validators.required, Validators.min(1)]],
     tipo: ['venta' as 'venta' | 'arriendo' | 'oferta', Validators.required],
     tipoInmueble: ['casa' as TipoInmueble, Validators.required],
+
     banos: [null as number | null],
     habitaciones: [null as number | null],
     tieneParqueadero: [false],
     numParqueaderos: [null as number | null],
+    tipoParqueadero: [null as TipoParqueadero | null],
     areaConstruida: [null as number | null],
+    areaLote: [null as number | null],
+    frente: [null as number | null],
+    fondo: [null as number | null],
     antiguedad: [null as number | null],
+    piso: [null as number | null],
+    vista: [null as Vista | null],
+
+    balcon: [false],
+    terraza: [false],
+    patio: [false],
+    bodega: [false],
+    zonaBbq: [false],
+    piscina: [false],
+    cocina: [false],
+
+    conjuntoCerrado: [false],
+    tieneAdministracion: [false],
+    valorAdministracion: [null as number | null],
+    zonasComunes: [null as string | null],
+
+    actividad: [null as string | null],
+    ruralUrbano: [null as RuralUrbano | null],
+    tieneServicios: [false],
+    tieneAlcantarillado: [false],
+    tieneAcueducto: [false],
+
+    permitePermuta: [false],
+    adicionales: [null as string | null],
   });
 
   // Signals derivados de los controles para poder mostrar/ocultar secciones del
@@ -113,12 +279,85 @@ export class PropiedadFormComponent implements OnInit {
   private readonly tipoInmuebleValue = toSignal(this.form.controls.tipoInmueble.valueChanges, {
     initialValue: this.form.controls.tipoInmueble.value,
   });
-  protected readonly mostrarDetalleInmueble = computed(() =>
-    TIPOS_INMUEBLE_CON_DETALLE.includes(this.tipoInmuebleValue() ?? 'casa'),
+
+  private readonly camposVisibles = computed(() => {
+    const tipo = this.tipoInmuebleValue() ?? 'casa';
+    return new Set<CampoDetalle>([...CAMPOS_REQUERIDOS[tipo], ...CAMPOS_OPCIONALES[tipo]]);
+  });
+
+  protected mostrarCampo(campo: CampoDetalle): boolean {
+    return this.camposVisibles().has(campo);
+  }
+
+  private readonly camposBoolPropios = computed(
+    () => new Set(CAMPOS_BOOL_PROPIOS[this.tipoInmuebleValue() ?? 'casa']),
   );
+
+  protected mostrarBool(campo: string): boolean {
+    return this.camposBoolPropios().has(campo);
+  }
+
+  protected readonly mostrarParqueaderoDetalle = computed(() =>
+    TIPOS_CON_PARQUEADERO_DETALLE.includes(this.tipoInmuebleValue() ?? 'casa'),
+  );
+  protected readonly mostrarParqueaderoSimple = computed(() =>
+    TIPOS_CON_PARQUEADERO_SIMPLE.includes(this.tipoInmuebleValue() ?? 'casa'),
+  );
+  protected readonly mostrarParqueadero = computed(
+    () => this.mostrarParqueaderoDetalle() || this.mostrarParqueaderoSimple(),
+  );
+  protected readonly opcionesTipoParqueadero = computed(
+    () => OPCIONES_TIPO_PARQUEADERO[this.tipoInmuebleValue() ?? 'casa'] ?? [],
+  );
+
+  protected readonly mostrarConjuntoCerrado = computed(() =>
+    TIPOS_CON_CONJUNTO_CERRADO.includes(this.tipoInmuebleValue() ?? 'casa'),
+  );
+  protected readonly mostrarAdminAnidada = computed(() =>
+    TIPOS_CON_ADMIN_ANIDADA.includes(this.tipoInmuebleValue() ?? 'casa'),
+  );
+  protected readonly mostrarAdminDirecta = computed(() =>
+    TIPOS_CON_ADMIN_DIRECTA.includes(this.tipoInmuebleValue() ?? 'casa'),
+  );
+  protected readonly mostrarFrenteFondo = computed(() =>
+    TIPOS_CON_FRENTE_FONDO.includes(this.tipoInmuebleValue() ?? 'casa'),
+  );
+
+  // terraza/patio son columnas compartidas entre tipos, pero el enunciado cambia:
+  // en finca "terraza" representa "Terraza y/o Patio"; en local/oficina "patio"
+  // se reutiliza con su propio rótulo.
+  protected readonly terrazaLabel = computed(() =>
+    this.tipoInmuebleValue() === 'finca' ? 'Terraza y/o Patio' : 'Terraza',
+  );
+  protected readonly patioLabel = computed(() => {
+    switch (this.tipoInmuebleValue()) {
+      case 'local':
+        return 'Patio/Zona de lavado';
+      default:
+        return 'Patio';
+    }
+  });
 
   protected readonly tieneParqueaderoValue = toSignal(this.form.controls.tieneParqueadero.valueChanges, {
     initialValue: this.form.controls.tieneParqueadero.value,
+  });
+  protected readonly conjuntoCerradoValue = toSignal(this.form.controls.conjuntoCerrado.valueChanges, {
+    initialValue: this.form.controls.conjuntoCerrado.value,
+  });
+  protected readonly tieneAdministracionValue = toSignal(this.form.controls.tieneAdministracion.valueChanges, {
+    initialValue: this.form.controls.tieneAdministracion.value,
+  });
+  protected readonly tieneServiciosValue = toSignal(this.form.controls.tieneServicios.valueChanges, {
+    initialValue: this.form.controls.tieneServicios.value,
+  });
+
+  // ¿Se muestra el input de valor de administración? Para casa/finca va directo
+  // (sin el booleano "tiene administración" de por medio); para apartamento y
+  // apartaestudio depende de ese booleano.
+  protected readonly mostrarValorAdministracion = computed(() => {
+    if (!this.mostrarCampo('valorAdministracion')) return false;
+    if (this.mostrarAdminAnidada()) return this.tieneAdministracionValue() === true;
+    return this.conjuntoCerradoValue() === true || this.mostrarAdminDirecta();
   });
 
   protected readonly fotoPrincipalFile = signal<File | null>(null);
@@ -143,21 +382,47 @@ export class PropiedadFormComponent implements OnInit {
           habitaciones: item.habitaciones,
           tieneParqueadero: item.tiene_parqueadero,
           numParqueaderos: item.num_parqueaderos,
+          tipoParqueadero: (item.tipo_parqueadero as TipoParqueadero | null) ?? null,
           areaConstruida: item.area_construida !== null ? Number(item.area_construida) : null,
+          areaLote: item.area_lote !== null ? Number(item.area_lote) : null,
+          frente: item.frente !== null ? Number(item.frente) : null,
+          fondo: item.fondo !== null ? Number(item.fondo) : null,
           antiguedad: item.antiguedad,
+          piso: item.piso,
+          vista: (item.vista as Vista | null) ?? null,
+          balcon: item.balcon,
+          terraza: item.terraza,
+          patio: item.patio,
+          bodega: item.bodega,
+          zonaBbq: item.zona_bbq,
+          piscina: item.piscina,
+          cocina: item.cocina,
+          conjuntoCerrado: item.conjunto_cerrado,
+          tieneAdministracion: item.tiene_administracion,
+          valorAdministracion: item.valor_administracion !== null ? Number(item.valor_administracion) : null,
+          zonasComunes: item.zonas_comunes,
+          actividad: item.actividad,
+          ruralUrbano: (item.rural_urbano as RuralUrbano | null) ?? null,
+          tieneServicios: item.tiene_servicios,
+          tieneAlcantarillado: item.tiene_alcantarillado,
+          tieneAcueducto: item.tiene_acueducto,
+          permitePermuta: item.permite_permuta,
+          adicionales: item.adicionales,
         });
       }
     });
 
-    // Baños/habitaciones/área/antigüedad son obligatorios solo si el inmueble es casa
-    // o apartamento; el número de parqueaderos solo si hay parqueadero. Se actualizan
-    // los validators en caliente en vez de duplicar la condición en el template.
-    this.form.controls.tipoInmueble.valueChanges.subscribe((tipo) => this.updateDetalleValidators(tipo));
+    // Qué campos son obligatorios depende del tipo de inmueble — se actualizan
+    // los validators en caliente en vez de duplicar la matriz en el template.
+    this.form.controls.tipoInmueble.valueChanges.subscribe((tipo) => {
+      this.updateDetalleValidators(tipo);
+      this.updateParqueaderoValidators(tipo, this.form.controls.tieneParqueadero.value);
+    });
     this.form.controls.tieneParqueadero.valueChanges.subscribe((tiene) =>
-      this.updateParqueaderoValidators(tiene),
+      this.updateParqueaderoValidators(this.form.controls.tipoInmueble.value, tiene),
     );
     this.updateDetalleValidators(this.form.controls.tipoInmueble.value);
-    this.updateParqueaderoValidators(this.form.controls.tieneParqueadero.value);
+    this.updateParqueaderoValidators(this.form.controls.tipoInmueble.value, this.form.controls.tieneParqueadero.value);
   }
 
   ngOnInit(): void {
@@ -237,8 +502,10 @@ export class PropiedadFormComponent implements OnInit {
       return;
     }
 
+    // La limpieza de campos que no aplican para el tipo de inmueble elegido (p.
+    // ej. "balcón" en un lote) la hace el backend en PropiedadForm/PropiedadUpdate
+    // — acá solo se arma el objeto con los valores crudos del formulario.
     const raw = this.form.getRawValue();
-    const esCasaOApartamento = TIPOS_INMUEBLE_CON_DETALLE.includes(raw.tipoInmueble ?? 'casa');
     const form: PropiedadForm = {
       nombre: raw.nombre ?? '',
       descripcion: raw.descripcion ?? '',
@@ -246,12 +513,41 @@ export class PropiedadFormComponent implements OnInit {
       precio: raw.precio ?? 0,
       tipo: raw.tipo ?? 'venta',
       tipo_inmueble: raw.tipoInmueble ?? 'casa',
-      banos: esCasaOApartamento ? raw.banos : null,
-      habitaciones: esCasaOApartamento ? raw.habitaciones : null,
-      tiene_parqueadero: esCasaOApartamento ? (raw.tieneParqueadero ?? false) : false,
-      num_parqueaderos: esCasaOApartamento && raw.tieneParqueadero ? raw.numParqueaderos : null,
-      area_construida: esCasaOApartamento ? raw.areaConstruida : null,
-      antiguedad: esCasaOApartamento ? raw.antiguedad : null,
+
+      banos: raw.banos,
+      habitaciones: raw.habitaciones,
+      tiene_parqueadero: raw.tieneParqueadero ?? false,
+      num_parqueaderos: raw.numParqueaderos,
+      tipo_parqueadero: raw.tipoParqueadero,
+      area_construida: raw.areaConstruida,
+      area_lote: raw.areaLote,
+      frente: raw.frente,
+      fondo: raw.fondo,
+      antiguedad: raw.antiguedad,
+      piso: raw.piso,
+      vista: raw.vista,
+
+      balcon: raw.balcon ?? false,
+      terraza: raw.terraza ?? false,
+      patio: raw.patio ?? false,
+      bodega: raw.bodega ?? false,
+      zona_bbq: raw.zonaBbq ?? false,
+      piscina: raw.piscina ?? false,
+      cocina: raw.cocina ?? false,
+
+      conjunto_cerrado: raw.conjuntoCerrado ?? false,
+      tiene_administracion: raw.tieneAdministracion ?? false,
+      valor_administracion: raw.valorAdministracion,
+      zonas_comunes: raw.zonasComunes,
+
+      actividad: raw.actividad,
+      rural_urbano: raw.ruralUrbano,
+      tiene_servicios: raw.tieneServicios ?? false,
+      tiene_alcantarillado: raw.tieneAlcantarillado ?? false,
+      tiene_acueducto: raw.tieneAcueducto ?? false,
+
+      permite_permuta: raw.permitePermuta ?? false,
+      adicionales: raw.adicionales,
     };
 
     if (this.isEditMode && this.propiedadId) {
@@ -268,22 +564,25 @@ export class PropiedadFormComponent implements OnInit {
   }
 
   private updateDetalleValidators(tipo: TipoInmueble | null): void {
-    const requerido = TIPOS_INMUEBLE_CON_DETALLE.includes(tipo ?? 'casa') ? [Validators.required] : [];
-    this.form.controls.banos.setValidators([...requerido, Validators.min(0)]);
-    this.form.controls.habitaciones.setValidators([...requerido, Validators.min(0)]);
-    this.form.controls.areaConstruida.setValidators([...requerido, Validators.min(0.01)]);
-    this.form.controls.antiguedad.setValidators([...requerido, Validators.min(0)]);
-    this.form.controls.banos.updateValueAndValidity({ emitEvent: false });
-    this.form.controls.habitaciones.updateValueAndValidity({ emitEvent: false });
-    this.form.controls.areaConstruida.updateValueAndValidity({ emitEvent: false });
-    this.form.controls.antiguedad.updateValueAndValidity({ emitEvent: false });
+    const requeridos = new Set(CAMPOS_REQUERIDOS[tipo ?? 'casa']);
+    for (const campo of TODOS_LOS_CAMPOS_DETALLE) {
+      const control = this.form.controls[campo];
+      const validators = requeridos.has(campo) ? [Validators.required] : [];
+      const minValue = CAMPOS_DETALLE_MIN[campo];
+      if (minValue !== undefined) {
+        validators.push(Validators.min(minValue));
+      }
+      control.setValidators(validators);
+      control.updateValueAndValidity({ emitEvent: false });
+    }
   }
 
-  private updateParqueaderoValidators(tieneParqueadero: boolean | null): void {
-    this.form.controls.numParqueaderos.setValidators(
-      tieneParqueadero ? [Validators.required, Validators.min(1)] : [],
-    );
+  private updateParqueaderoValidators(tipo: TipoInmueble | null, tieneParqueadero: boolean | null): void {
+    const requerido = !!tieneParqueadero && TIPOS_CON_PARQUEADERO_DETALLE.includes(tipo ?? 'casa');
+    this.form.controls.numParqueaderos.setValidators(requerido ? [Validators.required, Validators.min(1)] : []);
+    this.form.controls.tipoParqueadero.setValidators(requerido ? [Validators.required] : []);
     this.form.controls.numParqueaderos.updateValueAndValidity({ emitEvent: false });
+    this.form.controls.tipoParqueadero.updateValueAndValidity({ emitEvent: false });
   }
 
   private handleFotoPrincipal(file: File | null): void {
