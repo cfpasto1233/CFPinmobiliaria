@@ -23,8 +23,9 @@ class Propiedad(TimestampMixin, Base):
     foto_principal_key: Mapped[str] = mapped_column(String(500), nullable=False)
     orden: Mapped[int] = mapped_column(Integer, default=0, nullable=False, server_default="0")
 
-    # Tipo de inmueble ("casa" | "apartamento" | "lote"). Los campos siguientes solo
-    # aplican a casa/apartamento; para lote quedan en NULL/false.
+    # Tipo de inmueble ("casa" | "apartamento" | "lote" | "local" | "finca" |
+    # "apartaestudio" | "oficina"). Los campos siguientes aplican a todos excepto
+    # lote, que queda en NULL/false.
     tipo_inmueble: Mapped[str] = mapped_column(String(20), nullable=False, server_default="casa")
     banos: Mapped[int | None] = mapped_column(Integer, nullable=True)
     habitaciones: Mapped[int | None] = mapped_column(Integer, nullable=True)

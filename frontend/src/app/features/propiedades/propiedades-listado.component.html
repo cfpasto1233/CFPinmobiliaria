@@ -35,6 +35,14 @@
         >
           Arriendo
         </button>
+        <button
+          type="button"
+          class="propiedades-tipo-tab"
+          [class.is-active]="tipo() === 'oferta'"
+          (click)="setTipo('oferta')"
+        >
+          Oferta
+        </button>
       </div>
     </div>
 

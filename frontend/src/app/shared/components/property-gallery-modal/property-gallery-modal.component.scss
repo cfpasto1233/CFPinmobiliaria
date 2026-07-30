@@ -277,6 +277,11 @@
     background: $cfpasto-accent;
     color: $cfpasto-text-dark;
   }
+
+  &.is-oferta {
+    background: $cfpasto-success;
+    color: $cfpasto-white;
+  }
 }
 
 .gallery-modal-price {
@@ -288,6 +293,10 @@
 
   &.is-rent {
     color: $cfpasto-accent-dark;
+  }
+
+  &.is-oferta {
+    color: $cfpasto-success;
   }
 }
 

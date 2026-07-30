@@ -95,12 +95,24 @@
           </p>
           <h3 class="gallery-modal-name">{{ property().nombre }}</h3>
         </div>
-        <span class="gallery-modal-badge" [class.is-rent]="property().tipo === 'arriendo'">
-          {{ property().tipo === 'venta' ? 'Venta' : 'Arriendo' }}
+        <span
+          class="gallery-modal-badge"
+          [class.is-rent]="property().tipo === 'arriendo'"
+          [class.is-oferta]="property().tipo === 'oferta'"
+        >
+          @switch (property().tipo) {
+            @case ('arriendo') { Arriendo }
+            @case ('oferta') { Oferta }
+            @default { Venta }
+          }
         </span>
       </div>
 
-      <p class="gallery-modal-price" [class.is-rent]="property().tipo === 'arriendo'">
+      <p
+        class="gallery-modal-price"
+        [class.is-rent]="property().tipo === 'arriendo'"
+        [class.is-oferta]="property().tipo === 'oferta'"
+      >
         {{ property().precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}<span class="gallery-modal-price-suffix">{{
           property().tipo === 'arriendo' ? '/mes' : ''
         }}</span>

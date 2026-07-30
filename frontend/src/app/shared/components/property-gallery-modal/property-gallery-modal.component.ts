@@ -67,6 +67,14 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
     switch (this.property().tipo_inmueble) {
       case 'apartamento':
         return 'Apartamento';
+      case 'apartaestudio':
+        return 'Apartaestudio';
+      case 'finca':
+        return 'Finca';
+      case 'local':
+        return 'Local';
+      case 'oficina':
+        return 'Oficina';
       case 'lote':
         return 'Lote';
       default:
@@ -74,8 +82,8 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
     }
   });
 
-  // Baños/habitaciones/área/antigüedad/parqueadero solo existen para casa y
-  // apartamento — un lote no los tiene.
+  // Baños/habitaciones/área/antigüedad/parqueadero existen para todos los tipos
+  // de inmueble excepto lote.
   protected readonly specs = computed<SpecItem[]>(() => {
     const property = this.property();
     const items: SpecItem[] = [];

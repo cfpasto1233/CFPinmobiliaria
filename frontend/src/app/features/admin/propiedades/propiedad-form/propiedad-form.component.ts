@@ -14,7 +14,14 @@ import {
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
-const TIPOS_INMUEBLE_CON_DETALLE: TipoInmueble[] = ['casa', 'apartamento'];
+const TIPOS_INMUEBLE_CON_DETALLE: TipoInmueble[] = [
+  'casa',
+  'apartamento',
+  'local',
+  'finca',
+  'apartaestudio',
+  'oficina',
+];
 
 type FormFieldName =
   | 'nombre'
@@ -73,11 +80,16 @@ export class PropiedadFormComponent implements OnInit {
   protected readonly tipoOptions = [
     { value: 'venta', label: 'Venta' },
     { value: 'arriendo', label: 'Arriendo' },
+    { value: 'oferta', label: 'Oferta' },
   ];
 
   protected readonly tipoInmuebleOptions: { value: TipoInmueble; label: string }[] = [
     { value: 'casa', label: 'Casa' },
     { value: 'apartamento', label: 'Apartamento' },
+    { value: 'apartaestudio', label: 'Apartaestudio' },
+    { value: 'finca', label: 'Finca' },
+    { value: 'local', label: 'Local' },
+    { value: 'oficina', label: 'Oficina' },
     { value: 'lote', label: 'Lote' },
   ];
 
@@ -86,7 +98,7 @@ export class PropiedadFormComponent implements OnInit {
     descripcion: ['', Validators.required],
     ubicacion: ['', [Validators.required, Validators.maxLength(255)]],
     precio: [null as number | null, [Validators.required, Validators.min(1)]],
-    tipo: ['venta' as 'venta' | 'arriendo', Validators.required],
+    tipo: ['venta' as 'venta' | 'arriendo' | 'oferta', Validators.required],
     tipoInmueble: ['casa' as TipoInmueble, Validators.required],
     banos: [null as number | null],
     habitaciones: [null as number | null],
@@ -125,7 +137,7 @@ export class PropiedadFormComponent implements OnInit {
           descripcion: item.descripcion,
           ubicacion: item.ubicacion,
           precio: Number(item.precio),
-          tipo: item.tipo === 'arriendo' ? 'arriendo' : 'venta',
+          tipo: item.tipo === 'arriendo' || item.tipo === 'oferta' ? item.tipo : 'venta',
           tipoInmueble: (item.tipo_inmueble as TipoInmueble | undefined) ?? 'casa',
           banos: item.banos,
           habitaciones: item.habitaciones,

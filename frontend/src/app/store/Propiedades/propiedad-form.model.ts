@@ -1,4 +1,11 @@
-export type TipoInmueble = 'casa' | 'apartamento' | 'lote';
+export type TipoInmueble =
+  | 'casa'
+  | 'apartamento'
+  | 'lote'
+  | 'local'
+  | 'finca'
+  | 'apartaestudio'
+  | 'oficina';
 
 // Forma de los campos que arma el formulario de alta/edición. No viene del cliente
 // generado porque el endpoint de creación recibe cada campo como multipart Form()
@@ -11,7 +18,7 @@ export interface PropiedadForm {
   descripcion: string;
   ubicacion: string;
   precio: number;
-  tipo: 'venta' | 'arriendo';
+  tipo: 'venta' | 'arriendo' | 'oferta';
   tipo_inmueble: TipoInmueble;
   banos: number | null;
   habitaciones: number | null;

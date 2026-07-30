@@ -10,7 +10,7 @@ import { PropertyCardComponent } from '../../shared/components/property-card/pro
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems, selectPropiedadesLoading } from '../../store/Propiedades/propiedades.selectors';
 
-type TipoFiltro = 'todas' | 'venta' | 'arriendo';
+type TipoFiltro = 'todas' | 'venta' | 'arriendo' | 'oferta';
 type OrdenFiltro = 'destacadas' | 'precio-asc' | 'precio-desc';
 
 @Component({

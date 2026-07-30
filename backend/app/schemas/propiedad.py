@@ -4,12 +4,19 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 
-TipoPropiedad = Literal["venta", "arriendo"]
-TipoInmueble = Literal["casa", "apartamento", "lote"]
+TipoPropiedad = Literal["venta", "arriendo", "oferta"]
+TipoInmueble = Literal["casa", "apartamento", "lote", "local", "finca", "apartaestudio", "oficina"]
 
 # Tipos de inmueble para los que se piden baños, habitaciones, parqueadero, área
 # construida y antigüedad. Un lote no los tiene.
-_TIPOS_INMUEBLE_CON_DETALLE: set[str] = {"casa", "apartamento"}
+_TIPOS_INMUEBLE_CON_DETALLE: set[str] = {
+    "casa",
+    "apartamento",
+    "local",
+    "finca",
+    "apartaestudio",
+    "oficina",
+}
 
 
 class PropiedadForm(BaseModel):
