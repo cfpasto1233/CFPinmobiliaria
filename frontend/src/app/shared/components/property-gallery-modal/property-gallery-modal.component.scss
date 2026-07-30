@@ -274,8 +274,14 @@
   color: $cfpasto-white;
 
   &.is-rent {
-    background: $cfpasto-accent;
-    color: $cfpasto-text-dark;
+    background: $cfpasto-white;
+    color: $cfpasto-primary;
+    border: 1px solid $cfpasto-primary;
+  }
+
+  &.is-oferta {
+    background: $cfpasto-error;
+    color: $cfpasto-white;
   }
 }
 
@@ -288,6 +294,10 @@
 
   &.is-rent {
     color: $cfpasto-accent-dark;
+  }
+
+  &.is-oferta {
+    color: $cfpasto-success;
   }
 }
 
@@ -344,6 +354,29 @@
   color: $cfpasto-text-muted;
   margin: 0.75rem 0 0;
   white-space: pre-line;
+}
+
+.gallery-modal-notas {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid $cfpasto-border-light;
+}
+
+.gallery-modal-nota {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin: 0 0 0.5rem;
+  white-space: pre-line;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.gallery-modal-nota-label {
+  font-weight: 600;
+  color: $cfpasto-text-dark;
 }
 
 @media (max-width: 576px) {

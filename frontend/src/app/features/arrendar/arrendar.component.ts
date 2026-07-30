@@ -7,6 +7,7 @@ import { NotificationService } from '../../core/notifications/notification.servi
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
+import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems, selectPropiedadesLoading } from '../../store/Propiedades/propiedades.selectors';
 
@@ -29,7 +30,15 @@ const REQUIRED_MESSAGES: Partial<Record<FormFieldName, string>> = {
 @Component({
   selector: 'app-arrendar',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectModule, NavbarComponent, FooterComponent, RouterLink, PropertyCardComponent],
+  imports: [
+    ReactiveFormsModule,
+    NgSelectModule,
+    NavbarComponent,
+    FooterComponent,
+    RouterLink,
+    PropertyCardComponent,
+    PublicarWhatsappFabComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './arrendar.component.html',
   styleUrl: './arrendar.component.scss',

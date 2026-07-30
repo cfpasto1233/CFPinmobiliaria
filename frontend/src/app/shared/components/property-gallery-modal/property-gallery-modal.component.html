@@ -95,12 +95,24 @@
           </p>
           <h3 class="gallery-modal-name">{{ property().nombre }}</h3>
         </div>
-        <span class="gallery-modal-badge" [class.is-rent]="property().tipo === 'arriendo'">
-          {{ property().tipo === 'venta' ? 'Venta' : 'Arriendo' }}
+        <span
+          class="gallery-modal-badge"
+          [class.is-rent]="property().tipo === 'arriendo'"
+          [class.is-oferta]="property().tipo === 'oferta'"
+        >
+          @switch (property().tipo) {
+            @case ('arriendo') { Arriendo }
+            @case ('oferta') { Oferta }
+            @default { Venta }
+          }
         </span>
       </div>
 
-      <p class="gallery-modal-price" [class.is-rent]="property().tipo === 'arriendo'">
+      <p
+        class="gallery-modal-price"
+        [class.is-rent]="property().tipo === 'arriendo'"
+        [class.is-oferta]="property().tipo === 'oferta'"
+      >
         {{ property().precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}<span class="gallery-modal-price-suffix">{{
           property().tipo === 'arriendo' ? '/mes' : ''
         }}</span>
@@ -148,6 +160,11 @@
                       <circle cx="16.5" cy="16.5" r="1.5"></circle>
                     </svg>
                   }
+                  @case ('check') {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  }
                 }
               </span>
               <span>{{ spec.label }}</span>
@@ -157,6 +174,16 @@
       }
 
       <p class="gallery-modal-description">{{ property().descripcion }}</p>
+
+      @if (notasAdicionales().length > 0) {
+        <div class="gallery-modal-notas">
+          @for (nota of notasAdicionales(); track nota.label) {
+            <p class="gallery-modal-nota">
+              <span class="gallery-modal-nota-label">{{ nota.label }}:</span> {{ nota.texto }}
+            </p>
+          }
+        </div>
+      }
     </div>
   </div>
 </div>

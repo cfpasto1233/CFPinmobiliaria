@@ -10,21 +10,13 @@ from app.schemas.propiedad import PropiedadForm, PropiedadUpdate
 
 def create_propiedad(*, session: Session, form: PropiedadForm, foto_principal_key: str) -> Propiedad:
     max_orden = session.scalar(select(func.max(Propiedad.orden))) or 0
+    # Los nombres de PropiedadForm calzan 1:1 con las columnas de Propiedad, así
+    # que se pasan tal cual en vez de listarlas a mano (evita que este función se
+    # desincronice cada vez que se agrega un campo de detalle nuevo).
     db_obj = Propiedad(
-        nombre=form.nombre,
-        descripcion=form.descripcion,
-        ubicacion=form.ubicacion,
-        precio=form.precio,
-        tipo=form.tipo,
+        **form.model_dump(),
         foto_principal_key=foto_principal_key,
         orden=max_orden + 1,
-        tipo_inmueble=form.tipo_inmueble,
-        banos=form.banos,
-        habitaciones=form.habitaciones,
-        tiene_parqueadero=form.tiene_parqueadero,
-        num_parqueaderos=form.num_parqueaderos,
-        area_construida=form.area_construida,
-        antiguedad=form.antiguedad,
     )
     session.add(db_obj)
     session.commit()

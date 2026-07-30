@@ -155,21 +155,6 @@
   }
 }
 
-.propiedades-price-range {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  .form-control {
-    min-width: 0;
-  }
-}
-
-.propiedades-price-sep {
-  color: $cfpasto-text-light;
-  flex-shrink: 0;
-}
-
 .propiedades-clear-filters {
   align-self: flex-start;
   padding: 0;

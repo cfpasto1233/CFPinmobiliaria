@@ -175,9 +175,13 @@
         }
       </div>
 
-      <button type="button" class="search-option">
-        <span class="search-option-label">Sugerencias</span>
-      </button>
+      <a routerLink="/credito-hipotecario" class="search-option">
+        <span class="search-option-label">Crédito Hipotecario</span>
+      </a>
+
+      <a routerLink="/reduccion-credito" class="search-option">
+        <span class="search-option-label">Reducción de crédito</span>
+      </a>
     </div>
   </div>
 </section>
@@ -185,10 +189,18 @@
 @if (featuredProperties().length > 0) {
 <section class="featured-properties">
   <div class="featured-header">
-    <span class="campaign-pill">
-      <span class="campaign-dot"></span>
-      Campaña de aniversario
-    </span>
+    <div class="featured-header-info">
+      @if (campana(); as campania) {
+        <span class="campaign-pill">
+          <span class="campaign-dot"></span>
+          {{ campania.nombre }}
+        </span>
+        <p class="campaign-meta">
+          <span class="campaign-dates">{{ campanaRango() }}</span>
+          <span class="campaign-description">{{ campania.descripcion_corta }}</span>
+        </p>
+      }
+    </div>
 
     <a routerLink="/propiedades" class="btn btn-outline-primary featured-cta">
       Ver todas las propiedades →
@@ -340,3 +352,4 @@
 </section>
 
 <app-footer />
+<app-publicar-whatsapp-fab />

@@ -1,0 +1,55 @@
+<div class="solicitudes-list">
+  <div class="solicitudes-list-header">
+    <h1 class="solicitudes-list-title">Solicitudes de venta</h1>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      @if (loading() && items().length === 0) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary"></div>
+        </div>
+      } @else if (items().length === 0) {
+        <div class="text-center py-5 text-muted">Aún no hay solicitudes registradas.</div>
+      } @else {
+        <div class="solicitudes-table-scroll">
+          <div class="solicitudes-grid solicitudes-grid-head" role="row">
+            <span>Nombre</span>
+            <span>Medio</span>
+            <span>Presupuesto</span>
+            <span>Forma de pago</span>
+            <span>Detalle</span>
+            <span>Fecha</span>
+            <span>Acciones</span>
+          </div>
+
+          <div class="solicitudes-grid-body">
+            @for (item of items(); track item.id) {
+              <div class="solicitudes-grid solicitudes-row" role="row">
+                <span class="solicitudes-cell-nombre">{{ item.nombre_completo }}</span>
+                <span>{{ medioLabel(item) }}</span>
+                <span>{{ item.presupuesto_total }}</span>
+                <span>{{ formaPagoLabel(item) }}</span>
+                <span class="solicitudes-cell-detalle">{{ detalle(item) }}</span>
+                <span>{{ item.created_at | date: 'd MMM y, h:mm a' }}</span>
+                <span class="solicitudes-row-actions">
+                  <button type="button" class="btn btn-sm btn-soft-secondary" (click)="openDetalle(item)">
+                    Ver detalle
+                  </button>
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (selected(); as solicitud) {
+    <app-solicitud-venta-detalle-modal [solicitud]="solicitud" (closed)="closeDetalle()" />
+  }
+</div>

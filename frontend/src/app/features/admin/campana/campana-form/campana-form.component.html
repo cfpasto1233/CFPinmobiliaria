@@ -1,0 +1,90 @@
+<div class="campana-form">
+  <div class="campana-form-header">
+    <div>
+      <h1 class="campana-form-title">Campaña</h1>
+      <p class="campana-form-subtitle">
+        Información que se muestra en la sección de propiedades destacadas de la página de inicio.
+      </p>
+    </div>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="card border-0">
+      <div class="card-body p-4 p-lg-5">
+        <div class="campana-form-field">
+          <label for="nombre" class="campana-form-label">Nombre de la campaña *</label>
+          <input
+            id="nombre"
+            type="text"
+            class="form-control"
+            [class.is-invalid]="fieldError('nombre')"
+            formControlName="nombre"
+          />
+          @if (fieldError('nombre'); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="campana-form-row">
+          <div class="campana-form-field">
+            <label for="fecha_inicio" class="campana-form-label">Fecha de inicio *</label>
+            <input
+              id="fecha_inicio"
+              type="date"
+              class="form-control"
+              [class.is-invalid]="fieldError('fecha_inicio')"
+              formControlName="fecha_inicio"
+            />
+            @if (fieldError('fecha_inicio'); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+          </div>
+
+          <div class="campana-form-field">
+            <label for="fecha_fin" class="campana-form-label">Fecha de fin *</label>
+            <input
+              id="fecha_fin"
+              type="date"
+              class="form-control"
+              [class.is-invalid]="fieldError('fecha_fin') || rangoInvalido"
+              formControlName="fecha_fin"
+            />
+            @if (fieldError('fecha_fin'); as err) {
+              <div class="form-error">{{ err }}</div>
+            } @else if (rangoInvalido) {
+              <div class="form-error">La fecha de fin no puede ser anterior a la fecha de inicio.</div>
+            }
+          </div>
+        </div>
+
+        <div class="campana-form-field">
+          <label for="descripcion_corta" class="campana-form-label">Descripción corta *</label>
+          <textarea
+            id="descripcion_corta"
+            class="form-control"
+            rows="3"
+            [class.is-invalid]="fieldError('descripcion_corta')"
+            formControlName="descripcion_corta"
+          ></textarea>
+          @if (fieldError('descripcion_corta'); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="campana-form-actions">
+        <span class="campana-form-required-hint">* Campos obligatorios</span>
+        <button type="submit" class="btn btn-success" [disabled]="form.invalid || loading()">
+          @if (loading()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Guardar cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

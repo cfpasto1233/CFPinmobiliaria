@@ -70,8 +70,14 @@
   color: $cfpasto-white;
 
   &.is-rent {
-    background: $cfpasto-accent;
-    color: $cfpasto-text-dark;
+    background: $cfpasto-white;
+    color: $cfpasto-primary;
+    border: 1px solid $cfpasto-primary;
+  }
+
+  &.is-oferta {
+    background: $cfpasto-error;
+    color: $cfpasto-white;
   }
 }
 
@@ -106,6 +112,10 @@
 
   &.is-rent {
     color: $cfpasto-accent-dark;
+  }
+
+  &.is-oferta {
+    color: $cfpasto-success;
   }
 }
 

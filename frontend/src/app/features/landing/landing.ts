@@ -16,8 +16,13 @@ import { whatsappLink } from '../../core/whatsapp/whatsapp.util';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
+import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
+import { CampanaActions } from '../../store/Campana/campana.actions';
+import { selectCampanaItem } from '../../store/Campana/campana.selectors';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems } from '../../store/Propiedades/propiedades.selectors';
+
+const CAMPANA_DATE_FORMAT: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
 
 interface RealEstateTip {
   number: string;
@@ -41,7 +46,7 @@ interface StatsCtaOption {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, RouterLink, PropertyCardComponent],
+  imports: [NavbarComponent, FooterComponent, RouterLink, PropertyCardComponent, PublicarWhatsappFabComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './landing.html',
   styleUrl: './landing.scss',
@@ -54,8 +59,21 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
   private readonly propiedades = this.store.selectSignal(selectPropiedadesItems);
   protected readonly featuredProperties = computed(() => this.propiedades().slice(0, 4));
 
+  protected readonly campana = this.store.selectSignal(selectCampanaItem);
+  protected readonly campanaRango = computed(() => {
+    const campana = this.campana();
+    if (!campana) return '';
+    return `${this.formatCampanaDate(campana.fecha_inicio)} – ${this.formatCampanaDate(campana.fecha_fin)}`;
+  });
+
+  private formatCampanaDate(isoDate: string): string {
+    const [year, month, day] = isoDate.split('-').map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString('es-CO', CAMPANA_DATE_FORMAT);
+  }
+
   ngOnInit(): void {
     this.store.dispatch(PropiedadesActions.load());
+    this.store.dispatch(CampanaActions.load());
   }
 
   protected readonly tips: readonly RealEstateTip[] = [

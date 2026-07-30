@@ -52,7 +52,13 @@
                   }
                 </span>
                 <span>{{ item.ubicacion }}</span>
-                <span>{{ item.tipo === 'venta' ? 'Venta' : 'Arriendo' }}</span>
+                <span>
+                  @switch (item.tipo) {
+                    @case ('arriendo') { Arriendo }
+                    @case ('oferta') { Oferta }
+                    @default { Venta }
+                  }
+                </span>
                 <span>{{ item.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
                 <span class="propiedades-row-actions">
                   <a

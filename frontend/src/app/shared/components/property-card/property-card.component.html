@@ -8,15 +8,27 @@
 >
   <div class="property-media">
     <img [src]="property().foto_principal_url" [alt]="property().nombre" class="property-media-img" />
-    <span class="property-badge property-badge-type" [class.is-rent]="property().tipo === 'arriendo'">
-      {{ property().tipo === 'venta' ? 'Venta' : 'Arriendo' }}
+    <span
+      class="property-badge property-badge-type"
+      [class.is-rent]="property().tipo === 'arriendo'"
+      [class.is-oferta]="property().tipo === 'oferta'"
+    >
+      @switch (property().tipo) {
+        @case ('arriendo') { Arriendo }
+        @case ('oferta') { Oferta }
+        @default { Venta }
+      }
     </span>
   </div>
 
   <div class="property-body">
     <p class="property-location">{{ property().ubicacion }}</p>
     <h3 class="property-name">{{ property().nombre }}</h3>
-    <p class="property-price" [class.is-rent]="property().tipo === 'arriendo'">
+    <p
+      class="property-price"
+      [class.is-rent]="property().tipo === 'arriendo'"
+      [class.is-oferta]="property().tipo === 'oferta'"
+    >
       {{ property().precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}<span class="property-price-suffix">{{
         property().tipo === 'arriendo' ? '/mes' : ''
       }}</span>

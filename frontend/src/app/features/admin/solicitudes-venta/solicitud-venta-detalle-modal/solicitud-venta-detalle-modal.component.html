@@ -1,0 +1,41 @@
+<div class="detalle-modal-overlay" (click)="close()">
+  <div class="detalle-modal" (click)="$event.stopPropagation()">
+    <div class="detalle-modal-header">
+      <div>
+        <p class="detalle-modal-eyebrow">Solicitud de venta</p>
+        <h2 class="detalle-modal-title">{{ solicitud().nombre_completo }}</h2>
+      </div>
+      <button type="button" class="detalle-modal-close" aria-label="Cerrar" (click)="close()">&times;</button>
+    </div>
+
+    <div class="detalle-modal-body">
+      <div class="detalle-modal-badges">
+        <span class="detalle-modal-badge">{{ medioLabel() }}</span>
+        <span class="detalle-modal-badge detalle-modal-badge-outline">{{ formaPagoLabel() }}</span>
+      </div>
+
+      <dl class="detalle-modal-grid">
+        <div class="detalle-modal-field">
+          <dt>Presupuesto total</dt>
+          <dd>{{ solicitud().presupuesto_total }}</dd>
+        </div>
+
+        @for (field of detalleFields(); track field.label) {
+          <div class="detalle-modal-field">
+            <dt>{{ field.label }}</dt>
+            <dd>{{ field.value }}</dd>
+          </div>
+        }
+
+        <div class="detalle-modal-field">
+          <dt>Fecha de solicitud</dt>
+          <dd>{{ solicitud().created_at | date: "d 'de' MMMM 'de' y, h:mm a" }}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="detalle-modal-actions">
+      <button type="button" class="btn btn-outline-primary" (click)="close()">Cerrar</button>
+    </div>
+  </div>
+</div>
