@@ -29,7 +29,6 @@ export class PropiedadesListadoComponent implements OnInit {
 
   protected readonly tipo = signal<TipoFiltro>('todas');
   protected readonly busqueda = signal('');
-  protected readonly precioMin = signal<number | null>(null);
   protected readonly precioMax = signal<number | null>(null);
   protected readonly orden = signal<OrdenFiltro>('destacadas');
 
@@ -43,7 +42,6 @@ export class PropiedadesListadoComponent implements OnInit {
     () =>
       this.tipo() !== 'todas' ||
       this.busqueda().trim().length > 0 ||
-      this.precioMin() !== null ||
       this.precioMax() !== null ||
       this.orden() !== 'destacadas',
   );
@@ -51,7 +49,6 @@ export class PropiedadesListadoComponent implements OnInit {
   protected readonly filtered = computed(() => {
     const tipo = this.tipo();
     const term = this.busqueda().trim().toLowerCase();
-    const min = this.precioMin();
     const max = this.precioMax();
 
     const result = this.items().filter((item) => {
@@ -60,7 +57,6 @@ export class PropiedadesListadoComponent implements OnInit {
         return false;
       }
       const precio = Number(item.precio);
-      if (min !== null && precio < min) return false;
       if (max !== null && precio > max) return false;
       return true;
     });
@@ -80,10 +76,6 @@ export class PropiedadesListadoComponent implements OnInit {
     this.busqueda.set((event.target as HTMLInputElement).value);
   }
 
-  protected onPrecioMinInput(event: Event): void {
-    this.precioMin.set(this.parseNumber((event.target as HTMLInputElement).value));
-  }
-
   protected onPrecioMaxInput(event: Event): void {
     this.precioMax.set(this.parseNumber((event.target as HTMLInputElement).value));
   }
@@ -91,7 +83,6 @@ export class PropiedadesListadoComponent implements OnInit {
   protected clearFilters(): void {
     this.tipo.set('todas');
     this.busqueda.set('');
-    this.precioMin.set(null);
     this.precioMax.set(null);
     this.orden.set('destacadas');
   }

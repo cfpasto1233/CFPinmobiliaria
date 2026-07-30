@@ -65,26 +65,15 @@
     </div>
 
     <div class="propiedades-filter-block">
-      <span class="propiedades-filter-label">Precio (COP)</span>
-      <div class="propiedades-price-range">
-        <input
-          type="number"
-          min="0"
-          class="form-control"
-          placeholder="Mínimo"
-          [value]="precioMin() ?? ''"
-          (input)="onPrecioMinInput($event)"
-        />
-        <span class="propiedades-price-sep">—</span>
-        <input
-          type="number"
-          min="0"
-          class="form-control"
-          placeholder="Máximo"
-          [value]="precioMax() ?? ''"
-          (input)="onPrecioMaxInput($event)"
-        />
-      </div>
+      <span class="propiedades-filter-label">Precio máximo (COP)</span>
+      <input
+        type="number"
+        min="0"
+        class="form-control"
+        placeholder="Máximo"
+        [value]="precioMax() ?? ''"
+        (input)="onPrecioMaxInput($event)"
+      />
     </div>
 
     <div class="propiedades-filter-block">
