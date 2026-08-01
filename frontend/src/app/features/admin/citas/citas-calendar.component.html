@@ -45,10 +45,33 @@
   <div class="citas-calendar-body" [class.is-loading]="loading()">
     @switch (view()) {
       @case (Vistas.Month) {
+        <ng-template #cellTemplate let-day="day">
+          <div class="cal-cell-top">
+            <span class="cal-day-number">{{ day.date.getDate() }}</span>
+          </div>
+          @if (day.events.length > 0) {
+            <div class="cfp-month-events">
+              @for (event of eventosVisiblesDia(day); track event.id ?? event) {
+                <div class="cfp-month-event" (click)="onEventoMesClick(event, $event)">
+                  <span class="cfp-month-event-dot" [style.background-color]="event.color?.primary"></span>
+                  <span class="cfp-month-event-time">{{ formatHoraEvento(event) }}</span>
+                  <span class="cfp-month-event-title">{{ event.title }}</span>
+                </div>
+              }
+              @if (eventosOcultosDia(day) > 0) {
+                <button type="button" class="cfp-month-event-more" (click)="onVerMasClick(day, $event)">
+                  +{{ eventosOcultosDia(day) }} más
+                </button>
+              }
+            </div>
+          }
+        </ng-template>
+
         <mwl-calendar-month-view
           [viewDate]="viewDate()"
           [events]="events()"
-          locale="es"
+          [cellTemplate]="cellTemplate"
+          locale="es-CO"
           [weekStartsOn]="1"
           (dayClicked)="onDayClicked($event)"
           (eventClicked)="onEventClicked($event)"
@@ -59,8 +82,11 @@
         <mwl-calendar-week-view
           [viewDate]="viewDate()"
           [events]="events()"
-          locale="es"
+          locale="es-CO"
           [weekStartsOn]="1"
+          [excludeDays]="diasExcluidosSemana"
+          [dayStartHour]="8"
+          [dayEndHour]="18"
           (hourSegmentClicked)="onHourSegmentClicked($event)"
           (eventClicked)="onEventClicked($event)"
           (eventTimesChanged)="onEventTimesChanged($event)"
@@ -70,7 +96,9 @@
         <mwl-calendar-day-view
           [viewDate]="viewDate()"
           [events]="events()"
-          locale="es"
+          locale="es-CO"
+          [dayStartHour]="8"
+          [dayEndHour]="18"
           (hourSegmentClicked)="onHourSegmentClicked($event)"
           (eventClicked)="onEventClicked($event)"
           (eventTimesChanged)="onEventTimesChanged($event)"

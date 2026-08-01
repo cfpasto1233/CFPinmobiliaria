@@ -12,7 +12,6 @@
   font-family: $cfpasto-font-body;
   background-color: $cfpasto-surface;
   border-radius: $cfpasto-radius-lg;
-  overflow: hidden;
 }
 
 // ─── Vista mes ──────────────────────────────────────────────────────────────
@@ -66,6 +65,87 @@
 
   .cal-open-day-events {
     background-color: $cfpasto-text-dark;
+  }
+
+  .cal-cell-top {
+    min-height: auto;
+    padding-top: 0.35rem;
+  }
+
+  .cal-day-number {
+    margin-top: 0;
+    margin-right: 0;
+    float: none;
+    font-size: $cfpasto-text-sm;
+    opacity: 1;
+  }
+
+  .cal-day-cell.cal-today .cal-day-number {
+    font-size: $cfpasto-text-sm;
+  }
+
+  .cfp-month-events {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 0.25rem 0.35rem;
+  }
+
+  .cfp-month-event {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-width: 0;
+    padding: 1px 0.3rem;
+    border-radius: $cfpasto-radius-sm;
+    font-size: $cfpasto-text-xs;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: $cfpasto-bg-subtle;
+    }
+  }
+
+  .cfp-month-event-dot {
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .cfp-month-event-time {
+    flex: 0 0 auto;
+    color: $cfpasto-text-muted;
+    font-weight: 600;
+  }
+
+  .cfp-month-event-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: $cfpasto-text-dark;
+  }
+
+  .cfp-month-event-more {
+    display: block;
+    width: 100%;
+    padding: 1px 0.3rem;
+    border: none;
+    background: none;
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-xs;
+    font-weight: 600;
+    color: $cfpasto-primary;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -145,10 +225,6 @@
   font-family: $cfpasto-font-body;
   font-weight: 500;
   border-radius: $cfpasto-radius-sm;
-}
-
-.cal-month-view .cal-event {
-  border-radius: 50%;
 }
 
 .cal-tooltip-inner {
