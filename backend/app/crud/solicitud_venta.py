@@ -9,12 +9,14 @@ def create_solicitud_venta(*, session: Session, form: SolicitudVentaForm) -> Sol
     db_obj = SolicitudVenta(
         nombre_completo=form.nombre_completo,
         medio_comunicacion=form.medio_comunicacion,
+        numero=form.numero,
         presupuesto_total=form.presupuesto_total,
         forma_pago=form.forma_pago,
         sectores_interes=form.sectores_interes,
         valor_disponible_credito=form.valor_disponible_credito,
         valor_disponible_contado=form.valor_disponible_contado,
         forma_pago_otro=form.forma_pago_otro,
+        sugerencias=form.sugerencias,
     )
     session.add(db_obj)
     session.commit()

@@ -40,16 +40,27 @@ export class SolicitudVentaDetalleModalComponent implements OnInit, OnDestroy {
 
   protected readonly detalleFields = computed<DetalleField[]>(() => {
     const solicitud = this.solicitud();
-    if (solicitud.forma_pago === 'contado') {
-      return [{ label: 'Sectores de interés', value: solicitud.sectores_interes ?? '—' }];
-    }
+    const fields: DetalleField[] = [];
+
     if (solicitud.forma_pago === 'credito_hipotecario') {
-      return [
+      fields.push(
         { label: 'Valor disponible a crédito', value: solicitud.valor_disponible_credito ?? '—' },
         { label: 'Valor disponible de contado', value: solicitud.valor_disponible_contado ?? '—' },
-      ];
+      );
+    } else if (solicitud.forma_pago === 'otros') {
+      fields.push({
+        label: 'Descripción de la forma de pago',
+        value: solicitud.forma_pago_otro ?? '—',
+      });
     }
-    return [{ label: 'Descripción de la forma de pago', value: solicitud.forma_pago_otro ?? '—' }];
+
+    fields.push({ label: 'Sectores de interés', value: solicitud.sectores_interes ?? '—' });
+
+    if (solicitud.sugerencias) {
+      fields.push({ label: 'Sugerencias', value: solicitud.sugerencias });
+    }
+
+    return fields;
   });
 
   ngOnInit(): void {

@@ -16,6 +16,11 @@
 
       <dl class="detalle-modal-grid">
         <div class="detalle-modal-field">
+          <dt>Número</dt>
+          <dd>{{ solicitud().numero ?? '—' }}</dd>
+        </div>
+
+        <div class="detalle-modal-field">
           <dt>Presupuesto total</dt>
           <dd>{{ solicitud().presupuesto_total }}</dd>
         </div>

@@ -55,6 +55,23 @@
 
       <div class="ventas-row">
         <div class="ventas-field">
+          <label for="numero" class="ventas-label">Número *</label>
+          <input
+            id="numero"
+            type="tel"
+            class="ventas-input"
+            placeholder="Ej. 300 123 4567"
+            [class.is-invalid]="fieldError('numero')"
+            formControlName="numero"
+          />
+          @if (fieldError('numero'); as err) {
+            <div class="ventas-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="ventas-row">
+        <div class="ventas-field">
           <label for="presupuestoTotal" class="ventas-label">Presupuesto total *</label>
           <input
             id="presupuestoTotal"
@@ -87,24 +104,6 @@
       </div>
 
       @switch (form.controls.formaPago.value) {
-        @case ('contado') {
-          <div class="ventas-row">
-            <div class="ventas-field">
-              <label for="sectoresInteres" class="ventas-label">Sectores de interés *</label>
-              <input
-                id="sectoresInteres"
-                type="text"
-                class="ventas-input"
-                placeholder="Ej. Chapinero, Cedritos, Usaquén"
-                [class.is-invalid]="fieldError('sectoresInteres')"
-                formControlName="sectoresInteres"
-              />
-              @if (fieldError('sectoresInteres'); as err) {
-                <div class="ventas-error">{{ err }}</div>
-              }
-            </div>
-          </div>
-        }
         @case ('credito_hipotecario') {
           <div class="ventas-row">
             <div class="ventas-field">
@@ -159,6 +158,36 @@
           </div>
         }
       }
+
+      <div class="ventas-row">
+        <div class="ventas-field">
+          <label for="sectoresInteres" class="ventas-label">Sectores de interés *</label>
+          <input
+            id="sectoresInteres"
+            type="text"
+            class="ventas-input"
+            placeholder="Ej. Chapinero, Cedritos, Usaquén"
+            [class.is-invalid]="fieldError('sectoresInteres')"
+            formControlName="sectoresInteres"
+          />
+          @if (fieldError('sectoresInteres'); as err) {
+            <div class="ventas-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="ventas-row">
+        <div class="ventas-field">
+          <label for="sugerencias" class="ventas-label">Sugerencias</label>
+          <textarea
+            id="sugerencias"
+            rows="3"
+            class="ventas-input ventas-textarea"
+            placeholder="¿Algo más que quieras contarnos? (opcional)"
+            formControlName="sugerencias"
+          ></textarea>
+        </div>
+      </div>
 
       <div class="ventas-actions">
         <span class="ventas-required-hint">* Campos obligatorios</span>

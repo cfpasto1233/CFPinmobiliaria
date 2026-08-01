@@ -59,12 +59,14 @@ export class SolicitudesVentaListComponent implements OnInit {
   }
 
   protected detalle(item: SolicitudVentaPublic): string {
-    if (item.forma_pago === 'contado') {
-      return item.sectores_interes ?? '—';
-    }
+    const partes = [`Sectores: ${item.sectores_interes ?? '—'}`];
     if (item.forma_pago === 'credito_hipotecario') {
-      return `Crédito: ${item.valor_disponible_credito ?? '—'} · Contado: ${item.valor_disponible_contado ?? '—'}`;
+      partes.push(
+        `Crédito: ${item.valor_disponible_credito ?? '—'} · Contado: ${item.valor_disponible_contado ?? '—'}`,
+      );
+    } else if (item.forma_pago === 'otros') {
+      partes.push(item.forma_pago_otro ?? '—');
     }
-    return item.forma_pago_otro ?? '—';
+    return partes.join(' · ');
   }
 }
