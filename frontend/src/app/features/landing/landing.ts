@@ -81,37 +81,37 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
       number: '01',
       title: 'Verifica el estado legal antes de comprar',
       description:
-        'Revisa el certificado de tradición y libertad, y confirma que no existan embargos, hipotecas ni procesos judiciales sobre el inmueble antes de firmar cualquier documento.',
+        'El certificado de tradición y libertad debe tener una vigencia no mayor a 30 días. Confirma que no existan embargos, hipotecas, afectaciones familiares ni procesos judiciales. Además, revisa la escritura pública: si el inmueble fue adquirido durante matrimonio o unión libre superior a dos años, la pareja también debe firmar la venta.',
     },
     {
       number: '02',
-      title: 'Conoce el avalúo catastral',
+      title: 'Evalúa vías y servicios cercanos',
       description:
-        'El avalúo catastral determina el valor fiscal del inmueble y afecta el impuesto predial. Compáralo con el precio comercial antes de negociar.',
+        'La ubicación define la valorización. Estudios inmobiliarios muestran que la cercanía a vías principales, transporte público y servicios como colegios u hospitales puede aumentar el valor de un inmueble entre un 10% y un 25%. Asegúrate de que estos factores se adapten a tus necesidades para garantizar comodidad y proyección de inversión.',
     },
     {
       number: '03',
       title: 'Evalúa los costos adicionales',
       description:
-        'Además del precio de venta, considera escrituración, registro, notariado y posibles gastos de administración o remodelación.',
+        'Además del precio de venta, ten en cuenta escrituración, registro, notariado, administración y remodelación. Si el inmueble tiene gravámenes como hipoteca, patrimonio de familia, afectación a vivienda o anotaciones judiciales, deben levantarse mediante escritura pública y registro antes de la venta.',
     },
     {
       number: '04',
-      title: 'Visita en diferentes horarios',
+      title: 'Revisa servicios públicos y cargas ocultas',
       description:
-        'Recorre la propiedad en distintos momentos del día para evaluar ruido, luz natural, tráfico y seguridad del sector.',
+        'Confirma que el inmueble esté al día en servicios públicos como agua, energía, gas y predial. Solicita paz y salvo de administración si es propiedad horizontal. Revisa también posibles servidumbres de paso, restricciones urbanísticas o limitaciones de uso que puedan afectar la explotación futura del inmueble.',
     },
     {
       number: '05',
       title: 'Consulta el POT de tu ciudad',
       description:
-        'El Plan de Ordenamiento Territorial define los usos permitidos del suelo; verifica que se ajuste a tus planes de uso o construcción.',
+        'El Plan de Ordenamiento Territorial define los usos permitidos del suelo. Este análisis es clave si planeas ampliar pisos, cambiar el uso del inmueble o destinarlo a actividades comerciales. La información se obtiene en la Secretaría de Planeación Municipal o en la página oficial de la Alcaldía.',
     },
     {
       number: '06',
-      title: 'Usa un agente certificado',
+      title: 'Analiza la valorización por zonas',
       description:
-        'Un agente inmobiliario certificado te acompaña en la negociación y la revisión de documentos, protegiendo tus intereses durante todo el proceso.',
+        'En Pasto, sectores como el Hospital San Pedro registran una valorización superior frente a zonas como San Diego. Según el IGAC y observatorios inmobiliarios, la concentración de servicios, infraestructura vial y demanda residencial explica que estas áreas crezcan hasta un 20% más rápido en valor que otras con menor desarrollo urbano.',
     },
   ];
 

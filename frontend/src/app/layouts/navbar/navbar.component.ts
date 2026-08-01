@@ -11,17 +11,44 @@ import { whatsappLink } from '../../core/whatsapp/whatsapp.util';
   styleUrl: './navbar.scss',
 })
 export class NavbarComponent {
-  readonly menuOpen = signal(false);
-
   protected readonly asesorWhatsappLink = whatsappLink(
     'Hola, quiero más información sobre las propiedades de CFP Inmobiliaria.',
   );
 
-  toggleMenu(): void {
-    this.menuOpen.update((v) => !v);
+  protected readonly searchMenuOpen = signal(false);
+
+  protected toggleSearchMenu(): void {
+    this.searchMenuOpen.update((v) => !v);
   }
 
-  closeMenu(): void {
-    this.menuOpen.set(false);
+  protected closeSearchMenu(): void {
+    this.searchMenuOpen.set(false);
+    this.isArriendosMenuOpen.set(false);
+    this.isClientesMenuOpen.set(false);
+    this.isPublicarMenuOpen.set(false);
+  }
+
+  protected readonly isArriendosMenuOpen = signal(false);
+
+  protected toggleArriendosMenu(): void {
+    this.isArriendosMenuOpen.update((open) => !open);
+    this.isClientesMenuOpen.set(false);
+    this.isPublicarMenuOpen.set(false);
+  }
+
+  protected readonly isClientesMenuOpen = signal(false);
+
+  protected toggleClientesMenu(): void {
+    this.isClientesMenuOpen.update((open) => !open);
+    this.isArriendosMenuOpen.set(false);
+    this.isPublicarMenuOpen.set(false);
+  }
+
+  protected readonly isPublicarMenuOpen = signal(false);
+
+  protected togglePublicarMenu(): void {
+    this.isPublicarMenuOpen.update((open) => !open);
+    this.isArriendosMenuOpen.set(false);
+    this.isClientesMenuOpen.set(false);
   }
 }
