@@ -23,5 +23,6 @@ export class SidebarComponent {
     { label: 'Proyectos', path: '/admin/proyectos', icon: 'projects' },
     { label: 'Campaña', path: '/admin/campana', icon: 'campaign' },
     { label: 'Solicitudes de venta', path: '/admin/solicitudes-venta', icon: 'requests' },
+    { label: 'Solicitudes de arriendo', path: '/admin/solicitudes-arriendo', icon: 'requests' },
   ];
 }

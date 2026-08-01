@@ -18,6 +18,7 @@ import { AuthenticationEffects } from './store/Authentication/authentication.eff
 import { CampanaEffects } from './store/Campana/campana.effects';
 import { PropiedadesEffects } from './store/Propiedades/propiedades.effects';
 import { ProyectosEffects } from './store/Proyectos/proyectos.effects';
+import { SolicitudesArriendoEffects } from './store/SolicitudesArriendo/solicitudes-arriendo.effects';
 import { SolicitudesVentaEffects } from './store/SolicitudesVenta/solicitudes-venta.effects';
 import { metaReducers, rootReducer } from './store';
 import { routes } from './app.routes';
@@ -49,6 +50,7 @@ export const appConfig: ApplicationConfig = {
       ProyectosEffects,
       CampanaEffects,
       SolicitudesVentaEffects,
+      SolicitudesArriendoEffects,
     ]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],

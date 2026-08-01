@@ -81,13 +81,13 @@ export class VentasComponent implements OnInit {
   protected readonly form = this.fb.group({
     nombreCompleto: ['', [Validators.required, Validators.maxLength(255)]],
     medioComunicacion: [null as MedioComunicacion | null, Validators.required],
-    numero: ['', [Validators.required, Validators.maxLength(20)]],
     presupuestoTotal: ['', [Validators.required, Validators.maxLength(100)]],
     formaPago: [null as FormaPagoVenta | null, Validators.required],
-    sectoresInteres: ['', [Validators.required, Validators.maxLength(255)]],
     valorDisponibleCredito: ['', Validators.maxLength(100)],
     valorDisponibleContado: ['', Validators.maxLength(100)],
     formaPagoOtro: [''],
+    numero: ['', [Validators.required, Validators.maxLength(20)]],
+    sectoresInteres: ['', [Validators.required, Validators.maxLength(255)]],
     sugerencias: [''],
   });
 

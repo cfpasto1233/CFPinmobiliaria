@@ -6,6 +6,7 @@ from app.api.routes import (
     login,
     propiedades,
     proyectos,
+    solicitudes_arriendo,
     solicitudes_venta,
     users,
     utils,
@@ -19,4 +20,5 @@ api_router.include_router(propiedades.router)
 api_router.include_router(proyectos.router)
 api_router.include_router(campanas.router)
 api_router.include_router(solicitudes_venta.router)
+api_router.include_router(solicitudes_arriendo.router)
 api_router.include_router(utils.router)

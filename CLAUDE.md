@@ -35,7 +35,8 @@ Argon2id con fallback bcrypt (pwdlib). Payload del JWT: solo `sub=user_id`. Deta
 ```
 backend/app/
   api/routes/   # Routers FastAPI (uno por entidad): auth.py, login.py, users.py, utils.py,
-                # propiedades.py, proyectos.py, campanas.py, solicitudes_venta.py
+                # propiedades.py, proyectos.py, campanas.py, solicitudes_venta.py,
+                # solicitudes_arriendo.py
   api/deps.py   # SessionDep, CurrentUser, SuperUser
   core/         # config.py (Settings), security.py, db.py
   crud/         # Funciones de acceso a BD
@@ -54,9 +55,10 @@ frontend/src/app/
   features/           # landing (público, con el menú de búsqueda del hero: Ventas, Arriendos,
                        # Clientes, Proyectos), propiedades (listado público /propiedades),
                        # proyectos (listado público /proyectos, cards tipo propiedades),
-                       # ventas / arrendar / arrendar-propiedad / recaudo / reportes (formularios
-                       # públicos de captura de leads, solo visuales — sin backend propio, mismo
-                       # patrón de card navy/naranja del hero),
+                       # ventas y arrendar (formularios públicos de captura de leads, conectados a
+                       # /api/v1/solicitudes-venta y /api/v1/solicitudes-arriendo reales),
+                       # arrendar-propiedad / recaudo / reportes (formularios públicos solo
+                       # visuales — sin backend propio, mismo patrón de card navy/naranja del hero),
                        # auth (login/register), dashboard, design-system,
                        # admin/propiedades (CRUD superadmin: propiedades-list, propiedad-form,
                        # propiedad-upload.service.ts),
@@ -64,18 +66,19 @@ frontend/src/app/
                        # proyecto-upload.service.ts — mismo patrón que admin/propiedades pero con
                        # una sola foto de portada, sin galería adicional),
                        # admin/campana (formulario superadmin para configurar la campaña activa
-                       # de la landing — sin listado, un solo registro), admin/solicitudes-venta
-                       # (listado + modal de detalle de leads capturados por el formulario público
-                       # de /ventas, superadmin)
+                       # de la landing — sin listado, un solo registro), admin/solicitudes-venta y
+                       # admin/solicitudes-arriendo (listado + modal de detalle de leads capturados
+                       # por los formularios públicos de /ventas y /arrendar, superadmin)
   layouts/            # navbar, footer, admin-layout (shell /admin), sidebar, topbar
                        # (sidebar y topbar son componentes propios, usados por admin-layout)
   shared/components/  # toast-container, property-card, property-gallery-modal, project-card,
                        # publicar-whatsapp-fab, reutilizables
-  store/Authentication/  # feature key "auth"
-  store/Propiedades/     # feature key "propiedades" — compartido entre landing/propiedades y admin
-  store/Proyectos/       # feature key "proyectos" — compartido entre landing/proyectos y admin
-  store/Campana/         # feature key "campana"
-  store/SolicitudesVenta/ # feature key "solicitudesVenta"
+  store/Authentication/   # feature key "auth"
+  store/Propiedades/      # feature key "propiedades" — compartido entre landing/propiedades y admin
+  store/Proyectos/        # feature key "proyectos" — compartido entre landing/proyectos y admin
+  store/Campana/          # feature key "campana"
+  store/SolicitudesVenta/    # feature key "solicitudesVenta"
+  store/SolicitudesArriendo/ # feature key "solicitudesArriendo"
 frontend/src/client/  # generado por ng-openapi — NUNCA editar a mano
 ```
 
@@ -163,26 +166,29 @@ usuarios en `PRODUCT.md`.
 
 ## Estado actual
 Backend: auth (login/refresh/logout) + CRUD de usuarios + CRUD de propiedades + CRUD de proyectos +
-CRUD de campañas + CRUD de solicitudes de venta (lectura pública en propiedades/proyectos, escritura
-superadmin, fotos en MinIO vía `app/services/storage.py`). Entidades de negocio existentes: `User`,
-`Propiedad`/`PropiedadFoto`, `Proyecto` (una sola foto de portada, sin tabla de fotos adicionales —
-más simple que Propiedad a propósito), `Campana` (campaña activa mostrada en la landing — un solo
-registro, sin fotos), `SolicitudVenta` (leads capturados por el formulario público `/ventas` — solo
-texto, sin fotos). No asumir que existen más.
+CRUD de campañas + CRUD de solicitudes de venta + CRUD de solicitudes de arriendo (lectura pública en
+propiedades/proyectos, escritura superadmin, fotos en MinIO vía `app/services/storage.py`). Entidades
+de negocio existentes: `User`, `Propiedad`/`PropiedadFoto`, `Proyecto` (una sola foto de portada, sin
+tabla de fotos adicionales — más simple que Propiedad a propósito), `Campana` (campaña activa
+mostrada en la landing — un solo registro, sin fotos), `SolicitudVenta` (leads del formulario público
+`/ventas`), `SolicitudArriendo` (leads del formulario público `/arrendar`) — ambas solicitudes solo
+texto, sin fotos. No asumir que existen más.
 Frontend: landing pública (conectada a `/api/v1/propiedades` y `/api/v1/proyectos` reales) + página
 de listado público completo en `/propiedades` y `/proyectos` (`features/propiedades`,
-`features/proyectos`) + formularios públicos de captura de leads (`/ventas` conectado a
-`/api/v1/solicitudes-venta` real; `/arrendar`, `/arrendar-propiedad`, `/recaudo`, `/reportes`,
-`/credito-hipotecario`, `/reduccion-credito`, `/publicar-propiedad`, `/publicar-por-tu-cuenta` siguen
-siendo solo visuales, sin backend propio — enlazados desde el menú de búsqueda del hero o desde
-"Publica tu propiedad") + contacto vía WhatsApp (`core/whatsapp/whatsapp.util.ts`, usado en landing,
-navbar y `shared/components/publicar-whatsapp-fab`) + login/register + dashboard +
-`features/design-system` (showcase de componentes UI). El área superadmin (`layouts/admin-layout`,
-ruta `/admin`, con `layouts/sidebar` y `layouts/topbar` como componentes propios) tiene los módulos
-"Propiedades", "Proyectos", "Campaña" y "Solicitudes de venta" (`features/admin/propiedades`,
-`features/admin/proyectos`, `features/admin/campana`, `features/admin/solicitudes-venta`, stores
-`store/Propiedades`, `store/Proyectos`, `store/Campana`, `store/SolicitudesVenta`). El upload de
-fotos usa un servicio manual con `HttpClient`/`FormData` (`propiedad-upload.service.ts`,
+`features/proyectos`) + formularios públicos de captura de leads (`/ventas` y `/arrendar` conectados
+a `/api/v1/solicitudes-venta` y `/api/v1/solicitudes-arriendo` reales; `/arrendar-propiedad`,
+`/recaudo`, `/reportes`, `/credito-hipotecario`, `/reduccion-credito`, `/publicar-propiedad`,
+`/publicar-por-tu-cuenta` siguen siendo solo visuales, sin backend propio — enlazados desde el menú
+de búsqueda del hero o desde "Publica tu propiedad") + contacto vía WhatsApp
+(`core/whatsapp/whatsapp.util.ts`, usado en landing, navbar y `shared/components/publicar-whatsapp-fab`)
++ login/register + dashboard + `features/design-system` (showcase de componentes UI). El área
+superadmin (`layouts/admin-layout`, ruta `/admin`, con `layouts/sidebar` y `layouts/topbar` como
+componentes propios) tiene los módulos "Propiedades", "Proyectos", "Campaña", "Solicitudes de venta"
+y "Solicitudes de arriendo" (`features/admin/propiedades`, `features/admin/proyectos`,
+`features/admin/campana`, `features/admin/solicitudes-venta`, `features/admin/solicitudes-arriendo`,
+stores `store/Propiedades`, `store/Proyectos`, `store/Campana`, `store/SolicitudesVenta`,
+`store/SolicitudesArriendo`). El upload de fotos usa un servicio manual con `HttpClient`/`FormData`
+(`propiedad-upload.service.ts`,
 `proyecto-upload.service.ts`) porque el cliente ng-openapi generado no arma bien el body multipart;
 el resto de operaciones (list/get/update/delete) sí usan el cliente generado. Módulos de negocio
 adicionales del dominio inmobiliario siguen pendientes de definir/construir.

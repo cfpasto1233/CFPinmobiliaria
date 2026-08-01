@@ -165,6 +165,13 @@ export const routes: Routes = [
             (m) => m.SolicitudesVentaListComponent,
           ),
       },
+      {
+        path: 'solicitudes-arriendo',
+        loadComponent: () =>
+          import('./features/admin/solicitudes-arriendo/solicitudes-arriendo-list.component').then(
+            (m) => m.SolicitudesArriendoListComponent,
+          ),
+      },
     ],
   },
   {
