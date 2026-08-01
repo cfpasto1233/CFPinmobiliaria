@@ -17,7 +17,6 @@ Plataforma de gestión web para Cfpasto. Permite [funcionalidades principales].
 | `docs/BACKEND_GUIDE.md` | Patrones FastAPI + SQLAlchemy |
 | `docs/FRONTEND_GUIDE.md` | Patrones Angular + ng-openapi + estilos |
 | `docs/SECURITY.md` | Seguridad y manejo de credenciales |
-| `docs/GOOGLE_CALENDAR.md` | Integración Google Calendar (DWD, slots, crear eventos) |
 | `docs/DEPLOY_VERCEL_RAILWAY.md` | Despliegue frontend en Vercel + backend en Railway |
 
 ## Reglas globales

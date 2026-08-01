@@ -159,6 +159,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'citas',
+        loadComponent: () =>
+          import('./features/admin/citas/citas-calendar.component').then(
+            (m) => m.CitasCalendarComponent,
+          ),
+      },
+      {
         path: 'solicitudes-venta',
         loadComponent: () =>
           import('./features/admin/solicitudes-venta/solicitudes-venta-list.component').then(

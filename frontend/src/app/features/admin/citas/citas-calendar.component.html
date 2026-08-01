@@ -1,0 +1,85 @@
+<div class="citas-calendar">
+  <div class="citas-calendar-header">
+    <div class="citas-calendar-nav">
+      <button type="button" class="btn btn-outline-primary btn-sm" (click)="hoy()">Hoy</button>
+      <button type="button" class="citas-calendar-arrow" (click)="anterior()" aria-label="Anterior">&lsaquo;</button>
+      <button type="button" class="citas-calendar-arrow" (click)="siguiente()" aria-label="Siguiente">&rsaquo;</button>
+      <h1 class="citas-calendar-title">{{ tituloRango() }}</h1>
+    </div>
+
+    <div class="citas-calendar-views" role="group" aria-label="Cambiar vista">
+      <button
+        type="button"
+        class="btn btn-sm"
+        [class.btn-primary]="view() === Vistas.Month"
+        [class.btn-outline-primary]="view() !== Vistas.Month"
+        (click)="cambiarVista(Vistas.Month)"
+      >
+        Mes
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm"
+        [class.btn-primary]="view() === Vistas.Week"
+        [class.btn-outline-primary]="view() !== Vistas.Week"
+        (click)="cambiarVista(Vistas.Week)"
+      >
+        Semana
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm"
+        [class.btn-primary]="view() === Vistas.Day"
+        [class.btn-outline-primary]="view() !== Vistas.Day"
+        (click)="cambiarVista(Vistas.Day)"
+      >
+        Día
+      </button>
+    </div>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  <div class="citas-calendar-body" [class.is-loading]="loading()">
+    @switch (view()) {
+      @case (Vistas.Month) {
+        <mwl-calendar-month-view
+          [viewDate]="viewDate()"
+          [events]="events()"
+          locale="es"
+          [weekStartsOn]="1"
+          (dayClicked)="onDayClicked($event)"
+          (eventClicked)="onEventClicked($event)"
+          (eventTimesChanged)="onEventTimesChanged($event)"
+        />
+      }
+      @case (Vistas.Week) {
+        <mwl-calendar-week-view
+          [viewDate]="viewDate()"
+          [events]="events()"
+          locale="es"
+          [weekStartsOn]="1"
+          (hourSegmentClicked)="onHourSegmentClicked($event)"
+          (eventClicked)="onEventClicked($event)"
+          (eventTimesChanged)="onEventTimesChanged($event)"
+        />
+      }
+      @case (Vistas.Day) {
+        <mwl-calendar-day-view
+          [viewDate]="viewDate()"
+          [events]="events()"
+          locale="es"
+          (hourSegmentClicked)="onHourSegmentClicked($event)"
+          (eventClicked)="onEventClicked($event)"
+          (eventTimesChanged)="onEventTimesChanged($event)"
+        />
+      }
+    }
+  </div>
+</div>
+
+@if (modalState(); as modal) {
+  <app-cita-form-modal [data]="modal" (closed)="cerrarModal()" />
+}

@@ -1,0 +1,178 @@
+<div class="cita-modal-overlay" (click)="close()">
+  <div class="cita-modal" (click)="$event.stopPropagation()">
+    <div class="cita-modal-header">
+      <div>
+        <p class="cita-modal-eyebrow">{{ data().mode === 'edit' ? 'Editar cita' : 'Nueva cita' }}</p>
+        <h2 class="cita-modal-title">{{ data().cita?.titulo || 'Sin título' }}</h2>
+      </div>
+      <button type="button" class="cita-modal-close" aria-label="Cerrar" (click)="close()">&times;</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="cita-modal-body">
+        <div class="cita-modal-field">
+          <label for="titulo" class="cita-modal-label">Título *</label>
+          <input
+            id="titulo"
+            type="text"
+            class="form-control"
+            [class.is-invalid]="fieldError('titulo')"
+            formControlName="titulo"
+          />
+          @if (fieldError('titulo'); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="cita-modal-field">
+          <label for="descripcion" class="cita-modal-label">Descripción</label>
+          <textarea id="descripcion" class="form-control" rows="2" formControlName="descripcion"></textarea>
+        </div>
+
+        <div class="cita-modal-row cita-modal-row-3">
+          <div class="cita-modal-field">
+            <label for="fecha" class="cita-modal-label">Fecha *</label>
+            <input
+              id="fecha"
+              type="date"
+              class="form-control"
+              [class.is-invalid]="fieldError('fecha')"
+              formControlName="fecha"
+            />
+            @if (fieldError('fecha'); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+          </div>
+
+          <div class="cita-modal-field">
+            <label for="horaInicio" class="cita-modal-label">Hora inicio *</label>
+            <input
+              id="horaInicio"
+              type="time"
+              class="form-control"
+              [class.is-invalid]="fieldError('horaInicio')"
+              formControlName="horaInicio"
+            />
+            @if (fieldError('horaInicio'); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+          </div>
+
+          <div class="cita-modal-field">
+            <label for="horaFin" class="cita-modal-label">Hora fin *</label>
+            <input
+              id="horaFin"
+              type="time"
+              class="form-control"
+              [class.is-invalid]="fieldError('horaFin') || rangoInvalido"
+              formControlName="horaFin"
+            />
+            @if (fieldError('horaFin'); as err) {
+              <div class="form-error">{{ err }}</div>
+            } @else if (rangoInvalido) {
+              <div class="form-error">La hora de fin debe ser posterior a la de inicio.</div>
+            }
+          </div>
+        </div>
+
+        <div class="cita-modal-row">
+          <div class="cita-modal-field">
+            <label class="cita-modal-label">Estado *</label>
+            <ng-select
+              [items]="estadoOptions"
+              bindLabel="label"
+              bindValue="value"
+              [clearable]="false"
+              [appendTo]="'body'"
+              formControlName="estado"
+            ></ng-select>
+          </div>
+
+          <div class="cita-modal-field">
+            <label for="ubicacion" class="cita-modal-label">Ubicación</label>
+            <input id="ubicacion" type="text" class="form-control" formControlName="ubicacion" />
+          </div>
+        </div>
+
+        <div class="cita-modal-row">
+          <div class="cita-modal-field">
+            <label for="nombre_contacto" class="cita-modal-label">Nombre de contacto</label>
+            <input
+              id="nombre_contacto"
+              type="text"
+              class="form-control"
+              formControlName="nombre_contacto"
+            />
+          </div>
+
+          <div class="cita-modal-field">
+            <label for="telefono_contacto" class="cita-modal-label">Teléfono de contacto</label>
+            <input
+              id="telefono_contacto"
+              type="text"
+              class="form-control"
+              formControlName="telefono_contacto"
+            />
+          </div>
+        </div>
+
+        <div class="cita-modal-field">
+          <label class="cita-modal-label">Vincular a</label>
+          <ng-select
+            [items]="vinculoOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            [appendTo]="'body'"
+            formControlName="vinculoTipo"
+          ></ng-select>
+        </div>
+
+        @if (mostrarSolicitudVenta()) {
+          <div class="cita-modal-field">
+            <label class="cita-modal-label">Solicitud de venta</label>
+            <ng-select
+              [items]="solicitudVentaOptions()"
+              bindLabel="label"
+              bindValue="value"
+              placeholder="Selecciona una solicitud de venta"
+              [appendTo]="'body'"
+              formControlName="solicitudId"
+            ></ng-select>
+          </div>
+        }
+
+        @if (mostrarSolicitudArriendo()) {
+          <div class="cita-modal-field">
+            <label class="cita-modal-label">Solicitud de arriendo</label>
+            <ng-select
+              [items]="solicitudArriendoOptions()"
+              bindLabel="label"
+              bindValue="value"
+              placeholder="Selecciona una solicitud de arriendo"
+              [appendTo]="'body'"
+              formControlName="solicitudId"
+            ></ng-select>
+          </div>
+        }
+      </div>
+
+      <div class="cita-modal-actions">
+        <div class="cita-modal-actions-left">
+          @if (data().mode === 'edit') {
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelarCita()">
+              Cancelar cita
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm" (click)="eliminarCita()">
+              Eliminar
+            </button>
+          }
+        </div>
+        <div class="cita-modal-actions-right">
+          <button type="button" class="btn btn-outline-primary" (click)="close()">Cerrar</button>
+          <button type="submit" class="btn btn-success" [disabled]="form.invalid">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

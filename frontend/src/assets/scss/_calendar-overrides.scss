@@ -1,0 +1,173 @@
+// =============================================================================
+// Cfpasto — Overrides visuales de angular-calendar
+// =============================================================================
+// Reestiliza el look-and-feel por defecto de la librería (azul genérico #1e90ff,
+// rojo #b94a48, verde pálido #e8fde7) con los tokens reales de _design-tokens.scss
+// para que quede consistente con el resto del panel admin (azul marino/naranja).
+@use 'design-tokens' as *;
+
+.cal-month-view,
+.cal-week-view,
+.cal-day-view {
+  font-family: $cfpasto-font-body;
+  background-color: $cfpasto-surface;
+  border-radius: $cfpasto-radius-lg;
+  overflow: hidden;
+}
+
+// ─── Vista mes ──────────────────────────────────────────────────────────────
+
+.cal-month-view {
+  .cal-header {
+    background-color: $cfpasto-bg-subtle;
+
+    .cal-cell {
+      color: $cfpasto-text-muted;
+      font-family: $cfpasto-font-heading;
+      font-weight: 600;
+      font-size: $cfpasto-text-xs;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+  }
+
+  .cal-days,
+  .cal-day-cell:not(:last-child),
+  .cal-days .cal-cell-row {
+    border-color: $cfpasto-border;
+  }
+
+  .cal-cell-row:hover {
+    background-color: transparent;
+  }
+
+  .cal-cell-row .cal-cell:hover,
+  .cal-cell.cal-has-events.cal-open {
+    background-color: $cfpasto-bg-subtle;
+  }
+
+  .cal-day-cell.cal-today {
+    background-color: rgba($cfpasto-primary, 0.05);
+  }
+
+  .cal-day-cell.cal-today .cal-day-number {
+    color: $cfpasto-primary;
+    font-weight: 700;
+  }
+
+  .cal-day-cell.cal-weekend .cal-day-number {
+    color: $cfpasto-text-muted;
+  }
+
+  .cal-day-badge {
+    background-color: $cfpasto-accent;
+    color: $cfpasto-text-dark;
+  }
+
+  .cal-open-day-events {
+    background-color: $cfpasto-text-dark;
+  }
+}
+
+// ─── Vista semana / día ─────────────────────────────────────────────────────
+
+.cal-week-view,
+.cal-day-view {
+  border-top-color: $cfpasto-border;
+
+  .cal-day-headers {
+    border-color: $cfpasto-border;
+    background-color: $cfpasto-bg-subtle;
+
+    .cal-header {
+      border-right-color: $cfpasto-border;
+
+      span {
+        font-family: $cfpasto-font-heading;
+        font-weight: 600;
+        color: $cfpasto-text-muted;
+        opacity: 1;
+      }
+
+      &:hover {
+        background-color: $cfpasto-border-light;
+      }
+
+      &.cal-today {
+        background-color: rgba($cfpasto-primary, 0.07);
+
+        span {
+          color: $cfpasto-primary;
+        }
+      }
+
+      &.cal-weekend span {
+        color: $cfpasto-text-muted;
+      }
+    }
+  }
+
+  .cal-day-column,
+  .cal-time-events,
+  .cal-all-day-events {
+    border-color: $cfpasto-border;
+  }
+
+  .cal-hour:not(:last-child) .cal-hour-segment,
+  .cal-hour:last-child :not(:last-child) .cal-hour-segment {
+    border-bottom-color: $cfpasto-border-light;
+  }
+
+  .cal-hour-odd {
+    background-color: $cfpasto-bg-subtle;
+  }
+
+  .cal-time-events .cal-day-columns:not(.cal-resize-active) .cal-hour-segment:hover {
+    background-color: rgba($cfpasto-primary, 0.04);
+  }
+
+  .cal-time {
+    color: $cfpasto-text-muted;
+    font-weight: 600;
+  }
+
+  .cal-current-time-marker {
+    background-color: $cfpasto-accent;
+  }
+}
+
+// ─── Eventos ────────────────────────────────────────────────────────────────
+// El color real de cada cita lo define citas-event-color.util.ts vía el objeto
+// `color` de CalendarEvent (angular-calendar lo aplica inline); esto solo cubre
+// el estado base/fallback y la tipografía del chip.
+
+.cal-event {
+  font-family: $cfpasto-font-body;
+  font-weight: 500;
+  border-radius: $cfpasto-radius-sm;
+}
+
+.cal-month-view .cal-event {
+  border-radius: 50%;
+}
+
+.cal-tooltip-inner {
+  background-color: $cfpasto-text-dark;
+  font-family: $cfpasto-font-body;
+}
+
+.cal-tooltip.cal-tooltip-top .cal-tooltip-arrow {
+  border-top-color: $cfpasto-text-dark;
+}
+
+.cal-tooltip.cal-tooltip-bottom .cal-tooltip-arrow {
+  border-bottom-color: $cfpasto-text-dark;
+}
+
+.cal-tooltip.cal-tooltip-left .cal-tooltip-arrow {
+  border-left-color: $cfpasto-text-dark;
+}
+
+.cal-tooltip.cal-tooltip-right .cal-tooltip-arrow {
+  border-right-color: $cfpasto-text-dark;
+}

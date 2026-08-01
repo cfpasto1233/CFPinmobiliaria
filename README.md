@@ -118,7 +118,6 @@ git push origin feature/nombre-feature
 | [docs/BACKEND_GUIDE.md](docs/BACKEND_GUIDE.md) | Guía de patrones backend |
 | [docs/FRONTEND_GUIDE.md](docs/FRONTEND_GUIDE.md) | Guía de patrones frontend |
 | [docs/SECURITY.md](docs/SECURITY.md) | Seguridad y credenciales |
-| [docs/GOOGLE_CALENDAR.md](docs/GOOGLE_CALENDAR.md) | Integración Google Calendar |
 | [docs/DEPLOY_VERCEL_RAILWAY.md](docs/DEPLOY_VERCEL_RAILWAY.md) | Despliegue Vercel + Railway |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Log de decisiones técnicas |
 | [docs/MILESTONES.md](docs/MILESTONES.md) | Hitos y estado de avance |

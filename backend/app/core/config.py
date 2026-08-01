@@ -87,9 +87,6 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER: str
     FIRST_SUPERUSER_PASSWORD: str
 
-    # Google Calendar — Domain-Wide Delegation (ver docs/GOOGLE_CALENDAR.md)
-    GOOGLE_SERVICE_ACCOUNT_JSON: str = ""
-
     # Sentry — monitoreo de errores en producción (dejar vacío en local)
     SENTRY_DSN: str = ""
 
