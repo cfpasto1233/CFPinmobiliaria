@@ -36,6 +36,11 @@ export class SidebarComponent {
       items: [
         { label: 'Solicitudes de venta', path: '/admin/solicitudes-venta', icon: 'requests' },
         { label: 'Solicitudes de arriendo', path: '/admin/solicitudes-arriendo', icon: 'requests' },
+        {
+          label: 'Solicitudes de propietarios',
+          path: '/admin/solicitudes-arrendar-propiedad',
+          icon: 'requests',
+        },
         { label: 'Citas', path: '/admin/citas', icon: 'calendar' },
       ],
     },

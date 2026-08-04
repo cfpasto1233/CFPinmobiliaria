@@ -3,6 +3,7 @@ from app.models.cita import Cita
 from app.models.propiedad import Propiedad
 from app.models.propiedad_foto import PropiedadFoto
 from app.models.proyecto import Proyecto
+from app.models.solicitud_arrendar_propiedad import SolicitudArrendarPropiedad
 from app.models.solicitud_arriendo import SolicitudArriendo
 from app.models.solicitud_venta import SolicitudVenta
 from app.models.user import User
@@ -13,6 +14,7 @@ __all__ = [
     "Propiedad",
     "PropiedadFoto",
     "Proyecto",
+    "SolicitudArrendarPropiedad",
     "SolicitudArriendo",
     "SolicitudVenta",
     "User",

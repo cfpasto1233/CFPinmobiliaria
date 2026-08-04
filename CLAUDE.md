@@ -55,10 +55,14 @@ frontend/src/app/
   features/           # landing (público, con el menú de búsqueda del hero: Ventas, Arriendos,
                        # Clientes, Proyectos), propiedades (listado público /propiedades),
                        # proyectos (listado público /proyectos, cards tipo propiedades),
-                       # ventas y arrendar (formularios públicos de captura de leads, conectados a
-                       # /api/v1/solicitudes-venta y /api/v1/solicitudes-arriendo reales),
-                       # arrendar-propiedad / recaudo / reportes (formularios públicos solo
-                       # visuales — sin backend propio, mismo patrón de card navy/naranja del hero),
+                       # ventas, arrendar y arrendar-propiedad (formularios públicos de captura de
+                       # leads, conectados a /api/v1/solicitudes-venta,
+                       # /api/v1/solicitudes-arriendo y /api/v1/solicitudes-arrendar-propiedad
+                       # reales — arrendar-propiedad es "quiero que CFP arriende mi propiedad",
+                       # propietario que busca que CFP administre/arriende su inmueble, distinto de
+                       # arrendar que es el inquilino buscando propiedad),
+                       # recaudo / reportes (formularios públicos solo visuales — sin backend
+                       # propio, mismo patrón de card navy/naranja del hero),
                        # auth (login/register), dashboard, design-system,
                        # admin/propiedades (CRUD superadmin: propiedades-list, propiedad-form,
                        # propiedad-upload.service.ts),
@@ -71,9 +75,10 @@ frontend/src/app/
                        # crear/editar/mover/cancelar citas manualmente, con vínculo opcional a una
                        # SolicitudVenta o SolicitudArriendo; el agendamiento automático desde los
                        # formularios públicos del landing queda pendiente de definir),
-                       # admin/solicitudes-venta y admin/solicitudes-arriendo (listado + modal de
-                       # detalle de leads capturados por los formularios públicos de /ventas y
-                       # /arrendar, superadmin)
+                       # admin/solicitudes-venta, admin/solicitudes-arriendo y
+                       # admin/solicitudes-arrendar-propiedad (listado + modal de detalle de leads
+                       # capturados por los formularios públicos de /ventas, /arrendar y
+                       # /arrendar-propiedad, superadmin)
   layouts/            # navbar, footer, admin-layout (shell /admin), sidebar, topbar
                        # (sidebar y topbar son componentes propios, usados por admin-layout)
   shared/components/  # toast-container, property-card, property-gallery-modal, project-card,
@@ -85,6 +90,7 @@ frontend/src/app/
   store/Citas/            # feature key "citas"
   store/SolicitudesVenta/    # feature key "solicitudesVenta"
   store/SolicitudesArriendo/ # feature key "solicitudesArriendo"
+  store/SolicitudesArrendarPropiedad/ # feature key "solicitudesArrendarPropiedad"
 frontend/src/client/  # generado por ng-openapi — NUNCA editar a mano
 ```
 
@@ -172,30 +178,40 @@ usuarios en `PRODUCT.md`.
 
 ## Estado actual
 Backend: auth (login/refresh/logout) + CRUD de usuarios + CRUD de propiedades + CRUD de proyectos +
-CRUD de campañas + CRUD de citas + CRUD de solicitudes de venta + CRUD de solicitudes de arriendo
-(lectura pública en propiedades/proyectos, escritura superadmin, fotos en MinIO vía
-`app/services/storage.py`). Entidades de negocio existentes: `User`, `Propiedad`/`PropiedadFoto`,
-`Proyecto` (una sola foto de portada, sin tabla de fotos adicionales — más simple que Propiedad a
-propósito), `Campana` (campaña activa mostrada en la landing — un solo registro, sin fotos), `Cita`
-(citas gestionadas por el superadmin, con estado `pendiente`/`confirmada`/`cancelada`/`completada` y
-vínculo opcional a una `SolicitudVenta` o `SolicitudArriendo` vía FK nullable), `SolicitudVenta`
-(leads del formulario público `/ventas`), `SolicitudArriendo` (leads del formulario público
-`/arrendar`) — ambas solicitudes solo texto, sin fotos. No asumir que existen más.
+CRUD de campañas + CRUD de citas + CRUD de solicitudes de venta + CRUD de solicitudes de arriendo +
+CRUD de solicitudes de arrendar-propiedad (lectura pública en propiedades/proyectos, escritura
+superadmin, fotos en MinIO vía `app/services/storage.py`). Entidades de negocio existentes: `User`,
+`Propiedad`/`PropiedadFoto`, `Proyecto` (una sola foto de portada, sin tabla de fotos adicionales —
+más simple que Propiedad a propósito), `Campana` (campaña activa mostrada en la landing — un solo
+registro, sin fotos), `Cita` (citas gestionadas por el superadmin, con estado
+`pendiente`/`confirmada`/`cancelada`/`completada` y vínculo opcional a una `SolicitudVenta` o
+`SolicitudArriendo` vía FK nullable), `SolicitudVenta` (leads del formulario público `/ventas`),
+`SolicitudArriendo` (leads del formulario público `/arrendar`, inquilino buscando propiedad),
+`SolicitudArrendarPropiedad` (leads del formulario público `/arrendar-propiedad`, propietario que
+quiere que CFP le arriende/administre su inmueble) — las tres solicitudes solo texto, sin fotos. No
+asumir que existen más. Las tres tablas de solicitudes (`solicitudes_venta`, `solicitudes_arriendo`,
+`solicitudes_arrendar_propiedad`) se purgan automáticamente: una tarea en background dentro del
+proceso backend (`app/main.py`, arrancada en el `lifespan`) borra cada `SOLICITUDES_RETENTION_DIAS`
+(15 por defecto, `core/config.py`) los registros con `created_at` más viejo que ese umbral, usando un
+lock diario en Redis (`core/redis.py`) para que no se ejecute por duplicado con `--workers 2`; la
+lógica de borrado vive en `app/services/purga_solicitudes.py`.
 Frontend: landing pública (conectada a `/api/v1/propiedades` y `/api/v1/proyectos` reales) + página
 de listado público completo en `/propiedades` y `/proyectos` (`features/propiedades`,
-`features/proyectos`) + formularios públicos de captura de leads (`/ventas` y `/arrendar` conectados
-a `/api/v1/solicitudes-venta` y `/api/v1/solicitudes-arriendo` reales; `/arrendar-propiedad`,
-`/recaudo`, `/reportes`, `/credito-hipotecario`, `/reduccion-credito`, `/publicar-propiedad`,
-`/publicar-por-tu-cuenta` siguen siendo solo visuales, sin backend propio — enlazados desde el menú
-de búsqueda del hero o desde "Publica tu propiedad") + contacto vía WhatsApp
-(`core/whatsapp/whatsapp.util.ts`, usado en landing, navbar y `shared/components/publicar-whatsapp-fab`)
-+ login/register + dashboard + `features/design-system` (showcase de componentes UI). El área
-superadmin (`layouts/admin-layout`, ruta `/admin`, con `layouts/sidebar` y `layouts/topbar` como
-componentes propios) tiene los módulos "Propiedades", "Proyectos", "Citas", "Campaña", "Solicitudes
-de venta" y "Solicitudes de arriendo" (`features/admin/propiedades`, `features/admin/proyectos`,
+`features/proyectos`) + formularios públicos de captura de leads (`/ventas`, `/arrendar` y
+`/arrendar-propiedad` conectados a `/api/v1/solicitudes-venta`, `/api/v1/solicitudes-arriendo` y
+`/api/v1/solicitudes-arrendar-propiedad` reales; `/recaudo`, `/reportes`, `/credito-hipotecario`,
+`/reduccion-credito`, `/publicar-propiedad`, `/publicar-por-tu-cuenta` siguen siendo solo visuales,
+sin backend propio — enlazados desde el menú de búsqueda del hero o desde "Publica tu propiedad") +
+contacto vía WhatsApp (`core/whatsapp/whatsapp.util.ts`, usado en landing, navbar y
+`shared/components/publicar-whatsapp-fab`) + login/register + dashboard + `features/design-system`
+(showcase de componentes UI). El área superadmin (`layouts/admin-layout`, ruta `/admin`, con
+`layouts/sidebar` y `layouts/topbar` como componentes propios) tiene los módulos "Propiedades",
+"Proyectos", "Citas", "Campaña", "Solicitudes de venta", "Solicitudes de arriendo" y
+"Propietarios (arrendar propiedad)" (`features/admin/propiedades`, `features/admin/proyectos`,
 `features/admin/citas`, `features/admin/campana`, `features/admin/solicitudes-venta`,
-`features/admin/solicitudes-arriendo`, stores `store/Propiedades`, `store/Proyectos`, `store/Citas`,
-`store/Campana`, `store/SolicitudesVenta`, `store/SolicitudesArriendo`). El calendario de Citas usa
+`features/admin/solicitudes-arriendo`, `features/admin/solicitudes-arrendar-propiedad`, stores
+`store/Propiedades`, `store/Proyectos`, `store/Citas`, `store/Campana`, `store/SolicitudesVenta`,
+`store/SolicitudesArriendo`, `store/SolicitudesArrendarPropiedad`). El calendario de Citas usa
 `angular-calendar` (vistas mes/semana/día, crear/editar/mover/redimensionar citas con clic y
 arrastre) — el superadmin gestiona las citas manualmente; el agendamiento automático desde los
 formularios públicos del landing según disponibilidad queda pendiente de definir (no se decidió aún

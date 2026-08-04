@@ -179,6 +179,13 @@ export const routes: Routes = [
             (m) => m.SolicitudesArriendoListComponent,
           ),
       },
+      {
+        path: 'solicitudes-arrendar-propiedad',
+        loadComponent: () =>
+          import(
+            './features/admin/solicitudes-arrendar-propiedad/solicitudes-arrendar-propiedad-list.component'
+          ).then((m) => m.SolicitudesArrendarPropiedadListComponent),
+      },
     ],
   },
   {

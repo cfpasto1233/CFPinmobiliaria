@@ -102,5 +102,8 @@
 }
 
 .sidebar-link-label {
-  white-space: nowrap;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.25;
 }
