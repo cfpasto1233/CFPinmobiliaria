@@ -202,7 +202,7 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
 
   protected readonly statsCtaOptions: readonly StatsCtaOption[] = [
     { question: '¿Tienes una propiedad?', actionLabel: 'Publícala aquí' },
-    { question: '¿Buscas casa o apartamento?', actionLabel: 'Ver propiedades' },
+    { question: '¿Buscas casa o apartamento en venta?', actionLabel: 'Ver propiedades' },
     {
       question: '¿Necesitas orientación?',
       actionLabel: 'Pide una asesoría',
