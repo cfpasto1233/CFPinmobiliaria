@@ -1,6 +1,9 @@
-from sqlalchemy import func, select
+from datetime import timedelta
+
+from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
+from app.db.base import utc_now
 from app.models.solicitud_arriendo import SolicitudArriendo
 from app.schemas.solicitud_arriendo import SolicitudArriendoForm
 
@@ -33,3 +36,10 @@ def list_solicitudes_arriendo(
         .limit(limit)
     ).all()
     return list(items), count or 0
+
+
+def delete_solicitudes_arriendo_antiguas(*, session: Session, dias: int) -> int:
+    corte = utc_now() - timedelta(days=dias)
+    result = session.execute(delete(SolicitudArriendo).where(SolicitudArriendo.created_at < corte))
+    session.commit()
+    return result.rowcount  # type: ignore[attr-defined]

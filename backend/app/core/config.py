@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 días
 
+    # Retención de leads públicos (solicitudes de venta/arriendo)
+    SOLICITUDES_RETENTION_DIAS: int = 15
+
     # CORS
     BACKEND_CORS_ORIGINS: Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)] = []
 

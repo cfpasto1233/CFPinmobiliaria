@@ -125,6 +125,7 @@ bun run start                 # ng serve, proxy /api → localhost:8000, http://
 bun run build                 # build de producción
 bun run generate:client       # Regenerar cliente HTTP desde OpenAPI (requiere backend en :8000)
 ```
+No hay `lint`/`format` configurado en `frontend/package.json` (a diferencia de ruff en backend) — no asumir que existe.
 
 ### Cliente HTTP (raíz del repo)
 ```bash

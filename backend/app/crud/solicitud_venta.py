@@ -1,6 +1,9 @@
-from sqlalchemy import func, select
+from datetime import timedelta
+
+from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
+from app.db.base import utc_now
 from app.models.solicitud_venta import SolicitudVenta
 from app.schemas.solicitud_venta import SolicitudVentaForm
 
@@ -32,3 +35,10 @@ def list_solicitudes_venta(
         select(SolicitudVenta).order_by(SolicitudVenta.created_at.desc()).offset(skip).limit(limit)
     ).all()
     return list(items), count or 0
+
+
+def delete_solicitudes_venta_antiguas(*, session: Session, dias: int) -> int:
+    corte = utc_now() - timedelta(days=dias)
+    result = session.execute(delete(SolicitudVenta).where(SolicitudVenta.created_at < corte))
+    session.commit()
+    return result.rowcount  # type: ignore[attr-defined]
