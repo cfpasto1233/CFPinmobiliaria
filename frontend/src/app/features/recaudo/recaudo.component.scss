@@ -4,12 +4,14 @@
   display: block;
 }
 
+// ─── Hero + formulario ──────────────────────────────────────────────────────
+
 .recaudo {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 8rem 1.5rem 4rem;
-  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+  background: $cfpasto-white;
 
   @media (max-width: 767.98px) {
     padding: 7rem 1.25rem 3rem;
@@ -18,7 +20,7 @@
 
 .recaudo-header {
   max-width: 600px;
-  margin: 0 auto 2.5rem;
+  margin: 0 auto 1.5rem;
   text-align: center;
 }
 
@@ -29,13 +31,13 @@
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.65);
+  color: $cfpasto-text-muted;
   text-decoration: none;
   margin-bottom: 1.5rem;
   transition: color 0.2s ease;
 
   &:hover {
-    color: $cfpasto-white;
+    color: $cfpasto-primary;
   }
 }
 
@@ -45,7 +47,7 @@
   font-size: $cfpasto-text-sm;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: $cfpasto-accent;
+  color: $cfpasto-primary;
   margin-bottom: 0.75rem;
 }
 
@@ -53,24 +55,51 @@
   font-family: $cfpasto-font-heading;
   font-weight: 700;
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-  color: $cfpasto-white;
+  color: $cfpasto-primary;
   margin: 0 0 0.75rem;
 }
 
 .recaudo-subtitle {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-base;
-  color: rgba(255, 255, 255, 0.75);
+  color: $cfpasto-text-muted;
   margin: 0;
+}
+
+// ─── Banner informativo ─────────────────────────────────────────────────────
+
+.recaudo-info-banner {
+  width: 100%;
+  max-width: 880px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0 auto 2rem;
+  padding: 1rem 1.25rem;
+  background: $cfpasto-info-bg;
+  border: 1px solid $cfpasto-info-border;
+  border-radius: $cfpasto-radius-lg;
+  color: $cfpasto-info;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  p {
+    margin: 0;
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-sm;
+    line-height: 1.5;
+  }
 }
 
 .recaudo-card {
   width: 100%;
-  max-width: 640px;
-  padding: 2rem;
-  background: rgba($cfpasto-primary-dark, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 880px;
+  padding: 2rem 2.5rem;
+  background: $cfpasto-white;
+  border: 1.5px solid $cfpasto-primary;
   border-radius: $cfpasto-radius-xl;
   box-shadow: $cfpasto-shadow-lg;
 
@@ -85,14 +114,18 @@
   font-size: $cfpasto-text-lg;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: $cfpasto-accent;
+  color: $cfpasto-primary;
   margin: 0 0 1.75rem;
   padding-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid $cfpasto-border;
 }
 
 .recaudo-field {
   margin-bottom: 1.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .recaudo-label {
@@ -102,36 +135,38 @@
   font-size: $cfpasto-text-xs;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: $cfpasto-accent;
+  color: $cfpasto-primary;
   margin-bottom: 0.5rem;
 }
 
 .recaudo-input {
   width: 100%;
   padding: 0.85rem 1rem;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: $cfpasto-white;
+  border: 1.5px solid rgba($cfpasto-primary, 0.3);
   border-radius: $cfpasto-radius-lg;
-  color: $cfpasto-white;
+  color: $cfpasto-text-dark;
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.35);
+    color: $cfpasto-text-light;
   }
 
   &:focus {
     outline: none;
-    border-color: $cfpasto-accent;
-    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
+    border-color: $cfpasto-primary;
+    box-shadow: 0 0 0 3px rgba($cfpasto-primary, 0.15);
   }
 
   &.is-invalid {
-    border-color: $cfpasto-error-light;
+    border-color: $cfpasto-error;
 
     &:focus {
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+      box-shadow: 0 0 0 3px rgba($cfpasto-error, 0.15);
     }
   }
 }
@@ -144,7 +179,7 @@
 .recaudo-error {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-xs;
-  color: #ffb4b4;
+  color: $cfpasto-error;
   margin-top: 0.4rem;
 }
 
@@ -153,9 +188,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1.75rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid $cfpasto-border;
 
   @media (max-width: 575.98px) {
     flex-direction: column-reverse;
@@ -166,62 +201,157 @@
 .recaudo-required-hint {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-xs;
-  color: rgba(255, 255, 255, 0.55);
+  color: $cfpasto-text-muted;
 }
 
-// --- ng-select sobre fondo oscuro ---
-// Sin [appendTo]="'body'" el panel queda dentro del árbol del componente,
-// así que ::ng-deep con el atributo de encapsulación de Angular sí lo alcanza.
+// ─── Calendario de agendamiento ─────────────────────────────────────────────
 
-:host ::ng-deep .recaudo-select {
-  .ng-select-container {
-    min-height: 0;
-    padding: 0.35rem 0.25rem;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: $cfpasto-radius-lg;
-    color: $cfpasto-white;
+.recaudo-calendar {
+  margin-bottom: 2rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid $cfpasto-border;
+}
+
+.recaudo-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.recaudo-calendar-mes {
+  min-width: 10rem;
+  text-align: center;
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-base;
+  color: $cfpasto-primary;
+  text-transform: capitalize;
+}
+
+.recaudo-calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: $cfpasto-white;
+  border: 1px solid $cfpasto-border;
+  border-radius: 50%;
+  color: $cfpasto-primary;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: $cfpasto-bg-subtle;
   }
 
-  &.ng-select-focused .ng-select-container {
-    border-color: $cfpasto-accent;
-    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
+  &:disabled {
+    color: $cfpasto-text-light;
+    cursor: not-allowed;
   }
+}
 
-  .ng-value,
-  .ng-input > input {
-    color: $cfpasto-white;
-  }
+.recaudo-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+}
 
-  .ng-placeholder {
-    color: rgba(255, 255, 255, 0.35);
-  }
+.recaudo-calendar-dow {
+  text-align: center;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $cfpasto-text-light;
+  padding-bottom: 0.35rem;
+}
 
-  .ng-arrow-wrapper .ng-arrow {
-    border-top-color: rgba(255, 255, 255, 0.55);
-  }
+.recaudo-dia {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $cfpasto-bg-subtle;
+  border: 1.5px solid transparent;
+  border-radius: $cfpasto-radius;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-light;
+  cursor: not-allowed;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 
-  .ng-dropdown-panel {
-    background: $cfpasto-primary-dark;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: $cfpasto-radius-lg;
-    box-shadow: $cfpasto-shadow-lg;
-    margin-top: 0.35rem;
-    overflow: hidden;
+  &.is-verde {
+    background: $cfpasto-success-bg;
+    color: $cfpasto-success;
+    cursor: pointer;
 
-    .ng-dropdown-panel-items .ng-option {
-      background: transparent;
-      color: rgba(255, 255, 255, 0.85);
-
-      &.ng-option-marked {
-        background: rgba(255, 255, 255, 0.08);
-      }
-
-      &.ng-option-selected {
-        background: rgba($cfpasto-accent, 0.16);
-        color: $cfpasto-accent;
-        font-weight: 600;
-      }
+    &:hover {
+      border-color: $cfpasto-success-light;
     }
+  }
+
+  &.is-amarillo {
+    background: $cfpasto-warning-bg;
+    color: $cfpasto-warning;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $cfpasto-warning-light;
+    }
+  }
+
+  &.is-seleccionado {
+    border-color: $cfpasto-primary;
+    box-shadow: 0 0 0 2px rgba($cfpasto-primary, 0.15);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.recaudo-dia-vacio {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+.recaudo-horas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.recaudo-hora {
+  padding: 0.55rem 1.1rem;
+  background: $cfpasto-white;
+  border: 1.5px solid rgba($cfpasto-primary, 0.3);
+  border-radius: $cfpasto-radius-lg;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-primary;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    border-color: $cfpasto-primary;
+    background: rgba($cfpasto-primary, 0.06);
+  }
+
+  &.is-seleccionada {
+    background: $cfpasto-primary;
+    border-color: $cfpasto-primary;
+    color: $cfpasto-white;
   }
 }

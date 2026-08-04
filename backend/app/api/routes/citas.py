@@ -1,17 +1,27 @@
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 
 from fastapi import APIRouter, HTTPException
 
 from app.api.deps import SessionDep, SuperUser
 from app.crud.cita import (
+    crear_cita_recaudo,
     create_cita,
     delete_cita,
     get_cita_by_id,
     list_citas_por_rango,
+    listar_disponibilidad_recaudo,
     update_cita,
 )
-from app.schemas.cita import CitaForm, CitaOut, CitaPublic, CitasPublic, CitaUpdate
+from app.schemas.cita import (
+    CitaForm,
+    CitaOut,
+    CitaPublic,
+    CitaRecaudoForm,
+    CitasPublic,
+    CitaUpdate,
+    DisponibilidadRecaudoPublic,
+)
 
 router = APIRouter(prefix="/citas", tags=["citas"])
 
@@ -25,6 +35,27 @@ def read_citas(
 ) -> CitasPublic:
     items = list_citas_por_rango(session=session, desde=desde, hasta=hasta)
     return CitasPublic(data=list(items), count=len(items))
+
+
+@router.get("/recaudo/disponibilidad", response_model=DisponibilidadRecaudoPublic)
+def read_disponibilidad_recaudo(
+    session: SessionDep,
+    desde: date,
+    hasta: date,
+) -> DisponibilidadRecaudoPublic:
+    dias = listar_disponibilidad_recaudo(session=session, desde=desde, hasta=hasta)
+    return DisponibilidadRecaudoPublic(dias=dias)
+
+
+@router.post("/recaudo", response_model=CitaPublic)
+def create_cita_recaudo_endpoint(
+    session: SessionDep,
+    recaudo_in: CitaRecaudoForm,
+) -> CitaPublic:
+    try:
+        return crear_cita_recaudo(session=session, form=recaudo_in)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 @router.get("/{cita_id}", response_model=CitaOut)

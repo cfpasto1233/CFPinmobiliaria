@@ -1,10 +1,11 @@
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 
 EstadoCita = Literal["pendiente", "confirmada", "cancelada", "completada"]
+HoraRecaudo = Literal["09:00", "11:00", "15:00", "18:00"]
 
 
 class CitaForm(BaseModel):
@@ -78,3 +79,22 @@ class CitasPublic(BaseModel):
 
 class CitaOut(BaseModel):
     data: CitaPublic | None
+
+
+class CitaRecaudoForm(BaseModel):
+    nombre_contacto: str = Field(max_length=255)
+    telefono_contacto: str = Field(max_length=20)
+    direccion_recaudo: str = Field(max_length=255)
+    observaciones: str | None = Field(default=None, max_length=500)
+    fecha: date
+    hora: HoraRecaudo
+
+
+class DisponibilidadDia(BaseModel):
+    fecha: date
+    color: Literal["verde", "amarillo", "no_disponible"]
+    horas_disponibles: list[str]
+
+
+class DisponibilidadRecaudoPublic(BaseModel):
+    dias: list[DisponibilidadDia]

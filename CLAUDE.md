@@ -61,8 +61,12 @@ frontend/src/app/
                        # reales — arrendar-propiedad es "quiero que CFP arriende mi propiedad",
                        # propietario que busca que CFP administre/arriende su inmueble, distinto de
                        # arrendar que es el inquilino buscando propiedad),
-                       # recaudo / reportes (formularios públicos solo visuales — sin backend
-                       # propio, mismo patrón de card navy/naranja del hero),
+                       # recaudo (agenda visitas de recaudo del canon de arrendamiento — calendario
+                       # público con reglas de disponibilidad por día del mes/día de la semana,
+                       # crea una `Cita` real via /api/v1/citas/recaudo*, visible en
+                       # /admin/citas — no usa una tabla de solicitud propia) /
+                       # reportes (formulario público solo visual — sin backend propio, mismo
+                       # patrón de card navy/naranja del hero),
                        # auth (login/register), dashboard, design-system,
                        # admin/propiedades (CRUD superadmin: propiedades-list, propiedad-form,
                        # propiedad-upload.service.ts),
@@ -195,14 +199,26 @@ proceso backend (`app/main.py`, arrancada en el `lifespan`) borra cada `SOLICITU
 (15 por defecto, `core/config.py`) los registros con `created_at` más viejo que ese umbral, usando un
 lock diario en Redis (`core/redis.py`) para que no se ejecute por duplicado con `--workers 2`; la
 lógica de borrado vive en `app/services/purga_solicitudes.py`.
+`/recaudo` no usa una tabla de solicitud propia: agenda una visita de recaudo del canon de
+arrendamiento creando directamente una `Cita` (misma entidad que gestiona el superadmin en
+`/admin/citas`), vía dos endpoints públicos en `api/routes/citas.py` (`GET
+/api/v1/citas/recaudo/disponibilidad`, `POST /api/v1/citas/recaudo`) — el resto de endpoints de
+`citas.py` sigue exigiendo `SuperUser`. La lógica de reglas de horario (colores
+verde/amarillo/no_disponible por día del mes, franjas horarias lunes-sábado, anticipación mínima)
+vive en `app/services/recaudo_slots.py`, siempre en zona horaria `America/Bogota` (`zoneinfo`, sin
+que el backend confíe en el reloj del navegador del visitante); la detección de conflictos de
+horario reusa `crud/cita.py::list_citas_por_rango` (no existe otro mecanismo de anti-solapamiento en
+el proyecto, ni para el superadmin).
 Frontend: landing pública (conectada a `/api/v1/propiedades` y `/api/v1/proyectos` reales) + página
 de listado público completo en `/propiedades` y `/proyectos` (`features/propiedades`,
 `features/proyectos`) + formularios públicos de captura de leads (`/ventas`, `/arrendar` y
 `/arrendar-propiedad` conectados a `/api/v1/solicitudes-venta`, `/api/v1/solicitudes-arriendo` y
-`/api/v1/solicitudes-arrendar-propiedad` reales; `/recaudo`, `/reportes`, `/credito-hipotecario`,
-`/reduccion-credito`, `/publicar-propiedad`, `/publicar-por-tu-cuenta` siguen siendo solo visuales,
-sin backend propio — enlazados desde el menú de búsqueda del hero o desde "Publica tu propiedad") +
-contacto vía WhatsApp (`core/whatsapp/whatsapp.util.ts`, usado en landing, navbar y
+`/api/v1/solicitudes-arrendar-propiedad` reales; `/recaudo` conectado a `/api/v1/citas/recaudo*`
+—incluye un mini-calendario propio en `features/recaudo` que consume/extiende `store/Citas`, no un
+store nuevo—; `/reportes`, `/credito-hipotecario`, `/reduccion-credito`, `/publicar-propiedad`,
+`/publicar-por-tu-cuenta` siguen siendo solo visuales, sin backend propio — enlazados desde el menú
+de búsqueda del hero o desde "Publica tu propiedad") + contacto vía WhatsApp
+(`core/whatsapp/whatsapp.util.ts`, usado en landing, navbar y
 `shared/components/publicar-whatsapp-fab`) + login/register + dashboard + `features/design-system`
 (showcase de componentes UI). El área superadmin (`layouts/admin-layout`, ruta `/admin`, con
 `layouts/sidebar` y `layouts/topbar` como componentes propios) tiene los módulos "Propiedades",

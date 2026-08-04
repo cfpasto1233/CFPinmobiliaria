@@ -144,4 +144,65 @@ export class CitasEffects {
       ),
     { dispatch: false },
   );
+
+  loadDisponibilidadRecaudo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CitasActions.loadDisponibilidadRecaudo),
+      exhaustMap(({ desde, hasta }) =>
+        this.citasService
+          .readDisponibilidadRecaudoApiV1CitasRecaudoDisponibilidadGet(desde, hasta)
+          .pipe(
+            map((response) =>
+              CitasActions.loadDisponibilidadRecaudoSuccess({ dias: response.dias }),
+            ),
+            catchError((error) =>
+              of(
+                CitasActions.loadDisponibilidadRecaudoFailure({
+                  error: extractErrorMessage(error, 'No pudimos cargar la disponibilidad.'),
+                }),
+              ),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  crearRecaudo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CitasActions.crearRecaudo),
+      exhaustMap(({ form }) =>
+        this.citasService.createCitaRecaudoEndpointApiV1CitasRecaudoPost(form).pipe(
+          map((item) => CitasActions.crearRecaudoSuccess({ item })),
+          catchError((error) =>
+            of(
+              CitasActions.crearRecaudoFailure({
+                error: extractErrorMessage(
+                  error,
+                  'No pudimos agendar tu visita. Elige otro horario.',
+                ),
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  crearRecaudoSuccessNotify$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CitasActions.crearRecaudoSuccess),
+        tap(() => this.notif.success('Tu visita de recaudo fue agendada correctamente.')),
+      ),
+    { dispatch: false },
+  );
+
+  crearRecaudoFailureNotify$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CitasActions.crearRecaudoFailure),
+        tap(({ error }) => this.notif.error(error)),
+      ),
+    { dispatch: false },
+  );
 }

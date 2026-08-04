@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { CitaPublic } from '../../../client';
+import { CitaPublic, DisponibilidadDia } from '../../../client';
 import { CitasActions } from './citas.actions';
 
 export interface CitasState {
@@ -8,6 +8,9 @@ export interface CitasState {
   loading: boolean;
   error: string | null;
   rangoActual: { desde: string; hasta: string } | null;
+  disponibilidadRecaudo: DisponibilidadDia[];
+  disponibilidadRecaudoLoading: boolean;
+  creandoRecaudo: boolean;
 }
 
 const initialState: CitasState = {
@@ -16,6 +19,9 @@ const initialState: CitasState = {
   loading: false,
   error: null,
   rangoActual: null,
+  disponibilidadRecaudo: [],
+  disponibilidadRecaudoLoading: false,
+  creandoRecaudo: false,
 };
 
 export const citasReducer = createReducer(
@@ -54,4 +60,28 @@ export const citasReducer = createReducer(
     loading: false,
   })),
   on(CitasActions.deleteFailure, (state, { error }) => ({ ...state, loading: false, error })),
+
+  on(CitasActions.loadDisponibilidadRecaudo, (state) => ({
+    ...state,
+    disponibilidadRecaudoLoading: true,
+    error: null,
+  })),
+  on(CitasActions.loadDisponibilidadRecaudoSuccess, (state, { dias }) => ({
+    ...state,
+    disponibilidadRecaudo: dias,
+    disponibilidadRecaudoLoading: false,
+  })),
+  on(CitasActions.loadDisponibilidadRecaudoFailure, (state, { error }) => ({
+    ...state,
+    disponibilidadRecaudoLoading: false,
+    error,
+  })),
+
+  on(CitasActions.crearRecaudo, (state) => ({ ...state, creandoRecaudo: true, error: null })),
+  on(CitasActions.crearRecaudoSuccess, (state) => ({ ...state, creandoRecaudo: false })),
+  on(CitasActions.crearRecaudoFailure, (state, { error }) => ({
+    ...state,
+    creandoRecaudo: false,
+    error,
+  })),
 );
