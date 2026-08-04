@@ -41,6 +41,7 @@ export class SidebarComponent {
           path: '/admin/solicitudes-arrendar-propiedad',
           icon: 'requests',
         },
+        { label: 'Reportes de daño', path: '/admin/reportes-dano', icon: 'requests' },
         { label: 'Citas', path: '/admin/citas', icon: 'calendar' },
       ],
     },

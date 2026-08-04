@@ -19,6 +19,7 @@ import { CampanaEffects } from './store/Campana/campana.effects';
 import { CitasEffects } from './store/Citas/citas.effects';
 import { PropiedadesEffects } from './store/Propiedades/propiedades.effects';
 import { ProyectosEffects } from './store/Proyectos/proyectos.effects';
+import { ReportesDanoEffects } from './store/ReportesDano/reportes-dano.effects';
 import { SolicitudesArrendarPropiedadEffects } from './store/SolicitudesArrendarPropiedad/solicitudes-arrendar-propiedad.effects';
 import { SolicitudesArriendoEffects } from './store/SolicitudesArriendo/solicitudes-arriendo.effects';
 import { SolicitudesVentaEffects } from './store/SolicitudesVenta/solicitudes-venta.effects';
@@ -55,6 +56,7 @@ export const appConfig: ApplicationConfig = {
       SolicitudesVentaEffects,
       SolicitudesArriendoEffects,
       SolicitudesArrendarPropiedadEffects,
+      ReportesDanoEffects,
     ]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],

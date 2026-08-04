@@ -42,6 +42,13 @@ export const routes: Routes = [
       import('./features/reportes/reportes.component').then((m) => m.ReportesComponent),
   },
   {
+    path: 'reportes/:id/fotos',
+    loadComponent: () =>
+      import('./features/reportes/reporte-dano-fotos/reporte-dano-fotos.component').then(
+        (m) => m.ReporteDanoFotosComponent,
+      ),
+  },
+  {
     path: 'credito-hipotecario',
     loadComponent: () =>
       import('./features/credito-hipotecario/credito-hipotecario.component').then(
@@ -185,6 +192,13 @@ export const routes: Routes = [
           import(
             './features/admin/solicitudes-arrendar-propiedad/solicitudes-arrendar-propiedad-list.component'
           ).then((m) => m.SolicitudesArrendarPropiedadListComponent),
+      },
+      {
+        path: 'reportes-dano',
+        loadComponent: () =>
+          import('./features/admin/reportes-dano/reportes-dano-list.component').then(
+            (m) => m.ReportesDanoListComponent,
+          ),
       },
     ],
   },

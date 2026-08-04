@@ -36,7 +36,7 @@ Argon2id con fallback bcrypt (pwdlib). Payload del JWT: solo `sub=user_id`. Deta
 backend/app/
   api/routes/   # Routers FastAPI (uno por entidad): auth.py, login.py, users.py, utils.py,
                 # propiedades.py, proyectos.py, campanas.py, citas.py, solicitudes_venta.py,
-                # solicitudes_arriendo.py
+                # solicitudes_arriendo.py, solicitudes_arrendar_propiedad.py, reportes_dano.py
   api/deps.py   # SessionDep, CurrentUser, SuperUser
   core/         # config.py (Settings), security.py, db.py
   crud/         # Funciones de acceso a BD
@@ -44,7 +44,8 @@ backend/app/
   models/       # Modelos SQLAlchemy (registrar en models/__init__.py para Alembic)
   schemas/      # Esquemas Pydantic (*Create, *Update, *Public, *sPublic)
   services/     # storage.py (cliente boto3/MinIO; políticas de lectura pública por prefijo:
-                # propiedades/*, proyectos/*); resto vacío por ahora
+                # propiedades/*, proyectos/*; reportes-dano/* queda privado a propósito, sin
+                # panel de admin que necesite mostrarlo); purga_solicitudes.py; recaudo_slots.py
   alembic/      # env.py, versions/
 
 frontend/src/app/
@@ -65,8 +66,10 @@ frontend/src/app/
                        # público con reglas de disponibilidad por día del mes/día de la semana,
                        # crea una `Cita` real via /api/v1/citas/recaudo*, visible en
                        # /admin/citas — no usa una tabla de solicitud propia) /
-                       # reportes (formulario público solo visual — sin backend propio, mismo
-                       # patrón de card navy/naranja del hero),
+                       # reportes ("Reportes de daños" — formulario público real conectado a
+                       # /api/v1/reportes-dano, tema claro igual a arrendar-propiedad, hasta 5
+                       # fotos opcionales, con vista de admin en admin/reportes-dano, ver detalle
+                       # en Estado actual),
                        # auth (login/register), dashboard, design-system,
                        # admin/propiedades (CRUD superadmin: propiedades-list, propiedad-form,
                        # propiedad-upload.service.ts),
@@ -82,7 +85,9 @@ frontend/src/app/
                        # admin/solicitudes-venta, admin/solicitudes-arriendo y
                        # admin/solicitudes-arrendar-propiedad (listado + modal de detalle de leads
                        # capturados por los formularios públicos de /ventas, /arrendar y
-                       # /arrendar-propiedad, superadmin)
+                       # /arrendar-propiedad, superadmin), admin/reportes-dano (mismo patrón
+                       # listado + modal de detalle, con las fotos del reporte cargadas vía URLs
+                       # firmadas al abrir el modal)
   layouts/            # navbar, footer, admin-layout (shell /admin), sidebar, topbar
                        # (sidebar y topbar son componentes propios, usados por admin-layout)
   shared/components/  # toast-container, property-card, property-gallery-modal, project-card,
@@ -95,6 +100,9 @@ frontend/src/app/
   store/SolicitudesVenta/    # feature key "solicitudesVenta"
   store/SolicitudesArriendo/ # feature key "solicitudesArriendo"
   store/SolicitudesArrendarPropiedad/ # feature key "solicitudesArrendarPropiedad"
+  store/ReportesDano/     # feature key "reportesDano" — create (formulario público), load
+                          # (listado admin/reportes-dano) y loadFotos (URLs firmadas, compartido
+                          # por la página pública /reportes/:id/fotos y el modal de detalle admin)
 frontend/src/client/  # generado por ng-openapi — NUNCA editar a mano
 ```
 
@@ -192,13 +200,36 @@ registro, sin fotos), `Cita` (citas gestionadas por el superadmin, con estado
 `SolicitudArriendo` vía FK nullable), `SolicitudVenta` (leads del formulario público `/ventas`),
 `SolicitudArriendo` (leads del formulario público `/arrendar`, inquilino buscando propiedad),
 `SolicitudArrendarPropiedad` (leads del formulario público `/arrendar-propiedad`, propietario que
-quiere que CFP le arriende/administre su inmueble) — las tres solicitudes solo texto, sin fotos. No
-asumir que existen más. Las tres tablas de solicitudes (`solicitudes_venta`, `solicitudes_arriendo`,
-`solicitudes_arrendar_propiedad`) se purgan automáticamente: una tarea en background dentro del
-proceso backend (`app/main.py`, arrancada en el `lifespan`) borra cada `SOLICITUDES_RETENTION_DIAS`
-(15 por defecto, `core/config.py`) los registros con `created_at` más viejo que ese umbral, usando un
-lock diario en Redis (`core/redis.py`) para que no se ejecute por duplicado con `--workers 2`; la
-lógica de borrado vive en `app/services/purga_solicitudes.py`.
+quiere que CFP le arriende/administre su inmueble), `ReporteDano` (reportes de daños del formulario
+público `/reportes` — tubería, techo, estructura, instalación eléctrica, humedad u "otros" con texto
+libre — con hasta 5 fotos opcionales). Las cuatro solicitudes son solo texto salvo `ReporteDano`, que
+guarda las fotos como un `ARRAY(String)` de *keys* de MinIO directamente en la fila (no una tabla
+hija tipo `PropiedadFoto`: no hay panel de admin que necesite reordenarlas/reemplazarlas una a una).
+No asumir que existen más entidades. Las cuatro tablas de solicitudes (`solicitudes_venta`,
+`solicitudes_arriendo`, `solicitudes_arrendar_propiedad`, `reportes_dano`) se purgan
+automáticamente: una tarea en background dentro del proceso backend (`app/main.py`, arrancada en el
+`lifespan`) borra cada `SOLICITUDES_RETENTION_DIAS` (15 por defecto, `core/config.py`) los registros
+con `created_at` más viejo que ese umbral, usando un lock diario en Redis (`core/redis.py`) para que
+no se ejecute por duplicado con `--workers 2`; la lógica de borrado vive en
+`app/services/purga_solicitudes.py`. Para `reportes_dano` la purga también borra las fotos
+asociadas en MinIO antes de borrar las filas (`crud/reporte_dano.py::delete_reportes_dano_antiguos`)
+para no dejar objetos huérfanos en el bucket.
+`POST /api/v1/reportes-dano/` combina "sin auth" + subida de archivos (multipart, hasta 5 fotos
+vía `Form()`/`File()` igual que `POST /propiedades/`, sin `SuperUser`). `GET
+/api/v1/reportes-dano/` sí exige `SuperUser` (listado para `/admin/reportes-dano`, mismo patrón
+`data`/`count` que el resto de solicitudes). `GET /api/v1/reportes-dano/{id}/fotos` es público
+(por UUID no adivinable, mismo modelo que `GET /api/v1/propiedades/{id}`) y devuelve **solo**
+URLs firmadas temporales de MinIO (`storage.py::presigned_url()`, generadas al vuelo en cada
+request — nunca se guardan) para ese reporte puntual; nunca nombre/contacto/descripción. Este
+mismo endpoint público lo consumen dos cosas distintas: la página pública
+`/reportes/:id/fotos` (`features/reportes/reporte-dano-fotos/`, con
+`<meta name="robots" content="noindex, nofollow">`, enlazada desde el mensaje de WhatsApp) y el
+modal de detalle del panel admin (`ReporteDanoDetalleModalComponent`, que despacha
+`loadFotos({id})` al abrir si el reporte tiene fotos) — ambos reusan la misma action/effect/
+selector de `store/ReportesDano`, no hay dos mecanismos separados. `presigned_url()` usa un
+cliente boto3 propio apuntando a `MINIO_PUBLIC_URL` (no al `MINIO_ENDPOINT` interno de Docker que
+usa el resto de `storage.py`) — firmar no hace ninguna llamada de red, pero el host firmado sí
+tiene que ser uno alcanzable desde el navegador.
 `/recaudo` no usa una tabla de solicitud propia: agenda una visita de recaudo del canon de
 arrendamiento creando directamente una `Cita` (misma entidad que gestiona el superadmin en
 `/admin/citas`), vía dos endpoints públicos en `api/routes/citas.py` (`GET
@@ -215,24 +246,47 @@ de listado público completo en `/propiedades` y `/proyectos` (`features/propied
 `/arrendar-propiedad` conectados a `/api/v1/solicitudes-venta`, `/api/v1/solicitudes-arriendo` y
 `/api/v1/solicitudes-arrendar-propiedad` reales; `/recaudo` conectado a `/api/v1/citas/recaudo*`
 —incluye un mini-calendario propio en `features/recaudo` que consume/extiende `store/Citas`, no un
-store nuevo—; `/reportes`, `/credito-hipotecario`, `/reduccion-credito`, `/publicar-propiedad`,
+store nuevo—; `/reportes` ("Reportes de daños") conectado a `/api/v1/reportes-dano`, con selector de
+hasta 5 fotos (`URL.createObjectURL` para thumbnails, sin subida real hasta el submit). Al enviar,
+si no hay fotos se abre `wa.me` de inmediato con el resumen de texto (igual que el resto del
+sitio); si hay fotos, el mensaje además necesita el link a `/reportes/:id/fotos` — y ese `id` solo
+existe tras la respuesta del backend. Se probó primero con la Web Share API del navegador
+(`navigator.share`/`canShare`) para adjuntar las fotos directo, pero resultó poco confiable
+(`canShare()` podía lanzar en vez de devolver `false` en algunos navegadores de escritorio) y se
+retiró: ahora siempre es el mecanismo del link, sin excepción de navegador. Como `window.open()`
+llamado *después* de esperar una respuesta async ya no cuenta como gesto del usuario y el
+navegador lo bloquea como pop-up en silencio, `reportes.component.ts::onSubmit()` reserva una
+pestaña en blanco de forma síncrona en el momento del clic (`window.open('', '_blank')`) y recién
+la navega al link real cuando responde el backend — para eso el componente inyecta `Actions` de
+`@ngrx/effects` y se suscribe una sola vez (`take(1)`) a `createSuccess`/`createFailure` tras
+despachar `create`; es una excepción puntual a "el componente nunca reacciona a Actions", justificada
+porque solo el componente tiene la referencia viva a esa pestaña (no se puede pasar un `Window` a
+través de una action serializable hacia un Effect). `/credito-hipotecario`,
+`/reduccion-credito`, `/publicar-propiedad`,
 `/publicar-por-tu-cuenta` siguen siendo solo visuales, sin backend propio — enlazados desde el menú
 de búsqueda del hero o desde "Publica tu propiedad") + contacto vía WhatsApp
-(`core/whatsapp/whatsapp.util.ts`, usado en landing, navbar y
+(`core/whatsapp/whatsapp.util.ts`, usado en landing, navbar, `/reportes` y
 `shared/components/publicar-whatsapp-fab`) + login/register + dashboard + `features/design-system`
 (showcase de componentes UI). El área superadmin (`layouts/admin-layout`, ruta `/admin`, con
 `layouts/sidebar` y `layouts/topbar` como componentes propios) tiene los módulos "Propiedades",
-"Proyectos", "Citas", "Campaña", "Solicitudes de venta", "Solicitudes de arriendo" y
-"Propietarios (arrendar propiedad)" (`features/admin/propiedades`, `features/admin/proyectos`,
-`features/admin/citas`, `features/admin/campana`, `features/admin/solicitudes-venta`,
-`features/admin/solicitudes-arriendo`, `features/admin/solicitudes-arrendar-propiedad`, stores
+"Proyectos", "Citas", "Campaña", "Solicitudes de venta", "Solicitudes de arriendo",
+"Propietarios (arrendar propiedad)" y "Reportes de daño" (`features/admin/propiedades`,
+`features/admin/proyectos`, `features/admin/citas`, `features/admin/campana`,
+`features/admin/solicitudes-venta`, `features/admin/solicitudes-arriendo`,
+`features/admin/solicitudes-arrendar-propiedad`, `features/admin/reportes-dano`, stores
 `store/Propiedades`, `store/Proyectos`, `store/Citas`, `store/Campana`, `store/SolicitudesVenta`,
-`store/SolicitudesArriendo`, `store/SolicitudesArrendarPropiedad`). El calendario de Citas usa
+`store/SolicitudesArriendo`, `store/SolicitudesArrendarPropiedad`, `store/ReportesDano`). Como el
+resto de módulos de "Solicitudes", "Reportes de daño" es listado + modal de detalle de solo
+lectura (`ReportesDanoListComponent`/`ReporteDanoDetalleModalComponent`, sin editar/eliminar
+manual) — la purga automática de 15 días sigue siendo la única forma en que desaparecen. El
+calendario de Citas usa
 `angular-calendar` (vistas mes/semana/día, crear/editar/mover/redimensionar citas con clic y
 arrastre) — el superadmin gestiona las citas manualmente; el agendamiento automático desde los
 formularios públicos del landing según disponibilidad queda pendiente de definir (no se decidió aún
 qué formularios lo permitirán). El upload de fotos usa un servicio manual con `HttpClient`/`FormData`
-(`propiedad-upload.service.ts`,
-`proyecto-upload.service.ts`) porque el cliente ng-openapi generado no arma bien el body multipart;
-el resto de operaciones (list/get/update/delete) sí usan el cliente generado. Módulos de negocio
-adicionales del dominio inmobiliario siguen pendientes de definir/construir.
+(`propiedad-upload.service.ts`, `proyecto-upload.service.ts`, `reporte-dano-upload.service.ts` en
+`features/reportes/`) porque el cliente ng-openapi generado no arma bien el body multipart (serializa
+cada archivo con `String(file)` en vez de adjuntarlo como binario); el resto de operaciones
+(list/get/update/delete) sí usan el cliente generado. Estos servicios de upload solo los inyecta el
+Effect correspondiente (`PropiedadesEffects`, `ReportesDanoEffects`, etc.), nunca un componente.
+Módulos de negocio adicionales del dominio inmobiliario siguen pendientes de definir/construir.

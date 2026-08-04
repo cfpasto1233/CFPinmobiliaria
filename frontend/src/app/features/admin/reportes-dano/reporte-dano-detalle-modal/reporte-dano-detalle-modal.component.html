@@ -1,0 +1,60 @@
+<div class="detalle-modal-overlay" (click)="close()">
+  <div class="detalle-modal" (click)="$event.stopPropagation()">
+    <div class="detalle-modal-header">
+      <div>
+        <p class="detalle-modal-eyebrow">Reporte de daño</p>
+        <h2 class="detalle-modal-title">{{ reporte().nombre_completo }}</h2>
+      </div>
+      <button type="button" class="detalle-modal-close" aria-label="Cerrar" (click)="close()">&times;</button>
+    </div>
+
+    <div class="detalle-modal-body">
+      <div class="detalle-modal-badges">
+        <span class="detalle-modal-badge">{{ tipoLabel() }}</span>
+        @if (medioLabel(); as medio) {
+          <span class="detalle-modal-badge detalle-modal-badge-outline">{{ medio }}</span>
+        }
+      </div>
+
+      <dl class="detalle-modal-grid">
+        <div class="detalle-modal-field">
+          <dt>Número de contacto</dt>
+          <dd>{{ reporte().numero_contacto }}</dd>
+        </div>
+
+        <div class="detalle-modal-field">
+          <dt>Descripción del daño</dt>
+          <dd>{{ reporte().descripcion_dano }}</dd>
+        </div>
+
+        <div class="detalle-modal-field">
+          <dt>Fecha de reporte</dt>
+          <dd>{{ reporte().created_at | date: "d 'de' MMMM 'de' y, h:mm a" }}</dd>
+        </div>
+      </dl>
+
+      @if (reporte().fotos.length) {
+        <div class="detalle-modal-fotos">
+          <p class="detalle-modal-fotos-label">Fotos</p>
+          @if (fotosView().loading) {
+            <p class="detalle-modal-fotos-hint">Cargando fotos...</p>
+          } @else if (fotosView().error) {
+            <p class="detalle-modal-fotos-hint">No se pudieron cargar las fotos.</p>
+          } @else {
+            <div class="detalle-modal-fotos-grid">
+              @for (foto of fotosView().fotos; track foto) {
+                <a [href]="foto" target="_blank" rel="noopener" class="detalle-modal-foto-thumb">
+                  <img [src]="foto" alt="Foto del reporte" />
+                </a>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="detalle-modal-actions">
+      <button type="button" class="btn btn-outline-primary" (click)="close()">Cerrar</button>
+    </div>
+  </div>
+</div>

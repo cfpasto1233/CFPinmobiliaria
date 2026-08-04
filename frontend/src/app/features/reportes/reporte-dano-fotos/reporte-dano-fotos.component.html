@@ -1,0 +1,27 @@
+<app-navbar />
+
+<section class="reporte-dano-fotos">
+  <div class="reporte-dano-fotos-card">
+    <h1 class="reporte-dano-fotos-title">Fotos del reporte</h1>
+
+    @if (fotosView().loading) {
+      <p class="reporte-dano-fotos-hint">Cargando fotos...</p>
+    } @else if (fotosView().error) {
+      <p class="reporte-dano-fotos-empty">Este reporte no existe o el link ya expiró.</p>
+      <a routerLink="/" class="reporte-dano-fotos-back">Volver al inicio</a>
+    } @else if (!fotosView().fotos.length) {
+      <p class="reporte-dano-fotos-empty">Este reporte no tiene fotos adjuntas.</p>
+      <a routerLink="/" class="reporte-dano-fotos-back">Volver al inicio</a>
+    } @else {
+      <div class="reporte-dano-fotos-grid">
+        @for (foto of fotosView().fotos; track foto) {
+          <a [href]="foto" target="_blank" rel="noopener" class="reporte-dano-fotos-thumb">
+            <img [src]="foto" alt="Foto del reporte" />
+          </a>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<app-footer />

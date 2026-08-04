@@ -4,6 +4,7 @@ import { CampanaState, campanaReducer } from './Campana/campana.reducer';
 import { CitasState, citasReducer } from './Citas/citas.reducer';
 import { PropiedadesState, propiedadesReducer } from './Propiedades/propiedades.reducer';
 import { ProyectosState, proyectosReducer } from './Proyectos/proyectos.reducer';
+import { ReportesDanoState, reportesDanoReducer } from './ReportesDano/reportes-dano.reducer';
 import {
   SolicitudesArrendarPropiedadState,
   solicitudesArrendarPropiedadReducer,
@@ -20,6 +21,7 @@ export interface RootReducerState {
   solicitudesVenta: SolicitudesVentaState;
   solicitudesArriendo: SolicitudesArriendoState;
   solicitudesArrendarPropiedad: SolicitudesArrendarPropiedadState;
+  reportesDano: ReportesDanoState;
 }
 
 export const rootReducer: ActionReducerMap<RootReducerState> = {
@@ -31,6 +33,7 @@ export const rootReducer: ActionReducerMap<RootReducerState> = {
   solicitudesVenta: solicitudesVentaReducer,
   solicitudesArriendo: solicitudesArriendoReducer,
   solicitudesArrendarPropiedad: solicitudesArrendarPropiedadReducer,
+  reportesDano: reportesDanoReducer,
 };
 
 export const metaReducers: MetaReducer<RootReducerState>[] = [];
