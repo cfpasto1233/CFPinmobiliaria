@@ -96,7 +96,7 @@
 
 .recaudo-card {
   width: 100%;
-  max-width: 880px;
+  max-width: 1100px;
   padding: 2rem 2.5rem;
   background: $cfpasto-white;
   border: 1.5px solid $cfpasto-primary;
@@ -108,16 +108,40 @@
   }
 }
 
-.recaudo-card-title {
+.recaudo-col-title {
   font-family: $cfpasto-font-heading;
   font-weight: 700;
   font-size: $cfpasto-text-lg;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: $cfpasto-primary;
-  margin: 0 0 1.75rem;
+  margin: 0 0 1.5rem;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid $cfpasto-border;
+}
+
+.recaudo-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 2.5rem;
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+.recaudo-col-fields {
+  padding-left: 2.5rem;
+  border-left: 1px solid $cfpasto-border;
+
+  @media (max-width: 767.98px) {
+    padding-left: 0;
+    padding-top: 1.75rem;
+    margin-top: 1.75rem;
+    border-left: none;
+    border-top: 1px solid $cfpasto-border;
+  }
 }
 
 .recaudo-field {
@@ -207,9 +231,30 @@
 // ─── Calendario de agendamiento ─────────────────────────────────────────────
 
 .recaudo-calendar {
-  margin-bottom: 2rem;
-  padding-bottom: 1.75rem;
-  border-bottom: 1px solid $cfpasto-border;
+  margin-bottom: 1.5rem;
+}
+
+.recaudo-wait-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: $cfpasto-bg-subtle;
+  border-radius: $cfpasto-radius-lg;
+  color: $cfpasto-text-muted;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: $cfpasto-primary;
+  }
+
+  p {
+    margin: 0;
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-xs;
+    line-height: 1.5;
+  }
 }
 
 .recaudo-calendar-header {
