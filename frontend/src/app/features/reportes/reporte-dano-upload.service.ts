@@ -16,8 +16,9 @@ export class ReporteDanoUploadService {
   private readonly httpClient = inject(HttpClient);
   private readonly basePath = inject(BASE_PATH_DEFAULT);
 
-  crearReporteDano(form: ReporteDanoForm, fotos: File[]): Observable<ReporteDanoPublic> {
+  crearReporteDano(form: ReporteDanoForm, fotos: File[], id: string): Observable<ReporteDanoPublic> {
     const body = new FormData();
+    body.append('id', id);
     body.append('nombre_completo', form.nombre_completo);
     body.append('numero_contacto', form.numero_contacto);
     body.append('tipo_reporte', form.tipo_reporte);

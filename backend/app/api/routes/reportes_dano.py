@@ -3,6 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import ValidationError
+from sqlalchemy.exc import IntegrityError
 
 from app.api.deps import SessionDep, SuperUser
 from app.crud.reporte_dano import create_reporte_dano, get_reporte_dano_by_id, list_reportes_dano
@@ -28,6 +29,7 @@ def _mensaje_error_validacion(exc: ValidationError) -> str:
 @router.post("/", response_model=ReporteDanoPublic)
 def create_reporte_dano_endpoint(
     session: SessionDep,
+    id: Annotated[uuid.UUID, Form()],
     nombre_completo: Annotated[str, Form(max_length=255)],
     numero_contacto: Annotated[str, Form(max_length=20)],
     tipo_reporte: Annotated[TipoReporteDano, Form()],
@@ -36,6 +38,10 @@ def create_reporte_dano_endpoint(
     tipo_reporte_otro: Annotated[str | None, Form(max_length=100)] = None,
     fotos: Annotated[list[UploadFile], File()] = [],  # noqa: B006
 ) -> ReporteDanoPublic:
+    # El id lo genera el frontend (crypto.randomUUID()) y lo manda desde el submit, ANTES de que
+    # exista este registro — así el mensaje de WhatsApp puede incluir el link a
+    # /reportes/{id}/fotos y abrirse de inmediato, sin esperar esta respuesta. Colisión de UUID
+    # es prácticamente imposible, pero se maneja igual como 409 en vez de un 500 genérico.
     if len(fotos) > MAX_FOTOS:
         raise HTTPException(status_code=422, detail=f"Máximo {MAX_FOTOS} fotos.")
 
@@ -58,7 +64,11 @@ def create_reporte_dano_endpoint(
         storage.validate_image(foto)
         keys.append(storage.upload_image(foto, folder="reportes-dano"))
 
-    return create_reporte_dano(session=session, form=form, fotos=keys)
+    try:
+        return create_reporte_dano(session=session, id=id, form=form, fotos=keys)
+    except IntegrityError as exc:
+        session.rollback()
+        raise HTTPException(status_code=409, detail="Ya existe un reporte con ese id.") from exc
 
 
 @router.get("/", response_model=ReportesDanoPublic)
@@ -77,4 +87,6 @@ def read_reporte_dano_fotos(reporte_id: uuid.UUID, session: SessionDep) -> Repor
     reporte = get_reporte_dano_by_id(session=session, reporte_id=reporte_id)
     if not reporte:
         raise HTTPException(status_code=404, detail="Reporte no encontrado.")
-    return ReporteDanoFotosPublic(fotos=[storage.presigned_url(key) for key in reporte.fotos])
+    return ReporteDanoFotosPublic(
+        fotos=[storage.presigned_url(key, expires_in=86400) for key in reporte.fotos]
+    )

@@ -13,7 +13,7 @@ export const ReportesDanoActions = {
 
   create: createAction(
     '[ReportesDano] Create',
-    props<{ form: ReporteDanoForm; fotos: File[] }>(),
+    props<{ form: ReporteDanoForm; fotos: File[]; id: string }>(),
   ),
   createSuccess: createAction('[ReportesDano] Create Success', props<{ item: ReporteDanoPublic }>()),
   createFailure: createAction('[ReportesDano] Create Failure', props<{ error: string }>()),

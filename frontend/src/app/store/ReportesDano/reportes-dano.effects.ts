@@ -37,8 +37,8 @@ export class ReportesDanoEffects {
   create$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ReportesDanoActions.create),
-      exhaustMap(({ form, fotos }) =>
-        this.uploadService.crearReporteDano(form, fotos).pipe(
+      exhaustMap(({ form, fotos, id }) =>
+        this.uploadService.crearReporteDano(form, fotos, id).pipe(
           map((item) => ReportesDanoActions.createSuccess({ item })),
           catchError((error) =>
             of(

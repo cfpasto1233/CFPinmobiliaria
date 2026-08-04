@@ -215,13 +215,19 @@ no se ejecute por duplicado con `--workers 2`; la lógica de borrado vive en
 asociadas en MinIO antes de borrar las filas (`crud/reporte_dano.py::delete_reportes_dano_antiguos`)
 para no dejar objetos huérfanos en el bucket.
 `POST /api/v1/reportes-dano/` combina "sin auth" + subida de archivos (multipart, hasta 5 fotos
-vía `Form()`/`File()` igual que `POST /propiedades/`, sin `SuperUser`). `GET
-/api/v1/reportes-dano/` sí exige `SuperUser` (listado para `/admin/reportes-dano`, mismo patrón
-`data`/`count` que el resto de solicitudes). `GET /api/v1/reportes-dano/{id}/fotos` es público
-(por UUID no adivinable, mismo modelo que `GET /api/v1/propiedades/{id}`) y devuelve **solo**
-URLs firmadas temporales de MinIO (`storage.py::presigned_url()`, generadas al vuelo en cada
-request — nunca se guardan) para ese reporte puntual; nunca nombre/contacto/descripción. Este
-mismo endpoint público lo consumen dos cosas distintas: la página pública
+vía `Form()`/`File()` igual que `POST /propiedades/`, sin `SuperUser`). El `id` del reporte lo
+manda el propio cliente en el `Form()` (`crypto.randomUUID()` del navegador, ver más abajo el
+porqué) en vez de dejar que la fila lo genere — `crud/reporte_dano.py::create_reporte_dano` lo
+recibe explícito y el router atrapa una eventual colisión de `IntegrityError` como 409 (en la
+práctica, nunca pasa con UUIDs de verdad). `GET /api/v1/reportes-dano/` sí exige `SuperUser`
+(listado para `/admin/reportes-dano`, mismo patrón `data`/`count` que el resto de solicitudes).
+`GET /api/v1/reportes-dano/{id}/fotos` es público (por UUID no adivinable, mismo modelo que
+`GET /api/v1/propiedades/{id}`) y devuelve **solo** URLs firmadas de MinIO válidas 24h
+(`storage.py::presigned_url(key, expires_in=86400)`, generadas al vuelo en cada request — nunca
+se guardan) para ese reporte puntual; nunca nombre/contacto/descripción. Esas 24h son solo la
+frescura de la URL firmada, no una expiración real del link: la página pública sigue funcionando
+mientras el reporte exista en la base de datos (hasta los 15 días de purga), cada visita pide
+URLs nuevas. Este mismo endpoint público lo consumen dos cosas distintas: la página pública
 `/reportes/:id/fotos` (`features/reportes/reporte-dano-fotos/`, con
 `<meta name="robots" content="noindex, nofollow">`, enlazada desde el mensaje de WhatsApp) y el
 modal de detalle del panel admin (`ReporteDanoDetalleModalComponent`, que despacha
@@ -248,20 +254,17 @@ de listado público completo en `/propiedades` y `/proyectos` (`features/propied
 —incluye un mini-calendario propio en `features/recaudo` que consume/extiende `store/Citas`, no un
 store nuevo—; `/reportes` ("Reportes de daños") conectado a `/api/v1/reportes-dano`, con selector de
 hasta 5 fotos (`URL.createObjectURL` para thumbnails, sin subida real hasta el submit). Al enviar,
-si no hay fotos se abre `wa.me` de inmediato con el resumen de texto (igual que el resto del
-sitio); si hay fotos, el mensaje además necesita el link a `/reportes/:id/fotos` — y ese `id` solo
-existe tras la respuesta del backend. Se probó primero con la Web Share API del navegador
-(`navigator.share`/`canShare`) para adjuntar las fotos directo, pero resultó poco confiable
-(`canShare()` podía lanzar en vez de devolver `false` en algunos navegadores de escritorio) y se
-retiró: ahora siempre es el mecanismo del link, sin excepción de navegador. Como `window.open()`
-llamado *después* de esperar una respuesta async ya no cuenta como gesto del usuario y el
-navegador lo bloquea como pop-up en silencio, `reportes.component.ts::onSubmit()` reserva una
-pestaña en blanco de forma síncrona en el momento del clic (`window.open('', '_blank')`) y recién
-la navega al link real cuando responde el backend — para eso el componente inyecta `Actions` de
-`@ngrx/effects` y se suscribe una sola vez (`take(1)`) a `createSuccess`/`createFailure` tras
-despachar `create`; es una excepción puntual a "el componente nunca reacciona a Actions", justificada
-porque solo el componente tiene la referencia viva a esa pestaña (no se puede pasar un `Window` a
-través de una action serializable hacia un Effect). `/credito-hipotecario`,
+`reportes.component.ts::onSubmit()` abre `wa.me` **siempre de inmediato y síncrono**, dentro del
+mismo clic — sin fotos manda solo el resumen de texto; con fotos, agrega un link a
+`/reportes/:id/fotos`. Se probaron dos mecanismos previos para esto que terminaron retirados por
+poco confiables: la Web Share API del navegador (`navigator.share`/`canShare`, que podía lanzar
+en vez de devolver `false` en algunos navegadores de escritorio) y, después, esperar la respuesta
+del backend antes de abrir `wa.me` (el `window.open()` llamado *después* de un `fetch` ya no
+cuenta como gesto del usuario y el navegador lo bloquea como pop-up en silencio). La solución
+final: el **id lo genera el navegador** (`crypto.randomUUID()`) antes de mandar el formulario, así
+se conoce de entrada y el link se arma sin esperar nada — el componente vuelve a ser 100% síncrono
+y solo despacha `ReportesDanoActions.create({ form, fotos, id })`, sin inyectar `Actions` ni
+suscribirse a nada. `/credito-hipotecario`,
 `/reduccion-credito`, `/publicar-propiedad`,
 `/publicar-por-tu-cuenta` siguen siendo solo visuales, sin backend propio — enlazados desde el menú
 de búsqueda del hero o desde "Publica tu propiedad") + contacto vía WhatsApp

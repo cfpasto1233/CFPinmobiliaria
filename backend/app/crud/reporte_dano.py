@@ -25,9 +25,10 @@ def list_reportes_dano(
 
 
 def create_reporte_dano(
-    *, session: Session, form: ReporteDanoForm, fotos: list[str]
+    *, session: Session, id: uuid.UUID, form: ReporteDanoForm, fotos: list[str]
 ) -> ReporteDano:
     db_obj = ReporteDano(
+        id=id,
         nombre_completo=form.nombre_completo,
         medio_comunicacion=form.medio_comunicacion,
         numero_contacto=form.numero_contacto,

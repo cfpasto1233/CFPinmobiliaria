@@ -2,9 +2,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, inject, signal } from '@
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { take } from 'rxjs';
 import { whatsappLink } from '../../core/whatsapp/whatsapp.util';
 import { NotificationService } from '../../core/notifications/notification.service';
 import { FooterComponent } from '../../layouts/footer/footer.component';
@@ -71,7 +69,6 @@ interface FotoSeleccionada {
 export class ReportesComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly store = inject(Store);
-  private readonly actions$ = inject(Actions);
   private readonly notif = inject(NotificationService);
 
   protected readonly maxFotos = MAX_FOTOS;
@@ -183,25 +180,17 @@ export class ReportesComponent implements OnDestroy {
 
     // Un link wa.me solo precarga texto — nunca puede adjuntar archivos, así que cuando hay
     // fotos, el mensaje incluye un link a /reportes/:id/fotos en vez de intentar adjuntarlas
-    // directo (se probó con la Web Share API del navegador, pero resultó poco confiable:
-    // navigator.canShare() podía lanzar en vez de devolver false en algunos navegadores de
-    // escritorio, y se retiró en favor de este único mecanismo, uniforme en todos los
-    // navegadores).
-    const usarLinkFotos = fotos.length > 0;
+    // directo. El id lo genera el propio navegador (crypto.randomUUID()) y se manda al backend
+    // como parte del alta — así se conoce de entrada, sin esperar la respuesta del POST, y
+    // wa.me se abre siempre de inmediato y síncrono dentro del clic (antes se esperaba la
+    // respuesta del backend para armar el link, lo que hacía que el navegador bloqueara
+    // window.open() como pop-up en silencio).
+    const id = crypto.randomUUID();
+    const mensajeConLink = fotos.length
+      ? `${mensaje}\n\nFotos: ${window.location.origin}/reportes/${id}/fotos`
+      : mensaje;
 
-    // Abrir window.open() DESPUÉS de esperar la respuesta del backend (fetch async) ya no
-    // cuenta como gesto del usuario para el navegador, y lo bloquea como pop-up en silencio.
-    // Truco estándar: reservar la pestaña YA (en blanco), mientras el gesto todavía es válido,
-    // y solo navegarla más tarde cuando se conozca el link — navegar una pestaña ya abierta no
-    // tiene esa restricción.
-    let fotosWindow: Window | null = null;
-
-    if (usarLinkFotos) {
-      fotosWindow = window.open('', '_blank', 'noopener');
-      if (fotosWindow) fotosWindow.document.title = 'Preparando tu mensaje de WhatsApp...';
-    } else {
-      window.open(whatsappLink(mensaje), '_blank', 'noopener');
-    }
+    window.open(whatsappLink(mensajeConLink), '_blank', 'noopener');
 
     this.store.dispatch(
       ReportesDanoActions.create({
@@ -214,27 +203,9 @@ export class ReportesComponent implements OnDestroy {
           descripcion_dano: raw.descripcionDano ?? '',
         },
         fotos,
+        id,
       }),
     );
-
-    if (usarLinkFotos) {
-      this.actions$
-        .pipe(ofType(ReportesDanoActions.createSuccess, ReportesDanoActions.createFailure), take(1))
-        .subscribe((action) => {
-          const url =
-            action.type === ReportesDanoActions.createSuccess.type
-              ? whatsappLink(
-                  `${mensaje}\n\nFotos: ${window.location.origin}/reportes/${action.item.id}/fotos`,
-                )
-              : whatsappLink(mensaje);
-
-          if (fotosWindow && !fotosWindow.closed) {
-            fotosWindow.location.href = url;
-          } else {
-            window.open(url, '_blank', 'noopener');
-          }
-        });
-    }
 
     this.fotos().forEach((foto) => URL.revokeObjectURL(foto.previewUrl));
     this.fotos.set([]);
