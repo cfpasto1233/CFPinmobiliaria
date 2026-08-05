@@ -3,9 +3,13 @@ from fastapi import APIRouter
 from app.api.routes import (
     auth,
     campanas,
+    citas,
     login,
     propiedades,
     proyectos,
+    reportes_dano,
+    solicitudes_arrendar_propiedad,
+    solicitudes_arriendo,
     solicitudes_venta,
     users,
     utils,
@@ -18,5 +22,9 @@ api_router.include_router(users.router)
 api_router.include_router(propiedades.router)
 api_router.include_router(proyectos.router)
 api_router.include_router(campanas.router)
+api_router.include_router(citas.router)
 api_router.include_router(solicitudes_venta.router)
+api_router.include_router(solicitudes_arriendo.router)
+api_router.include_router(solicitudes_arrendar_propiedad.router)
+api_router.include_router(reportes_dano.router)
 api_router.include_router(utils.router)

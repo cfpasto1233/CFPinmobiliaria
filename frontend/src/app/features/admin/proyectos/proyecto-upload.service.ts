@@ -21,6 +21,12 @@ export class ProyectoUploadService {
     body.append('descripcion', form.descripcion);
     body.append('ubicacion', form.ubicacion);
     body.append('estado', form.estado);
+    body.append('precio', String(form.precio));
+    body.append('financiacion', String(form.financiacion));
+    if (form.financiacion_descripcion) {
+      body.append('financiacion_descripcion', form.financiacion_descripcion);
+    }
+    body.append('credito_hipotecario', String(form.credito_hipotecario));
     body.append('foto_portada', fotoPortada);
 
     return this.httpClient.post<ProyectoPublic>(`${this.basePath}/api/v1/proyectos/`, body);

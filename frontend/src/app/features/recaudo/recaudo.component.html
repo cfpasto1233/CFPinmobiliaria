@@ -11,111 +11,182 @@
     </a>
 
     <p class="recaudo-eyebrow">Servicio de recaudo</p>
-    <h1 class="recaudo-title">Gestiona el recaudo de tu arriendo</h1>
+    <h1 class="recaudo-title">Agenda tu visita de recaudo</h1>
     <p class="recaudo-subtitle">
-      Consulta tu estado de cuenta, reporta un pago o solicita un certificado. Un asesor te contactará.
+      Programa el día, la hora y el lugar para el pago de tu canon de arrendamiento.
+    </p>
+  </div>
+
+  <div class="recaudo-info-banner">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M12 16v-4"></path>
+      <path d="M12 8h.01"></path>
+    </svg>
+    <p>
+      En este espacio pueden programar la hora, el día y el lugar para realizar el pago de su canon
+      de arrendamiento antes del día 5 de cada mes. Posterior a esta fecha, el pago se programa
+      directamente en la oficina, agendando su cita para entregar el dinero.
     </p>
   </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="recaudo-card">
-      <h2 class="recaudo-card-title">Datos de tu solicitud</h2>
+      <div class="recaudo-columns">
+        <div class="recaudo-col recaudo-col-calendar">
+          <h2 class="recaudo-col-title">Elige día y hora</h2>
 
-      <div class="recaudo-field">
-        <label for="nombreCompleto" class="recaudo-label">Nombre completo *</label>
-        <input
-          id="nombreCompleto"
-          type="text"
-          class="recaudo-input"
-          placeholder="Tu nombre"
-          [class.is-invalid]="fieldError('nombreCompleto')"
-          formControlName="nombreCompleto"
-        />
-        @if (fieldError('nombreCompleto'); as err) {
-          <div class="recaudo-error">{{ err }}</div>
-        }
-      </div>
+          <div class="recaudo-calendar">
+            <div class="recaudo-calendar-header">
+              <button
+                type="button"
+                class="recaudo-calendar-nav"
+                [disabled]="mesOffset() === 0"
+                (click)="cambiarMes(-1)"
+                aria-label="Mes anterior"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <span class="recaudo-calendar-mes">{{ etiquetaMes() }}</span>
+              <button
+                type="button"
+                class="recaudo-calendar-nav"
+                [disabled]="mesOffset() === 1"
+                (click)="cambiarMes(1)"
+                aria-label="Mes siguiente"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
 
-      <div class="recaudo-field">
-        <label for="numeroContacto" class="recaudo-label">Número de contacto *</label>
-        <input
-          id="numeroContacto"
-          type="tel"
-          class="recaudo-input"
-          placeholder="+57 300 000 0000"
-          [class.is-invalid]="fieldError('numeroContacto')"
-          formControlName="numeroContacto"
-        />
-        @if (fieldError('numeroContacto'); as err) {
-          <div class="recaudo-error">{{ err }}</div>
-        }
-      </div>
+            <div class="recaudo-calendar-grid">
+              <span class="recaudo-calendar-dow">Lun</span>
+              <span class="recaudo-calendar-dow">Mar</span>
+              <span class="recaudo-calendar-dow">Mié</span>
+              <span class="recaudo-calendar-dow">Jue</span>
+              <span class="recaudo-calendar-dow">Vie</span>
+              <span class="recaudo-calendar-dow">Sáb</span>
+              <span class="recaudo-calendar-dow">Dom</span>
 
-      <div class="recaudo-field">
-        <label class="recaudo-label">Tipo de cliente *</label>
-        <ng-select
-          class="recaudo-select"
-          [items]="tipoClienteOptions"
-          bindLabel="label"
-          bindValue="value"
-          [clearable]="false"
-          placeholder="Seleccionar..."
-          formControlName="tipoCliente"
-        ></ng-select>
-        @if (fieldError('tipoCliente'); as err) {
-          <div class="recaudo-error">{{ err }}</div>
-        }
-      </div>
+              @for (semana of semanas(); track $index) {
+                @for (dia of semana; track dia?.iso ?? $index) {
+                  @if (dia) {
+                    <button
+                      type="button"
+                      class="recaudo-dia"
+                      [class.is-verde]="dia.disponibilidad?.color === 'verde'"
+                      [class.is-amarillo]="dia.disponibilidad?.color === 'amarillo'"
+                      [class.is-seleccionado]="fechaSeleccionada() === dia.iso"
+                      [disabled]="!dia.disponibilidad?.horas_disponibles?.length"
+                      (click)="seleccionarDia(dia)"
+                    >
+                      {{ dia.numero }}
+                    </button>
+                  } @else {
+                    <span class="recaudo-dia recaudo-dia-vacio"></span>
+                  }
+                }
+              }
+            </div>
 
-      <div class="recaudo-field">
-        <label for="referenciaInmueble" class="recaudo-label">Inmueble o número de contrato *</label>
-        <input
-          id="referenciaInmueble"
-          type="text"
-          class="recaudo-input"
-          placeholder="Ej: Cra 15 #80-20, contrato 1042"
-          [class.is-invalid]="fieldError('referenciaInmueble')"
-          formControlName="referenciaInmueble"
-        />
-        @if (fieldError('referenciaInmueble'); as err) {
-          <div class="recaudo-error">{{ err }}</div>
-        }
-      </div>
+            @if (fechaSeleccionada()) {
+              <div class="recaudo-horas">
+                @for (hora of horasDelDiaSeleccionado(); track hora) {
+                  <button
+                    type="button"
+                    class="recaudo-hora"
+                    [class.is-seleccionada]="horaSeleccionada() === hora"
+                    (click)="seleccionarHora(hora)"
+                  >
+                    {{ hora }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
 
-      <div class="recaudo-field">
-        <label class="recaudo-label">Motivo de tu solicitud *</label>
-        <ng-select
-          class="recaudo-select"
-          [items]="motivoOptions"
-          bindLabel="label"
-          bindValue="value"
-          [clearable]="false"
-          placeholder="Seleccionar..."
-          formControlName="motivoSolicitud"
-        ></ng-select>
-        @if (fieldError('motivoSolicitud'); as err) {
-          <div class="recaudo-error">{{ err }}</div>
-        }
-      </div>
+          <div class="recaudo-wait-note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <p>El recaudo tendrá máximo 10 min de espera.</p>
+          </div>
+        </div>
 
-      <div class="recaudo-field">
-        <label for="mensaje" class="recaudo-label">Mensaje</label>
-        <textarea
-          id="mensaje"
-          rows="3"
-          class="recaudo-input recaudo-textarea"
-          placeholder="Cuéntanos más detalles de tu solicitud..."
-          [class.is-invalid]="fieldError('mensaje')"
-          formControlName="mensaje"
-        ></textarea>
-        @if (fieldError('mensaje'); as err) {
-          <div class="recaudo-error">{{ err }}</div>
-        }
+        <div class="recaudo-col recaudo-col-fields">
+          <h2 class="recaudo-col-title">Tus datos</h2>
+
+          <div class="recaudo-field">
+            <label for="nombreCompleto" class="recaudo-label">Nombre completo *</label>
+            <input
+              id="nombreCompleto"
+              type="text"
+              class="recaudo-input"
+              placeholder="Tu nombre"
+              [class.is-invalid]="fieldError('nombreCompleto')"
+              formControlName="nombreCompleto"
+            />
+            @if (fieldError('nombreCompleto'); as err) {
+              <div class="recaudo-error">{{ err }}</div>
+            }
+          </div>
+
+          <div class="recaudo-field">
+            <label for="numeroContacto" class="recaudo-label">Número de contacto *</label>
+            <input
+              id="numeroContacto"
+              type="tel"
+              class="recaudo-input"
+              placeholder="+57 300 000 0000"
+              [class.is-invalid]="fieldError('numeroContacto')"
+              formControlName="numeroContacto"
+            />
+            @if (fieldError('numeroContacto'); as err) {
+              <div class="recaudo-error">{{ err }}</div>
+            }
+          </div>
+
+          <div class="recaudo-field">
+            <label for="direccionRecaudo" class="recaudo-label">Dirección de recaudo *</label>
+            <input
+              id="direccionRecaudo"
+              type="text"
+              class="recaudo-input"
+              placeholder="Cra 15 #80-20, Pasto"
+              [class.is-invalid]="fieldError('direccionRecaudo')"
+              formControlName="direccionRecaudo"
+            />
+            @if (fieldError('direccionRecaudo'); as err) {
+              <div class="recaudo-error">{{ err }}</div>
+            }
+          </div>
+
+          <div class="recaudo-field">
+            <label for="observaciones" class="recaudo-label">Observaciones</label>
+            <textarea
+              id="observaciones"
+              rows="3"
+              class="recaudo-input recaudo-textarea"
+              placeholder="Detalles adicionales para la visita..."
+              [class.is-invalid]="fieldError('observaciones')"
+              formControlName="observaciones"
+            ></textarea>
+            @if (fieldError('observaciones'); as err) {
+              <div class="recaudo-error">{{ err }}</div>
+            }
+          </div>
+        </div>
       </div>
 
       <div class="recaudo-actions">
-        <span class="recaudo-required-hint">* Campos obligatorios</span>
-        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
+        <span class="recaudo-required-hint">* Campos obligatorios — elige un día y una hora disponibles</span>
+        <button type="submit" class="btn btn-secondary" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Agendar visita
+        </button>
       </div>
     </div>
   </form>

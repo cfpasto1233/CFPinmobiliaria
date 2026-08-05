@@ -12,6 +12,7 @@ ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB
 
 _client = None
+_presign_client = None
 
 
 def _endpoint_url() -> str:
@@ -31,6 +32,22 @@ def _get_client():
             aws_secret_access_key=settings.MINIO_ROOT_PASSWORD,
         )
     return _client
+
+
+def _get_presign_client():
+    # Cliente separado solo para firmar URLs: `_get_client()` apunta a MINIO_ENDPOINT (el
+    # hostname interno de Docker, ej. http://minio:9000), inalcanzable desde el navegador.
+    # Firmar no hace ninguna llamada de red — solo calcula la firma localmente — así que
+    # este cliente nunca necesita conectividad real, solo el endpoint público correcto.
+    global _presign_client
+    if _presign_client is None:
+        _presign_client = boto3.client(
+            "s3",
+            endpoint_url=settings.MINIO_PUBLIC_URL,
+            aws_access_key_id=settings.MINIO_ROOT_USER,
+            aws_secret_access_key=settings.MINIO_ROOT_PASSWORD,
+        )
+    return _presign_client
 
 
 def _public_read_policy() -> str:
@@ -99,3 +116,11 @@ def delete_object(key: str) -> None:
 
 def public_url(key: str) -> str:
     return f"{settings.MINIO_PUBLIC_URL}/{settings.MINIO_BUCKET}/{key}"
+
+
+def presigned_url(key: str, *, expires_in: int = 3600) -> str:
+    return _get_presign_client().generate_presigned_url(
+        "get_object",
+        Params={"Bucket": settings.MINIO_BUCKET, "Key": key},
+        ExpiresIn=expires_in,
+    )

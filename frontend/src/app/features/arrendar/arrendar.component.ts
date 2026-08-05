@@ -3,13 +3,16 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Store } from '@ngrx/store';
-import { NotificationService } from '../../core/notifications/notification.service';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
 import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems, selectPropiedadesLoading } from '../../store/Propiedades/propiedades.selectors';
+import { SolicitudesArriendoActions } from '../../store/SolicitudesArriendo/solicitudes-arriendo.actions';
+import { selectSolicitudesArriendoLoading } from '../../store/SolicitudesArriendo/solicitudes-arriendo.selectors';
+
+type MedioContacto = 'whatsapp' | 'llamada' | 'correo';
 
 type FormFieldName =
   | 'nombreCompleto'
@@ -47,7 +50,6 @@ export class ArrendarComponent implements OnInit {
   @ViewChild('carouselTrack') private readonly carouselTrack?: ElementRef<HTMLDivElement>;
 
   private readonly fb = inject(FormBuilder);
-  private readonly notif = inject(NotificationService);
   private readonly store = inject(Store);
 
   protected readonly loading = this.store.selectSignal(selectPropiedadesLoading);
@@ -56,7 +58,9 @@ export class ArrendarComponent implements OnInit {
     this.items().filter((item) => item.tipo === 'arriendo'),
   );
 
-  protected readonly medioContactoOptions = [
+  protected readonly submitting = this.store.selectSignal(selectSolicitudesArriendoLoading);
+
+  protected readonly medioContactoOptions: { value: MedioContacto; label: string }[] = [
     { value: 'whatsapp', label: 'WhatsApp' },
     { value: 'llamada', label: 'Llamada telefónica' },
     { value: 'correo', label: 'Correo electrónico' },
@@ -64,10 +68,10 @@ export class ArrendarComponent implements OnInit {
 
   protected readonly form = this.fb.group({
     nombreCompleto: ['', [Validators.required, Validators.maxLength(255)]],
+    medioContacto: [null as MedioContacto | null, Validators.required],
     numeroContacto: ['', [Validators.required, Validators.pattern(/^[0-9+\s()-]{7,20}$/)]],
-    sectorInteres: ['', [Validators.required, Validators.maxLength(255)]],
     precioMaximo: ['', [Validators.required, Validators.maxLength(100)]],
-    medioContacto: [null as string | null, Validators.required],
+    sectorInteres: ['', [Validators.required, Validators.maxLength(255)]],
     observaciones: ['', Validators.maxLength(500)],
   });
 
@@ -90,7 +94,20 @@ export class ArrendarComponent implements OnInit {
       return;
     }
 
-    this.notif.success('Tu solicitud de arriendo fue registrada correctamente.');
+    const raw = this.form.getRawValue();
+    this.store.dispatch(
+      SolicitudesArriendoActions.create({
+        form: {
+          nombre_completo: raw.nombreCompleto ?? '',
+          numero_contacto: raw.numeroContacto ?? '',
+          sector_interes: raw.sectorInteres ?? '',
+          precio_maximo: raw.precioMaximo ?? '',
+          medio_contacto: raw.medioContacto ?? 'whatsapp',
+          observaciones: raw.observaciones || undefined,
+        },
+      }),
+    );
+
     this.form.reset();
   }
 

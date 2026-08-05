@@ -20,6 +20,7 @@
           <div class="solicitudes-grid solicitudes-grid-head" role="row">
             <span>Nombre</span>
             <span>Medio</span>
+            <span>Número</span>
             <span>Presupuesto</span>
             <span>Forma de pago</span>
             <span>Detalle</span>
@@ -32,6 +33,7 @@
               <div class="solicitudes-grid solicitudes-row" role="row">
                 <span class="solicitudes-cell-nombre">{{ item.nombre_completo }}</span>
                 <span>{{ medioLabel(item) }}</span>
+                <span>{{ item.numero ?? '—' }}</span>
                 <span>{{ item.presupuesto_total }}</span>
                 <span>{{ formaPagoLabel(item) }}</span>
                 <span class="solicitudes-cell-detalle">{{ detalle(item) }}</span>

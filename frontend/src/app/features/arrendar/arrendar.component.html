@@ -1,123 +1,5 @@
 <app-navbar />
 
-<section class="arrendar">
-  <div class="arrendar-header">
-    <a routerLink="/" class="arrendar-back">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 12H5" />
-        <path d="M12 19l-7-7 7-7" />
-      </svg>
-      Volver al inicio
-    </a>
-
-    <p class="arrendar-eyebrow">Para inquilinos</p>
-    <h1 class="arrendar-title">Quiero arrendar con CFP</h1>
-    <p class="arrendar-subtitle">
-      Cuéntanos qué estás buscando y un asesor te ayudará a encontrar tu próximo hogar en arriendo.
-    </p>
-  </div>
-
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="arrendar-card">
-      <div class="arrendar-field">
-        <label for="nombreCompleto" class="arrendar-label">Nombre completo *</label>
-        <input
-          id="nombreCompleto"
-          type="text"
-          class="arrendar-input"
-          placeholder="Tu nombre"
-          [class.is-invalid]="fieldError('nombreCompleto')"
-          formControlName="nombreCompleto"
-        />
-        @if (fieldError('nombreCompleto'); as err) {
-          <div class="arrendar-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="arrendar-field">
-        <label for="numeroContacto" class="arrendar-label">Número de contacto *</label>
-        <input
-          id="numeroContacto"
-          type="tel"
-          class="arrendar-input"
-          placeholder="+57 300 000 0000"
-          [class.is-invalid]="fieldError('numeroContacto')"
-          formControlName="numeroContacto"
-        />
-        @if (fieldError('numeroContacto'); as err) {
-          <div class="arrendar-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="arrendar-field">
-        <label for="sectorInteres" class="arrendar-label">Sector de interés *</label>
-        <input
-          id="sectorInteres"
-          type="text"
-          class="arrendar-input"
-          placeholder="Ej: Chapinero, Usaquén, Norte..."
-          [class.is-invalid]="fieldError('sectorInteres')"
-          formControlName="sectorInteres"
-        />
-        @if (fieldError('sectorInteres'); as err) {
-          <div class="arrendar-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="arrendar-field">
-        <label for="precioMaximo" class="arrendar-label">Precio máximo *</label>
-        <input
-          id="precioMaximo"
-          type="text"
-          class="arrendar-input"
-          placeholder="Ej: $2.000.000/mes"
-          [class.is-invalid]="fieldError('precioMaximo')"
-          formControlName="precioMaximo"
-        />
-        @if (fieldError('precioMaximo'); as err) {
-          <div class="arrendar-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="arrendar-field">
-        <label class="arrendar-label">Medio de contacto preferido *</label>
-        <ng-select
-          class="arrendar-select"
-          [items]="medioContactoOptions"
-          bindLabel="label"
-          bindValue="value"
-          [clearable]="false"
-          placeholder="Seleccionar..."
-          formControlName="medioContacto"
-        ></ng-select>
-        @if (fieldError('medioContacto'); as err) {
-          <div class="arrendar-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="arrendar-field">
-        <label for="observaciones" class="arrendar-label">Sugerencias u observaciones</label>
-        <textarea
-          id="observaciones"
-          rows="3"
-          class="arrendar-input arrendar-textarea"
-          placeholder="Habitaciones, mascotas, parqueadero..."
-          [class.is-invalid]="fieldError('observaciones')"
-          formControlName="observaciones"
-        ></textarea>
-        @if (fieldError('observaciones'); as err) {
-          <div class="arrendar-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="arrendar-actions">
-        <span class="arrendar-required-hint">* Campos obligatorios</span>
-        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
-      </div>
-    </div>
-  </form>
-</section>
-
 <section class="arrendar-listing">
   <div class="arrendar-listing-header">
     <p class="arrendar-listing-eyebrow">Disponibles ahora</p>
@@ -161,6 +43,139 @@
       </button>
     </div>
   }
+</section>
+
+<section class="arrendar">
+  <div class="arrendar-header">
+    <a routerLink="/" class="arrendar-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5" />
+        <path d="M12 19l-7-7 7-7" />
+      </svg>
+      Volver al inicio
+    </a>
+
+    <p class="arrendar-eyebrow">Para inquilinos</p>
+    <h1 class="arrendar-title">Quiero arrendar con CFP</h1>
+    <p class="arrendar-subtitle">
+      Cuéntanos qué estás buscando y un asesor te ayudará a encontrar tu próximo hogar en arriendo.
+    </p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="arrendar-card">
+      <h2 class="arrendar-card-title">Datos del arrendatario</h2>
+
+      <div class="arrendar-row">
+        <div class="arrendar-field">
+          <label for="nombreCompleto" class="arrendar-label">Nombre completo *</label>
+          <input
+            id="nombreCompleto"
+            type="text"
+            class="arrendar-input"
+            placeholder="Tu nombre"
+            [class.is-invalid]="fieldError('nombreCompleto')"
+            formControlName="nombreCompleto"
+          />
+          @if (fieldError('nombreCompleto'); as err) {
+            <div class="arrendar-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="arrendar-field">
+          <label class="arrendar-label">Medio de contacto preferido *</label>
+          <ng-select
+            class="arrendar-select"
+            [items]="medioContactoOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            placeholder="Seleccionar..."
+            formControlName="medioContacto"
+          ></ng-select>
+          @if (fieldError('medioContacto'); as err) {
+            <div class="arrendar-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="arrendar-row">
+        <div class="arrendar-field">
+          <label for="numeroContacto" class="arrendar-label">Número de contacto *</label>
+          <input
+            id="numeroContacto"
+            type="tel"
+            class="arrendar-input"
+            placeholder="+57 300 000 0000"
+            [class.is-invalid]="fieldError('numeroContacto')"
+            formControlName="numeroContacto"
+          />
+          @if (fieldError('numeroContacto'); as err) {
+            <div class="arrendar-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="arrendar-field">
+          <label for="precioMaximo" class="arrendar-label">Precio máximo *</label>
+          <input
+            id="precioMaximo"
+            type="text"
+            class="arrendar-input"
+            placeholder="Ej: $2.000.000/mes"
+            [class.is-invalid]="fieldError('precioMaximo')"
+            formControlName="precioMaximo"
+          />
+          @if (fieldError('precioMaximo'); as err) {
+            <div class="arrendar-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="arrendar-row">
+        <div class="arrendar-field">
+          <label for="sectorInteres" class="arrendar-label">Sector de interés *</label>
+          <input
+            id="sectorInteres"
+            type="text"
+            class="arrendar-input"
+            placeholder="Ej: Paraná, Santa Monica y Aquine"
+            [class.is-invalid]="fieldError('sectorInteres')"
+            formControlName="sectorInteres"
+          />
+          @if (fieldError('sectorInteres'); as err) {
+            <div class="arrendar-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="arrendar-row">
+        <div class="arrendar-field">
+          <label for="observaciones" class="arrendar-label">Sugerencias u observaciones</label>
+          <textarea
+            id="observaciones"
+            rows="3"
+            class="arrendar-input arrendar-textarea"
+            placeholder="Habitaciones, mascotas, parqueadero..."
+            [class.is-invalid]="fieldError('observaciones')"
+            formControlName="observaciones"
+          ></textarea>
+          @if (fieldError('observaciones'); as err) {
+            <div class="arrendar-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="arrendar-actions">
+        <span class="arrendar-required-hint">* Campos obligatorios</span>
+        <button type="submit" class="btn btn-secondary" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Enviar solicitud
+        </button>
+      </div>
+    </div>
+  </form>
 </section>
 
 <app-footer />

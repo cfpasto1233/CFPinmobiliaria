@@ -11,6 +11,13 @@
   z-index: 1030;
 }
 
+.navbar-end {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -76,12 +83,231 @@
   }
 }
 
-.navbar-toggler {
+// ─── Menú de navegación general (hamburguesa dedicada) ─────────────────────
+// Icono independiente del .navbar-toggler original (que solo colapsa el menú
+// de "Quiénes somos"/contacto). Este despliega el mismo menú que el hero de
+// landing (Ventas, Arriendos, Clientes, Proyectos, etc.) y está siempre
+// visible, en cualquier página y en cualquier tamaño de pantalla.
+
+.navbar-menu-wrap {
+  position: relative;
+}
+
+.navbar-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
   border: none;
-  padding: 0.25rem 0.5rem;
+  border-radius: $cfpasto-radius;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
 
   &:focus {
     box-shadow: none;
+  }
+}
+
+.navbar-search-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1035;
+  background: transparent;
+}
+
+.navbar-search-card {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  z-index: 1040;
+  width: 300px;
+  max-width: calc(100vw - 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: $cfpasto-white;
+  border: 1px solid $cfpasto-border;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+}
+
+.navbar-search-label {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: $cfpasto-text-muted;
+  margin: 0 0 0.25rem;
+}
+
+.navbar-search-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba($cfpasto-primary, 0.05);
+  border: 1px solid rgba($cfpasto-primary, 0.15);
+  border-radius: $cfpasto-radius-lg;
+  color: $cfpasto-primary;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-base;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    background: rgba($cfpasto-primary, 0.1);
+    border-color: rgba($cfpasto-primary, 0.3);
+    color: $cfpasto-primary;
+  }
+}
+
+.navbar-search-option-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.navbar-search-chevron {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+
+  &.is-open {
+    transform: rotate(180deg);
+  }
+}
+
+.navbar-search-submenu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  background: $cfpasto-bg-subtle;
+  border: 1px solid $cfpasto-border-light;
+  border-radius: $cfpasto-radius-lg;
+  overflow: hidden;
+}
+
+.navbar-search-submenu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid $cfpasto-border-light;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: $cfpasto-white;
+  }
+}
+
+.navbar-search-submenu-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: $cfpasto-primary;
+}
+
+.navbar-search-submenu-subtitle {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-muted;
+}
+
+// Contenido de "Quiénes somos"/Sugerencias/redes/CTA repetido dentro de la
+// tarjeta blanca, visible solo por debajo de lg (ver media query al final) —
+// en pantallas grandes ese contenido ya se muestra inline vía .navbar-collapse
+// y no hace falta repetirlo aquí.
+.navbar-search-mobile-extra {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.navbar-search-divider {
+  height: 1px;
+  background: $cfpasto-border-light;
+  margin: 0.25rem 0;
+}
+
+.navbar-search-link {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-primary;
+  text-decoration: none;
+  text-align: center;
+  padding: 0.4rem 0;
+
+  &:hover {
+    color: $cfpasto-primary-dark;
+  }
+}
+
+.navbar-search-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.navbar-search-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: $cfpasto-primary;
+  background: rgba($cfpasto-primary, 0.05);
+  transition: color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    color: $cfpasto-primary-dark;
+    background: rgba($cfpasto-primary, 0.12);
+  }
+}
+
+.navbar-search-cta {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  padding: 0.7rem 1.25rem;
+  border-radius: $cfpasto-radius;
+  color: $cfpasto-white;
+  background-color: $cfpasto-accent;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $cfpasto-accent-dark;
+    color: $cfpasto-white;
   }
 }
 
@@ -95,25 +321,16 @@
   background-size: 100%;
 }
 
+// Por debajo de lg, Bootstrap oculta .navbar-collapse (nunca recibe la clase
+// .show — ver navbar.html), así que su contenido se repite dentro de la
+// tarjeta blanca del único ícono de hamburguesa disponible en ese rango.
 @media (max-width: 991.98px) {
-  .navbar-collapse {
-    background-color: $cfpasto-primary-dark;
-    padding: 1rem;
-    border-radius: $cfpasto-radius-lg;
-    margin-top: 0.5rem;
+  .navbar-search-mobile-extra {
+    display: flex;
   }
 
-  .nav-link {
-    color: rgba(255, 255, 255, 0.85);
-    padding: 0.5rem 0;
-  }
-
-  .social-link {
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-  .btn-contact {
-    width: 100%;
-    text-align: center;
+  .navbar-search-card {
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
   }
 }

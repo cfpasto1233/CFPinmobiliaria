@@ -1,0 +1,50 @@
+<div class="detalle-modal-overlay" (click)="close()">
+  <div class="detalle-modal" (click)="$event.stopPropagation()">
+    <div class="detalle-modal-header">
+      <div>
+        <p class="detalle-modal-eyebrow">Solicitud de arriendo</p>
+        <h2 class="detalle-modal-title">{{ solicitud().nombre_completo }}</h2>
+      </div>
+      <button type="button" class="detalle-modal-close" aria-label="Cerrar" (click)="close()">&times;</button>
+    </div>
+
+    <div class="detalle-modal-body">
+      <div class="detalle-modal-badges">
+        <span class="detalle-modal-badge">{{ medioLabel() }}</span>
+      </div>
+
+      <dl class="detalle-modal-grid">
+        <div class="detalle-modal-field">
+          <dt>Número de contacto</dt>
+          <dd>{{ solicitud().numero_contacto }}</dd>
+        </div>
+
+        <div class="detalle-modal-field">
+          <dt>Sector de interés</dt>
+          <dd>{{ solicitud().sector_interes }}</dd>
+        </div>
+
+        <div class="detalle-modal-field">
+          <dt>Precio máximo</dt>
+          <dd>{{ solicitud().precio_maximo }}</dd>
+        </div>
+
+        @if (solicitud().observaciones; as observaciones) {
+          <div class="detalle-modal-field">
+            <dt>Sugerencias u observaciones</dt>
+            <dd>{{ observaciones }}</dd>
+          </div>
+        }
+
+        <div class="detalle-modal-field">
+          <dt>Fecha de solicitud</dt>
+          <dd>{{ solicitud().created_at | date: "d 'de' MMMM 'de' y, h:mm a" }}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="detalle-modal-actions">
+      <button type="button" class="btn btn-outline-primary" (click)="close()">Cerrar</button>
+    </div>
+  </div>
+</div>

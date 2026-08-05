@@ -1,0 +1,84 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.citas-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.citas-calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.citas-calendar-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid $cfpasto-border;
+  border-radius: $cfpasto-radius-sm;
+  background: $cfpasto-white;
+  color: $cfpasto-primary;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: $cfpasto-bg-subtle;
+  }
+}
+
+.citas-calendar-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-text-dark;
+  text-transform: capitalize;
+  margin: 0 0 0 0.5rem;
+}
+
+.citas-calendar-views {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.citas-calendar-body {
+  background: $cfpasto-surface;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-md;
+  overflow: hidden;
+  transition: opacity 0.15s ease;
+
+  &.is-loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+::ng-deep .cal-week-view,
+::ng-deep .cal-day-view {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 767.98px) {
+  .citas-calendar-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .citas-calendar-title {
+    font-size: $cfpasto-text-xl;
+  }
+}

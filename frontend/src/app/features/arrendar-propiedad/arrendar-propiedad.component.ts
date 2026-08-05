@@ -1,45 +1,63 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { NotificationService } from '../../core/notifications/notification.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { Store } from '@ngrx/store';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
+import { SolicitudesArrendarPropiedadActions } from '../../store/SolicitudesArrendarPropiedad/solicitudes-arrendar-propiedad.actions';
+import { selectSolicitudesArrendarPropiedadLoading } from '../../store/SolicitudesArrendarPropiedad/solicitudes-arrendar-propiedad.selectors';
+
+type MedioComunicacion = 'whatsapp' | 'llamada' | 'correo';
 
 type FormFieldName =
   | 'nombrePropietario'
+  | 'medioComunicacion'
   | 'numeroContacto'
   | 'direccionInmueble'
-  | 'sectorBarrio'
-  | 'canonEsperado'
   | 'observaciones';
 
 const REQUIRED_MESSAGES: Partial<Record<FormFieldName, string>> = {
   nombrePropietario: 'El nombre del propietario es obligatorio.',
   numeroContacto: 'El número de contacto es obligatorio.',
   direccionInmueble: 'La dirección del inmueble es obligatoria.',
-  sectorBarrio: 'Indica el sector o barrio.',
-  canonEsperado: 'El canon esperado es obligatorio.',
 };
 
 @Component({
   selector: 'app-arrendar-propiedad',
   standalone: true,
-  imports: [ReactiveFormsModule, NavbarComponent, FooterComponent, RouterLink, PublicarWhatsappFabComponent],
+  imports: [
+    ReactiveFormsModule,
+    NgSelectModule,
+    NavbarComponent,
+    FooterComponent,
+    RouterLink,
+    PublicarWhatsappFabComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './arrendar-propiedad.component.html',
   styleUrl: './arrendar-propiedad.component.scss',
 })
 export class ArrendarPropiedadComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly notif = inject(NotificationService);
+  private readonly store = inject(Store);
+
+  protected readonly submitting = this.store.selectSignal(
+    selectSolicitudesArrendarPropiedadLoading,
+  );
+
+  protected readonly medioComunicacionOptions: { value: MedioComunicacion; label: string }[] = [
+    { value: 'whatsapp', label: 'WhatsApp' },
+    { value: 'llamada', label: 'Llamada telefónica' },
+    { value: 'correo', label: 'Correo electrónico' },
+  ];
 
   protected readonly form = this.fb.group({
     nombrePropietario: ['', [Validators.required, Validators.maxLength(255)]],
+    medioComunicacion: [null as MedioComunicacion | null],
     numeroContacto: ['', [Validators.required, Validators.pattern(/^[0-9+\s()-]{7,20}$/)]],
     direccionInmueble: ['', [Validators.required, Validators.maxLength(255)]],
-    sectorBarrio: ['', [Validators.required, Validators.maxLength(255)]],
-    canonEsperado: ['', [Validators.required, Validators.maxLength(100)]],
     observaciones: ['', Validators.maxLength(500)],
   });
 
@@ -58,7 +76,19 @@ export class ArrendarPropiedadComponent {
       return;
     }
 
-    this.notif.success('Los datos de tu propiedad fueron registrados correctamente.');
+    const raw = this.form.getRawValue();
+    this.store.dispatch(
+      SolicitudesArrendarPropiedadActions.create({
+        form: {
+          nombre_propietario: raw.nombrePropietario ?? '',
+          medio_comunicacion: raw.medioComunicacion ?? undefined,
+          numero_contacto: raw.numeroContacto ?? '',
+          direccion_inmueble: raw.direccionInmueble ?? '',
+          observaciones: raw.observaciones || undefined,
+        },
+      }),
+    );
+
     this.form.reset();
   }
 }

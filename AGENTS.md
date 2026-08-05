@@ -59,7 +59,6 @@ POSTGRES_SERVER=localhost REDIS_HOST=localhost \
 | `docs/BACKEND_GUIDE.md` | Patrones FastAPI + SQLAlchemy |
 | `docs/FRONTEND_GUIDE.md` | Angular + ng-openapi + estilos |
 | `docs/SECURITY.md` | Seguridad y manejo de credenciales |
-| `docs/GOOGLE_CALENDAR.md` | Integración Google Calendar (DWD, slots, crear eventos) |
 | `docs/DEPLOY_VERCEL_RAILWAY.md` | Despliegue Vercel + Railway paso a paso |
 | `docs/DECISIONS.md` | Log de decisiones técnicas |
 

@@ -175,11 +175,6 @@ Ir a la pestaña **Variables** del servicio backend:
 
 > **Por qué `local` y no `minio`:** Railway no ofrece MinIO. Con `local`, los archivos se guardan en el filesystem del contenedor. Para producción real con archivos persistentes, migrar a Cloudflare R2 o S3 cambiando solo `STORAGE_BACKEND` y las variables de credenciales.
 
-#### Google Calendar (si se implementa)
-| Variable | Valor |
-|---|---|
-| `GOOGLE_SERVICE_ACCOUNT_JSON` | *(JSON en una sola línea)* |
-
 ---
 
 ## PASO 5 — Verificar que el deploy funciona

@@ -50,5 +50,26 @@ Formato: `YYYY-MM-DD — Título de la decisión`
 
 ---
 
+## 2026-08-01 — Calendario propio de citas en vez de integración con Google Calendar
+
+**Decisión:** Se descarta la integración con Google Calendar (Domain-Wide Delegation + Service
+Account) documentada en `docs/GOOGLE_CALENDAR.md` y se construye en su lugar un módulo propio de
+citas dentro de la plataforma (`Cita`, `features/admin/citas`, `store/Citas`) con calendario visual
+(mes/semana/día) para que el superadmin gestione citas manualmente.
+
+**Contexto:** La integración con Google Calendar nunca se implementó — quedó solo como diseño
+documental y un setting vacío (`GOOGLE_SERVICE_ACCOUNT_JSON`), sin código real. Evita depender de
+Google Workspace Admin para Domain-Wide Delegation y mantiene el control del agendamiento dentro de
+la plataforma.
+
+**Alcance de esta fase:** Solo gestión manual por el superadmin (crear/editar/mover/cancelar citas
+desde el calendario, con vínculo opcional a una `SolicitudVenta` o `SolicitudArriendo`). El
+agendamiento automático desde los formularios públicos del landing según disponibilidad queda
+pendiente de definir — no se decidió aún qué formularios lo permitirán.
+
+**Consecuencias:** Se eliminó `docs/GOOGLE_CALENDAR.md` y el setting `GOOGLE_SERVICE_ACCOUNT_JSON`
+de `config.py`/`.env.example`. La librería `angular-calendar` (+ `angular-draggable-droppable`,
+`angular-resizable-element`, `date-fns`) se agregó al frontend para las vistas de calendario.
+
 <!-- Agregar nuevas decisiones aquí conforme evolucione el proyecto -->
 <!-- Formato: ## YYYY-MM-DD — Título -->

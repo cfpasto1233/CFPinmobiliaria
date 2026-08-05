@@ -10,11 +10,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8rem 1.5rem 4rem;
-  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
+  padding: 4rem 1.5rem;
+  background: $cfpasto-white;
 
   @media (max-width: 767.98px) {
-    padding: 7rem 1.25rem 3rem;
+    padding: 3rem 1.25rem;
   }
 }
 
@@ -31,13 +31,13 @@
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.65);
+  color: $cfpasto-text-muted;
   text-decoration: none;
   margin-bottom: 1.5rem;
   transition: color 0.2s ease;
 
   &:hover {
-    color: $cfpasto-white;
+    color: $cfpasto-primary;
   }
 }
 
@@ -47,7 +47,7 @@
   font-size: $cfpasto-text-sm;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: $cfpasto-accent;
+  color: $cfpasto-primary;
   margin-bottom: 0.75rem;
 }
 
@@ -55,29 +55,54 @@
   font-family: $cfpasto-font-heading;
   font-weight: 700;
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-  color: $cfpasto-white;
+  color: $cfpasto-primary;
   margin: 0 0 0.75rem;
 }
 
 .arrendar-subtitle {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-base;
-  color: rgba(255, 255, 255, 0.75);
+  color: $cfpasto-text-muted;
   margin: 0;
 }
 
 .arrendar-card {
   width: 100%;
-  max-width: 640px;
-  padding: 2rem;
-  background: rgba($cfpasto-primary-dark, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 880px;
+  padding: 2rem 2.5rem;
+  background: $cfpasto-white;
+  border: 1.5px solid $cfpasto-primary;
   border-radius: $cfpasto-radius-xl;
   box-shadow: $cfpasto-shadow-lg;
 
   @media (max-width: 575.98px) {
     padding: 1.5rem;
+  }
+}
+
+.arrendar-card-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-lg;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $cfpasto-primary;
+  margin: 0 0 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid $cfpasto-border;
+}
+
+.arrendar-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+
+  .arrendar-field {
+    margin-bottom: 0;
   }
 }
 
@@ -92,36 +117,38 @@
   font-size: $cfpasto-text-xs;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: $cfpasto-accent;
+  color: $cfpasto-primary;
   margin-bottom: 0.5rem;
 }
 
 .arrendar-input {
   width: 100%;
   padding: 0.85rem 1rem;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: $cfpasto-white;
+  border: 1.5px solid rgba($cfpasto-primary, 0.3);
   border-radius: $cfpasto-radius-lg;
-  color: $cfpasto-white;
+  color: $cfpasto-text-dark;
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.35);
+    color: $cfpasto-text-light;
   }
 
   &:focus {
     outline: none;
-    border-color: $cfpasto-accent;
-    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
+    border-color: $cfpasto-primary;
+    box-shadow: 0 0 0 3px rgba($cfpasto-primary, 0.15);
   }
 
   &.is-invalid {
-    border-color: $cfpasto-error-light;
+    border-color: $cfpasto-error;
 
     &:focus {
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+      box-shadow: 0 0 0 3px rgba($cfpasto-error, 0.15);
     }
   }
 }
@@ -134,7 +161,7 @@
 .arrendar-error {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-xs;
-  color: #ffb4b4;
+  color: $cfpasto-error;
   margin-top: 0.4rem;
 }
 
@@ -143,9 +170,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1.75rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid $cfpasto-border;
 
   @media (max-width: 575.98px) {
     flex-direction: column-reverse;
@@ -156,10 +183,10 @@
 .arrendar-required-hint {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-xs;
-  color: rgba(255, 255, 255, 0.55);
+  color: $cfpasto-text-muted;
 }
 
-// --- ng-select (medio de contacto) sobre fondo oscuro ---
+// --- ng-select (medio de contacto) sobre fondo claro ---
 // Sin [appendTo]="'body'" el panel queda dentro del árbol del componente,
 // así que ::ng-deep con el atributo de encapsulación de Angular sí lo alcanza.
 
@@ -167,33 +194,33 @@
   .ng-select-container {
     min-height: 0;
     padding: 0.35rem 0.25rem;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: $cfpasto-white;
+    border: 1.5px solid rgba($cfpasto-primary, 0.3);
     border-radius: $cfpasto-radius-lg;
-    color: $cfpasto-white;
+    color: $cfpasto-text-dark;
   }
 
   &.ng-select-focused .ng-select-container {
-    border-color: $cfpasto-accent;
-    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
+    border-color: $cfpasto-primary;
+    box-shadow: 0 0 0 3px rgba($cfpasto-primary, 0.15);
   }
 
   .ng-value,
   .ng-input > input {
-    color: $cfpasto-white;
+    color: $cfpasto-text-dark;
   }
 
   .ng-placeholder {
-    color: rgba(255, 255, 255, 0.35);
+    color: $cfpasto-text-light;
   }
 
   .ng-arrow-wrapper .ng-arrow {
-    border-top-color: rgba(255, 255, 255, 0.55);
+    border-top-color: $cfpasto-text-muted;
   }
 
   .ng-dropdown-panel {
-    background: $cfpasto-primary-dark;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: $cfpasto-white;
+    border: 1px solid $cfpasto-border;
     border-radius: $cfpasto-radius-lg;
     box-shadow: $cfpasto-shadow-lg;
     margin-top: 0.35rem;
@@ -201,15 +228,15 @@
 
     .ng-dropdown-panel-items .ng-option {
       background: transparent;
-      color: rgba(255, 255, 255, 0.85);
+      color: $cfpasto-text-dark;
 
       &.ng-option-marked {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba($cfpasto-primary, 0.06);
       }
 
       &.ng-option-selected {
-        background: rgba($cfpasto-accent, 0.16);
-        color: $cfpasto-accent;
+        background: rgba($cfpasto-primary, 0.1);
+        color: $cfpasto-primary;
         font-weight: 600;
       }
     }
@@ -219,7 +246,11 @@
 // ─── Listado en arriendo (carrusel) ─────────────────────────────────────────
 
 .arrendar-listing {
-  padding: 4rem 1.5rem;
+  padding: 6rem 1.5rem 4rem;
+
+  @media (max-width: 767.98px) {
+    padding: 5rem 1.25rem 3rem;
+  }
 }
 
 .arrendar-listing-header {

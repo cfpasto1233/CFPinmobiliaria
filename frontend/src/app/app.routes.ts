@@ -42,6 +42,13 @@ export const routes: Routes = [
       import('./features/reportes/reportes.component').then((m) => m.ReportesComponent),
   },
   {
+    path: 'reportes/:id/fotos',
+    loadComponent: () =>
+      import('./features/reportes/reporte-dano-fotos/reporte-dano-fotos.component').then(
+        (m) => m.ReporteDanoFotosComponent,
+      ),
+  },
+  {
     path: 'credito-hipotecario',
     loadComponent: () =>
       import('./features/credito-hipotecario/credito-hipotecario.component').then(
@@ -159,10 +166,38 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'citas',
+        loadComponent: () =>
+          import('./features/admin/citas/citas-calendar.component').then(
+            (m) => m.CitasCalendarComponent,
+          ),
+      },
+      {
         path: 'solicitudes-venta',
         loadComponent: () =>
           import('./features/admin/solicitudes-venta/solicitudes-venta-list.component').then(
             (m) => m.SolicitudesVentaListComponent,
+          ),
+      },
+      {
+        path: 'solicitudes-arriendo',
+        loadComponent: () =>
+          import('./features/admin/solicitudes-arriendo/solicitudes-arriendo-list.component').then(
+            (m) => m.SolicitudesArriendoListComponent,
+          ),
+      },
+      {
+        path: 'solicitudes-arrendar-propiedad',
+        loadComponent: () =>
+          import(
+            './features/admin/solicitudes-arrendar-propiedad/solicitudes-arrendar-propiedad-list.component'
+          ).then((m) => m.SolicitudesArrendarPropiedadListComponent),
+      },
+      {
+        path: 'reportes-dano',
+        loadComponent: () =>
+          import('./features/admin/reportes-dano/reportes-dano-list.component').then(
+            (m) => m.ReportesDanoListComponent,
           ),
       },
     ],

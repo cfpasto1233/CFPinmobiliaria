@@ -12,6 +12,7 @@ class SolicitudVenta(TimestampMixin, Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     nombre_completo: Mapped[str] = mapped_column(String(255), nullable=False)
     medio_comunicacion: Mapped[str] = mapped_column(String(20), nullable=False)
+    numero: Mapped[str | None] = mapped_column(String(20), nullable=True)
     presupuesto_total: Mapped[str] = mapped_column(String(100), nullable=False)
     forma_pago: Mapped[str] = mapped_column(String(30), nullable=False)
 
@@ -19,3 +20,4 @@ class SolicitudVenta(TimestampMixin, Base):
     valor_disponible_credito: Mapped[str | None] = mapped_column(String(100), nullable=True)
     valor_disponible_contado: Mapped[str | None] = mapped_column(String(100), nullable=True)
     forma_pago_otro: Mapped[str | None] = mapped_column(Text, nullable=True)
+    sugerencias: Mapped[str | None] = mapped_column(Text, nullable=True)

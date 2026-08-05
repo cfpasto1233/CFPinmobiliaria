@@ -63,7 +63,7 @@ Scaffolding completo del proyecto. Sin funcionalidad de negocio, pero toda la in
 - ✅ docs/SECURITY.md
 - ✅ docs/DECISIONS.md
 - ✅ docs/MILESTONES.md
-- ✅ docs/GOOGLE_CALENDAR.md
+- ~~✅ docs/GOOGLE_CALENDAR.md~~ (descartado, ver docs/DECISIONS.md — reemplazado por el módulo de Citas)
 - ✅ docs/DEPLOY_VERCEL_RAILWAY.md
 
 ---

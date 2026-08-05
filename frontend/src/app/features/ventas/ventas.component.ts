@@ -19,6 +19,7 @@ type FormaPagoVenta = 'contado' | 'credito_hipotecario' | 'otros';
 type FormFieldName =
   | 'nombreCompleto'
   | 'medioComunicacion'
+  | 'numero'
   | 'presupuestoTotal'
   | 'formaPago'
   | 'sectoresInteres'
@@ -29,6 +30,7 @@ type FormFieldName =
 const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   nombreCompleto: 'El nombre completo es obligatorio.',
   medioComunicacion: 'Selecciona un medio de comunicación.',
+  numero: 'El número de contacto es obligatorio.',
   presupuestoTotal: 'El presupuesto total es obligatorio.',
   formaPago: 'Selecciona una forma de pago.',
   sectoresInteres: 'Indica los sectores de interés.',
@@ -81,10 +83,12 @@ export class VentasComponent implements OnInit {
     medioComunicacion: [null as MedioComunicacion | null, Validators.required],
     presupuestoTotal: ['', [Validators.required, Validators.maxLength(100)]],
     formaPago: [null as FormaPagoVenta | null, Validators.required],
-    sectoresInteres: ['', Validators.maxLength(255)],
     valorDisponibleCredito: ['', Validators.maxLength(100)],
     valorDisponibleContado: ['', Validators.maxLength(100)],
     formaPagoOtro: [''],
+    numero: ['', [Validators.required, Validators.maxLength(20)]],
+    sectoresInteres: ['', [Validators.required, Validators.maxLength(255)]],
+    sugerencias: [''],
   });
 
   ngOnInit(): void {
@@ -115,12 +119,14 @@ export class VentasComponent implements OnInit {
         form: {
           nombre_completo: raw.nombreCompleto ?? '',
           medio_comunicacion: raw.medioComunicacion ?? 'whatsapp',
+          numero: raw.numero ?? '',
           presupuesto_total: raw.presupuestoTotal ?? '',
           forma_pago: raw.formaPago ?? 'contado',
-          sectores_interes: raw.sectoresInteres || undefined,
+          sectores_interes: raw.sectoresInteres ?? '',
           valor_disponible_credito: raw.valorDisponibleCredito || undefined,
           valor_disponible_contado: raw.valorDisponibleContado || undefined,
           forma_pago_otro: raw.formaPagoOtro || undefined,
+          sugerencias: raw.sugerencias || undefined,
         },
       }),
     );
@@ -136,31 +142,25 @@ export class VentasComponent implements OnInit {
   }
 
   private onFormaPagoChange(formaPago: FormaPagoVenta | null): void {
-    const sectoresInteres = this.form.controls.sectoresInteres;
     const valorDisponibleCredito = this.form.controls.valorDisponibleCredito;
     const valorDisponibleContado = this.form.controls.valorDisponibleContado;
     const formaPagoOtro = this.form.controls.formaPagoOtro;
 
-    sectoresInteres.clearValidators();
     valorDisponibleCredito.clearValidators();
     valorDisponibleContado.clearValidators();
     formaPagoOtro.clearValidators();
 
-    sectoresInteres.setValue('');
     valorDisponibleCredito.setValue('');
     valorDisponibleContado.setValue('');
     formaPagoOtro.setValue('');
 
-    if (formaPago === 'contado') {
-      sectoresInteres.setValidators([Validators.required, Validators.maxLength(255)]);
-    } else if (formaPago === 'credito_hipotecario') {
+    if (formaPago === 'credito_hipotecario') {
       valorDisponibleCredito.setValidators([Validators.required, Validators.maxLength(100)]);
       valorDisponibleContado.setValidators([Validators.required, Validators.maxLength(100)]);
     } else if (formaPago === 'otros') {
       formaPagoOtro.setValidators([Validators.required]);
     }
 
-    sectoresInteres.updateValueAndValidity();
     valorDisponibleCredito.updateValueAndValidity();
     valorDisponibleContado.updateValueAndValidity();
     formaPagoOtro.updateValueAndValidity();

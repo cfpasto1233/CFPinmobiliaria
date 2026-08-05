@@ -4,7 +4,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 interface AdminNavItem {
   label: string;
   path: string;
-  icon: 'overview' | 'users' | 'properties' | 'projects' | 'campaign' | 'requests';
+  icon: 'overview' | 'users' | 'properties' | 'projects' | 'campaign' | 'requests' | 'calendar';
+}
+
+interface AdminNavSection {
+  label: string;
+  items: readonly AdminNavItem[];
 }
 
 @Component({
@@ -18,10 +23,31 @@ interface AdminNavItem {
 export class SidebarComponent {
   readonly open = input(false);
 
-  protected readonly navItems: readonly AdminNavItem[] = [
-    { label: 'Propiedades', path: '/admin/propiedades', icon: 'properties' },
-    { label: 'Proyectos', path: '/admin/proyectos', icon: 'projects' },
-    { label: 'Campaña', path: '/admin/campana', icon: 'campaign' },
-    { label: 'Solicitudes de venta', path: '/admin/solicitudes-venta', icon: 'requests' },
+  protected readonly navSections: readonly AdminNavSection[] = [
+    {
+      label: 'Catálogo',
+      items: [
+        { label: 'Propiedades', path: '/admin/propiedades', icon: 'properties' },
+        { label: 'Proyectos', path: '/admin/proyectos', icon: 'projects' },
+      ],
+    },
+    {
+      label: 'Leads y citas',
+      items: [
+        { label: 'Solicitudes de venta', path: '/admin/solicitudes-venta', icon: 'requests' },
+        { label: 'Solicitudes de arriendo', path: '/admin/solicitudes-arriendo', icon: 'requests' },
+        {
+          label: 'Solicitudes de propietarios',
+          path: '/admin/solicitudes-arrendar-propiedad',
+          icon: 'requests',
+        },
+        { label: 'Reportes de daño', path: '/admin/reportes-dano', icon: 'requests' },
+        { label: 'Citas', path: '/admin/citas', icon: 'calendar' },
+      ],
+    },
+    {
+      label: 'Marketing',
+      items: [{ label: 'Campaña', path: '/admin/campana', icon: 'campaign' }],
+    },
   ];
 }

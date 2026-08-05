@@ -47,7 +47,24 @@
 .sidebar-nav {
   display: flex;
   flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
   gap: 0.25rem;
+}
+
+.sidebar-section-label {
+  padding: 0 0.9rem;
+  margin-bottom: 0.35rem;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .sidebar-link {
@@ -85,5 +102,8 @@
 }
 
 .sidebar-link-label {
-  white-space: nowrap;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.25;
 }

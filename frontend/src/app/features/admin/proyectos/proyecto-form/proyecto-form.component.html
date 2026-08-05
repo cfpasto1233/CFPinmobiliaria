@@ -76,6 +76,65 @@
         </div>
 
         <div class="proyecto-form-field">
+          <label for="precio" class="proyecto-form-label">Precio *</label>
+          <div class="input-group" [class.is-invalid]="fieldError('precio')">
+            <span class="input-group-text">$</span>
+            <input
+              id="precio"
+              type="number"
+              min="1"
+              class="form-control"
+              [class.is-invalid]="fieldError('precio')"
+              formControlName="precio"
+            />
+            <span class="input-group-text">COP</span>
+          </div>
+          @if (fieldError('precio'); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="proyecto-form-field">
+          <div class="form-check">
+            <input
+              id="financiacion"
+              type="checkbox"
+              class="form-check-input"
+              formControlName="financiacion"
+            />
+            <label for="financiacion" class="form-check-label">¿Tiene financiación?</label>
+          </div>
+        </div>
+
+        @if (mostrarFinanciacionDescripcion()) {
+          <div class="proyecto-form-field">
+            <label for="financiacionDescripcion" class="proyecto-form-label">Descripción de la financiación *</label>
+            <textarea
+              id="financiacionDescripcion"
+              class="form-control"
+              rows="3"
+              [class.is-invalid]="fieldError('financiacionDescripcion')"
+              formControlName="financiacionDescripcion"
+            ></textarea>
+            @if (fieldError('financiacionDescripcion'); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+          </div>
+        }
+
+        <div class="proyecto-form-field">
+          <div class="form-check">
+            <input
+              id="creditoHipotecario"
+              type="checkbox"
+              class="form-check-input"
+              formControlName="creditoHipotecario"
+            />
+            <label for="creditoHipotecario" class="form-check-label">¿Aplica crédito hipotecario?</label>
+          </div>
+        </div>
+
+        <div class="proyecto-form-field">
           <label class="proyecto-form-label">Foto de portada {{ isEditMode ? '' : '*' }}</label>
 
           @if (fotoPortadaPreview(); as preview) {
