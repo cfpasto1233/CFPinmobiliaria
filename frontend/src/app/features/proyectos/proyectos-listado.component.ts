@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
-import { ProjectCardComponent } from '../../shared/components/project-card/project-card.component';
+import { ProjectStoryComponent } from '../../shared/components/project-story/project-story.component';
 import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 import { ProyectosActions } from '../../store/Proyectos/proyectos.actions';
 import { selectProyectosItems, selectProyectosLoading } from '../../store/Proyectos/proyectos.selectors';
@@ -11,7 +11,7 @@ import { selectProyectosItems, selectProyectosLoading } from '../../store/Proyec
 @Component({
   selector: 'app-proyectos-listado',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, ProjectCardComponent, PublicarWhatsappFabComponent, RouterLink],
+  imports: [NavbarComponent, FooterComponent, ProjectStoryComponent, PublicarWhatsappFabComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './proyectos-listado.component.html',
   styleUrl: './proyectos-listado.component.scss',

@@ -1,0 +1,166 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.proyecto-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  background: $cfpasto-white;
+
+  &.is-reversed {
+    background: $cfpasto-bg;
+  }
+
+  @media (max-width: 991.98px) {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+}
+
+.proyecto-story-media {
+  position: relative;
+  overflow: hidden;
+  order: 1;
+  background: $cfpasto-bg-subtle;
+
+  @media (max-width: 991.98px) {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.is-reversed .proyecto-story-media {
+  order: 2;
+}
+
+.proyecto-story-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.proyecto-story-media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba($cfpasto-primary, 0) 55%, rgba($cfpasto-primary-dark, 0.5) 100%);
+  pointer-events: none;
+}
+
+.proyecto-story-body {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 5vw, 5rem);
+}
+
+.is-reversed .proyecto-story-body {
+  order: 1;
+}
+
+.proyecto-story-content {
+  max-width: 30rem;
+}
+
+.proyecto-story-index {
+  display: block;
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.08em;
+  color: $cfpasto-accent-dark;
+  margin-bottom: 1rem;
+}
+
+.proyecto-story-meta {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $cfpasto-text-muted;
+  margin-bottom: 0.75rem;
+}
+
+.proyecto-story-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+  color: $cfpasto-text-dark;
+  margin-bottom: 1.25rem;
+}
+
+.proyecto-story-description {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  line-height: 1.7;
+  color: $cfpasto-text-muted;
+  margin-bottom: 1rem;
+}
+
+.proyecto-story-financiacion {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  line-height: 1.6;
+  color: $cfpasto-text-muted;
+  background: rgba($cfpasto-primary, 0.05);
+  border: 1px solid $cfpasto-border;
+  border-radius: $cfpasto-radius;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.proyecto-story-price {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-primary;
+  margin-bottom: 1rem;
+}
+
+.proyecto-story-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.proyecto-story-tag {
+  padding: 0.3rem 0.75rem;
+  border-radius: 50rem;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  background: $cfpasto-white;
+  color: $cfpasto-text-dark;
+  border: 1px solid $cfpasto-border;
+}
+
+.proyecto-story-cta {
+  align-self: flex-start;
+  background: $cfpasto-primary;
+  border-color: $cfpasto-primary;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  padding: 0.75rem 1.75rem;
+  border-radius: $cfpasto-radius;
+  transition: transform 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    background: $cfpasto-primary-dark;
+    border-color: $cfpasto-primary-dark;
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}

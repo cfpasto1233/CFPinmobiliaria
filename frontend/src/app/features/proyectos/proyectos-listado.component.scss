@@ -4,6 +4,14 @@
   display: block;
 }
 
+.proyectos-content {
+  display: block;
+}
+
+app-project-story {
+  display: block;
+}
+
 .proyectos-hero {
   padding: 6rem 1.5rem 2.5rem;
   background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
@@ -53,12 +61,6 @@
   margin: 0 auto;
 }
 
-.proyectos-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem 5rem;
-}
-
 .proyectos-state {
   display: flex;
   flex-direction: column;
@@ -84,16 +86,3 @@
   margin: 0;
 }
 
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-
-  @media (max-width: 1199.98px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 575.98px) {
-    grid-template-columns: 1fr;
-  }
-}

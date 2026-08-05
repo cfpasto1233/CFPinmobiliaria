@@ -1,0 +1,41 @@
+<section class="proyecto-story" [class.is-reversed]="isReversed()">
+  <div class="proyecto-story-media">
+    <img
+      [src]="project().foto_portada_url"
+      [alt]="project().nombre"
+      [loading]="index() === 0 ? 'eager' : 'lazy'"
+      class="proyecto-story-img"
+    />
+    <div class="proyecto-story-media-overlay"></div>
+  </div>
+
+  <div class="proyecto-story-body">
+    <div class="proyecto-story-content">
+      <span class="proyecto-story-index">{{ index() + 1 | number: '2.0-0' }}</span>
+      <p class="proyecto-story-meta">{{ estadoLabel() }} · {{ project().ubicacion }}</p>
+      <h2 class="proyecto-story-title">{{ project().nombre }}</h2>
+      <p class="proyecto-story-description">{{ project().descripcion }}</p>
+
+      @if (project().financiacion && project().financiacion_descripcion) {
+        <p class="proyecto-story-financiacion">{{ project().financiacion_descripcion }}</p>
+      }
+
+      <p class="proyecto-story-price">{{ project().precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</p>
+
+      @if (project().financiacion || project().credito_hipotecario) {
+        <div class="proyecto-story-tags">
+          @if (project().financiacion) {
+            <span class="proyecto-story-tag">Financiación disponible</span>
+          }
+          @if (project().credito_hipotecario) {
+            <span class="proyecto-story-tag">Crédito hipotecario</span>
+          }
+        </div>
+      }
+
+      <a [href]="whatsappHref()" target="_blank" rel="noopener" class="btn btn-primary proyecto-story-cta">
+        Consultar por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
