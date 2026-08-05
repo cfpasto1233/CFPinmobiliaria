@@ -8,5 +8,16 @@
     <p class="project-location">{{ project().ubicacion }}</p>
     <h3 class="project-name">{{ project().nombre }}</h3>
     <p class="project-description">{{ project().descripcion }}</p>
+    <p class="project-price">{{ project().precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</p>
+    @if (project().financiacion || project().credito_hipotecario) {
+      <div class="project-tags">
+        @if (project().financiacion) {
+          <span class="project-tag">Financiación disponible</span>
+        }
+        @if (project().credito_hipotecario) {
+          <span class="project-tag">Crédito hipotecario</span>
+        }
+      </div>
+    }
   </div>
 </article>

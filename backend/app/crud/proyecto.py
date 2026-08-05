@@ -16,6 +16,10 @@ def create_proyecto(*, session: Session, form: ProyectoForm, foto_portada_key: s
         estado=form.estado,
         foto_portada_key=foto_portada_key,
         orden=max_orden + 1,
+        precio=form.precio,
+        financiacion=form.financiacion,
+        financiacion_descripcion=form.financiacion_descripcion,
+        credito_hipotecario=form.credito_hipotecario,
     )
     session.add(db_obj)
     session.commit()

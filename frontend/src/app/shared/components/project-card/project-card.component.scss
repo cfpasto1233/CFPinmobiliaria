@@ -91,3 +91,30 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.project-price {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-lg;
+  color: $cfpasto-primary;
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+
+.project-tag {
+  padding: 0.25rem 0.6rem;
+  border-radius: 50rem;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  background: $cfpasto-bg-subtle;
+  color: $cfpasto-text-dark;
+  border: 1px solid $cfpasto-border;
+}

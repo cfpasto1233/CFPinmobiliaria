@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, effect, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -14,13 +15,25 @@ import {
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 
-type FormFieldName = 'nombre' | 'descripcion' | 'ubicacion' | 'estado';
+type FormFieldName =
+  | 'nombre'
+  | 'descripcion'
+  | 'ubicacion'
+  | 'estado'
+  | 'precio'
+  | 'financiacionDescripcion';
 
 const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   nombre: 'El nombre es obligatorio.',
   descripcion: 'La descripción es obligatoria.',
   ubicacion: 'La ubicación es obligatoria.',
   estado: 'Selecciona el estado del proyecto.',
+  precio: 'El precio es obligatorio.',
+  financiacionDescripcion: 'Indica la descripción de la financiación.',
+};
+
+const MIN_MESSAGES: Partial<Record<FormFieldName, string>> = {
+  precio: 'El precio debe ser mayor a 0.',
 };
 
 @Component({
@@ -45,8 +58,9 @@ export class ProyectoFormComponent implements OnInit {
   protected readonly selected = this.store.selectSignal(selectProyectoSelected);
 
   protected readonly estadoOptions: { value: EstadoProyecto; label: string }[] = [
-    { value: 'preventa', label: 'Preventa' },
-    { value: 'en_construccion', label: 'En construcción' },
+    { value: 'planos', label: 'Planos' },
+    { value: 'construccion_1', label: 'Construcción I' },
+    { value: 'construccion_2', label: 'Construcción II' },
     { value: 'entrega_inmediata', label: 'Entrega inmediata' },
   ];
 
@@ -54,8 +68,19 @@ export class ProyectoFormComponent implements OnInit {
     nombre: ['', [Validators.required, Validators.maxLength(255)]],
     descripcion: ['', Validators.required],
     ubicacion: ['', [Validators.required, Validators.maxLength(255)]],
-    estado: ['preventa' as EstadoProyecto, Validators.required],
+    estado: ['planos' as EstadoProyecto, Validators.required],
+    precio: [null as number | null, [Validators.required, Validators.min(1)]],
+    financiacion: [false],
+    financiacionDescripcion: [null as string | null],
+    creditoHipotecario: [false],
   });
+
+  // Signal derivado del control para poder mostrar/ocultar la descripción de
+  // financiación reactivamente (OnPush) sin suscribirse manualmente en la vista.
+  protected readonly financiacionValue = toSignal(this.form.controls.financiacion.valueChanges, {
+    initialValue: this.form.controls.financiacion.value,
+  });
+  protected readonly mostrarFinanciacionDescripcion = computed(() => this.financiacionValue() === true);
 
   protected readonly fotoPortadaFile = signal<File | null>(null);
   protected readonly fotoPortadaPreview = signal<string | null>(null);
@@ -71,9 +96,20 @@ export class ProyectoFormComponent implements OnInit {
           descripcion: item.descripcion,
           ubicacion: item.ubicacion,
           estado: item.estado as EstadoProyecto,
+          precio: Number(item.precio),
+          financiacion: item.financiacion,
+          financiacionDescripcion: item.financiacion_descripcion,
+          creditoHipotecario: item.credito_hipotecario,
         });
       }
     });
+
+    // La descripción de financiación es obligatoria solo cuando financiacion=true —
+    // se actualiza el validator en caliente en vez de duplicar la regla en el template.
+    this.form.controls.financiacion.valueChanges.subscribe((financiacion) =>
+      this.updateFinanciacionValidators(financiacion),
+    );
+    this.updateFinanciacionValidators(this.form.controls.financiacion.value);
   }
 
   ngOnInit(): void {
@@ -87,6 +123,7 @@ export class ProyectoFormComponent implements OnInit {
     if (!control || !control.invalid || !(control.dirty || control.touched)) return null;
     if (control.hasError('required')) return REQUIRED_MESSAGES[name];
     if (control.hasError('maxlength')) return 'Máximo 255 caracteres.';
+    if (control.hasError('min')) return MIN_MESSAGES[name] ?? 'El valor no puede ser negativo.';
     return null;
   }
 
@@ -129,7 +166,11 @@ export class ProyectoFormComponent implements OnInit {
       nombre: raw.nombre ?? '',
       descripcion: raw.descripcion ?? '',
       ubicacion: raw.ubicacion ?? '',
-      estado: raw.estado ?? 'preventa',
+      estado: raw.estado ?? 'planos',
+      precio: raw.precio ?? 0,
+      financiacion: raw.financiacion ?? false,
+      financiacion_descripcion: raw.financiacionDescripcion,
+      credito_hipotecario: raw.creditoHipotecario ?? false,
     };
 
     if (this.isEditMode && this.proyectoId) {
@@ -162,6 +203,13 @@ export class ProyectoFormComponent implements OnInit {
 
     this.fotoPortadaFile.set(file);
     this.fotoPortadaPreview.set(URL.createObjectURL(file));
+  }
+
+  private updateFinanciacionValidators(financiacion: boolean | null): void {
+    this.form.controls.financiacionDescripcion.setValidators(
+      financiacion ? [Validators.required] : [],
+    );
+    this.form.controls.financiacionDescripcion.updateValueAndValidity({ emitEvent: false });
   }
 
   private validateImage(file: File): string | null {

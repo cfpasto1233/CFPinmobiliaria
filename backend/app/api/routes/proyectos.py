@@ -65,11 +65,22 @@ def create_proyecto_endpoint(
     descripcion: Annotated[str, Form(min_length=1)],
     ubicacion: Annotated[str, Form(min_length=1, max_length=255)],
     estado: Annotated[EstadoProyecto, Form()],
+    precio: Annotated[int, Form(gt=0)],
     foto_portada: Annotated[UploadFile, File()],
+    financiacion: Annotated[bool, Form()] = False,
+    financiacion_descripcion: Annotated[str | None, Form()] = None,
+    credito_hipotecario: Annotated[bool, Form()] = False,
 ) -> ProyectoPublic:
     try:
         form = ProyectoForm(
-            nombre=nombre, descripcion=descripcion, ubicacion=ubicacion, estado=estado
+            nombre=nombre,
+            descripcion=descripcion,
+            ubicacion=ubicacion,
+            estado=estado,
+            precio=precio,
+            financiacion=financiacion,
+            financiacion_descripcion=financiacion_descripcion,
+            credito_hipotecario=credito_hipotecario,
         )
     except ValidationError as exc:
         raise HTTPException(status_code=422, detail=_mensaje_error_validacion(exc)) from exc

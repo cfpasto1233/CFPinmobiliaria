@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { RouterLink } from '@angular/router';
@@ -11,15 +12,16 @@ import {
 } from '../../../../store/Proyectos/proyectos.selectors';
 
 const ESTADO_LABELS: Record<string, string> = {
-  preventa: 'Preventa',
-  en_construccion: 'En construcción',
+  planos: 'Planos',
+  construccion_1: 'Construcción I',
+  construccion_2: 'Construcción II',
   entrega_inmediata: 'Entrega inmediata',
 };
 
 @Component({
   selector: 'app-proyectos-list',
   standalone: true,
-  imports: [RouterLink, CdkDropList, CdkDrag, CdkDragHandle],
+  imports: [RouterLink, CdkDropList, CdkDrag, CdkDragHandle, CurrencyPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './proyectos-list.component.html',
   styleUrl: './proyectos-list.component.scss',

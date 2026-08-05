@@ -29,6 +29,7 @@
             <span></span>
             <span>Nombre</span>
             <span>Ubicación</span>
+            <span>Precio</span>
             <span>Estado</span>
             <span>Acciones</span>
           </div>
@@ -40,6 +41,7 @@
                 <img [src]="item.foto_portada_url" [alt]="item.nombre" class="proyectos-list-thumb" />
                 <span class="proyectos-cell-nombre">{{ item.nombre }}</span>
                 <span>{{ item.ubicacion }}</span>
+                <span>{{ item.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
                 <span>{{ estadoLabel(item.estado) }}</span>
                 <span class="proyectos-row-actions">
                   <a [routerLink]="['/admin/proyectos', item.id, 'editar']" class="btn btn-sm btn-soft-secondary me-1">

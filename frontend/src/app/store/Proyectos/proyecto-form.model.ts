@@ -1,4 +1,4 @@
-export type EstadoProyecto = 'preventa' | 'en_construccion' | 'entrega_inmediata';
+export type EstadoProyecto = 'planos' | 'construccion_1' | 'construccion_2' | 'entrega_inmediata';
 
 // Igual que PropiedadForm: el endpoint de creación recibe cada campo como multipart
 // Form() individual, no como body JSON, así que este modelo no viene del cliente
@@ -9,4 +9,8 @@ export interface ProyectoForm {
   descripcion: string;
   ubicacion: string;
   estado: EstadoProyecto;
+  precio: number;
+  financiacion: boolean;
+  financiacion_descripcion: string | null;
+  credito_hipotecario: boolean;
 }
