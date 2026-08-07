@@ -131,38 +131,34 @@
         </div>
       </div>
 
-      <div class="arrendar-row">
-        <div class="arrendar-field">
-          <label for="sectorInteres" class="arrendar-label">Sector de interés *</label>
-          <input
-            id="sectorInteres"
-            type="text"
-            class="arrendar-input"
-            placeholder="Ej: Paraná, Santa Monica y Aquine"
-            [class.is-invalid]="fieldError('sectorInteres')"
-            formControlName="sectorInteres"
-          />
-          @if (fieldError('sectorInteres'); as err) {
-            <div class="arrendar-error">{{ err }}</div>
-          }
-        </div>
+      <div class="arrendar-field">
+        <label for="sectorInteres" class="arrendar-label">Sector de interés *</label>
+        <input
+          id="sectorInteres"
+          type="text"
+          class="arrendar-input"
+          placeholder="Ej: Paraná, Santa Monica y Aquine"
+          [class.is-invalid]="fieldError('sectorInteres')"
+          formControlName="sectorInteres"
+        />
+        @if (fieldError('sectorInteres'); as err) {
+          <div class="arrendar-error">{{ err }}</div>
+        }
       </div>
 
-      <div class="arrendar-row">
-        <div class="arrendar-field">
-          <label for="observaciones" class="arrendar-label">Sugerencias u observaciones</label>
-          <textarea
-            id="observaciones"
-            rows="3"
-            class="arrendar-input arrendar-textarea"
-            placeholder="Habitaciones, mascotas, parqueadero..."
-            [class.is-invalid]="fieldError('observaciones')"
-            formControlName="observaciones"
-          ></textarea>
-          @if (fieldError('observaciones'); as err) {
-            <div class="arrendar-error">{{ err }}</div>
-          }
-        </div>
+      <div class="arrendar-field">
+        <label for="observaciones" class="arrendar-label">Sugerencias u observaciones</label>
+        <textarea
+          id="observaciones"
+          rows="3"
+          class="arrendar-input arrendar-textarea"
+          placeholder="Habitaciones, mascotas, parqueadero..."
+          [class.is-invalid]="fieldError('observaciones')"
+          formControlName="observaciones"
+        ></textarea>
+        @if (fieldError('observaciones'); as err) {
+          <div class="arrendar-error">{{ err }}</div>
+        }
       </div>
 
       <div class="arrendar-actions">

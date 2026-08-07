@@ -16,12 +16,15 @@ type FormFieldName =
   | 'medioComunicacion'
   | 'numeroContacto'
   | 'direccionInmueble'
+  | 'precioEstimado'
   | 'observaciones';
 
 const REQUIRED_MESSAGES: Partial<Record<FormFieldName, string>> = {
-  nombrePropietario: 'El nombre del propietario es obligatorio.',
+  nombrePropietario: 'El nombre completo es obligatorio.',
+  medioComunicacion: 'Selecciona un medio de comunicación.',
   numeroContacto: 'El número de contacto es obligatorio.',
   direccionInmueble: 'La dirección del inmueble es obligatoria.',
+  precioEstimado: 'El precio estimado es obligatorio.',
 };
 
 @Component({
@@ -55,9 +58,11 @@ export class ArrendarPropiedadComponent {
 
   protected readonly form = this.fb.group({
     nombrePropietario: ['', [Validators.required, Validators.maxLength(255)]],
-    medioComunicacion: [null as MedioComunicacion | null],
+    medioComunicacion: [null as MedioComunicacion | null, Validators.required],
     numeroContacto: ['', [Validators.required, Validators.pattern(/^[0-9+\s()-]{7,20}$/)]],
     direccionInmueble: ['', [Validators.required, Validators.maxLength(255)]],
+    precioEstimado: ['', [Validators.required, Validators.maxLength(100)]],
+    descripcionCaracteristicas: ['', Validators.maxLength(1000)],
     observaciones: ['', Validators.maxLength(500)],
   });
 
@@ -81,9 +86,11 @@ export class ArrendarPropiedadComponent {
       SolicitudesArrendarPropiedadActions.create({
         form: {
           nombre_propietario: raw.nombrePropietario ?? '',
-          medio_comunicacion: raw.medioComunicacion ?? undefined,
+          medio_comunicacion: raw.medioComunicacion ?? 'whatsapp',
           numero_contacto: raw.numeroContacto ?? '',
           direccion_inmueble: raw.direccionInmueble ?? '',
+          precio_estimado: raw.precioEstimado ?? '',
+          descripcion_caracteristicas: raw.descripcionCaracteristicas || undefined,
           observaciones: raw.observaciones || undefined,
         },
       }),

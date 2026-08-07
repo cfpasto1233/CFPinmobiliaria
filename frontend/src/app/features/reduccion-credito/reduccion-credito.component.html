@@ -21,65 +21,69 @@
     <div class="reduccion-card">
       <h2 class="reduccion-card-title">Datos de tu solicitud</h2>
 
-      <div class="reduccion-field">
-        <label for="nombreCompleto" class="reduccion-label">Nombre completo *</label>
-        <input
-          id="nombreCompleto"
-          type="text"
-          class="reduccion-input"
-          placeholder="Tu nombre"
-          [class.is-invalid]="fieldError('nombreCompleto')"
-          formControlName="nombreCompleto"
-        />
-        @if (fieldError('nombreCompleto'); as err) {
-          <div class="reduccion-error">{{ err }}</div>
-        }
+      <div class="reduccion-row">
+        <div class="reduccion-field">
+          <label for="nombreCompleto" class="reduccion-label">Nombre completo *</label>
+          <input
+            id="nombreCompleto"
+            type="text"
+            class="reduccion-input"
+            placeholder="Tu nombre"
+            [class.is-invalid]="fieldError('nombreCompleto')"
+            formControlName="nombreCompleto"
+          />
+          @if (fieldError('nombreCompleto'); as err) {
+            <div class="reduccion-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="reduccion-field">
+          <label for="numeroContacto" class="reduccion-label">Número de contacto *</label>
+          <input
+            id="numeroContacto"
+            type="tel"
+            class="reduccion-input"
+            placeholder="+57 300 000 0000"
+            [class.is-invalid]="fieldError('numeroContacto')"
+            formControlName="numeroContacto"
+          />
+          @if (fieldError('numeroContacto'); as err) {
+            <div class="reduccion-error">{{ err }}</div>
+          }
+        </div>
       </div>
 
-      <div class="reduccion-field">
-        <label for="numeroContacto" class="reduccion-label">Número de contacto *</label>
-        <input
-          id="numeroContacto"
-          type="tel"
-          class="reduccion-input"
-          placeholder="+57 300 000 0000"
-          [class.is-invalid]="fieldError('numeroContacto')"
-          formControlName="numeroContacto"
-        />
-        @if (fieldError('numeroContacto'); as err) {
-          <div class="reduccion-error">{{ err }}</div>
-        }
-      </div>
+      <div class="reduccion-row">
+        <div class="reduccion-field">
+          <label for="entidadFinanciera" class="reduccion-label">Entidad financiera actual *</label>
+          <input
+            id="entidadFinanciera"
+            type="text"
+            class="reduccion-input"
+            placeholder="Ej: Bancolombia, Davivienda..."
+            [class.is-invalid]="fieldError('entidadFinanciera')"
+            formControlName="entidadFinanciera"
+          />
+          @if (fieldError('entidadFinanciera'); as err) {
+            <div class="reduccion-error">{{ err }}</div>
+          }
+        </div>
 
-      <div class="reduccion-field">
-        <label for="entidadFinanciera" class="reduccion-label">Entidad financiera actual *</label>
-        <input
-          id="entidadFinanciera"
-          type="text"
-          class="reduccion-input"
-          placeholder="Ej: Bancolombia, Davivienda..."
-          [class.is-invalid]="fieldError('entidadFinanciera')"
-          formControlName="entidadFinanciera"
-        />
-        @if (fieldError('entidadFinanciera'); as err) {
-          <div class="reduccion-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="reduccion-field">
-        <label class="reduccion-label">Motivo de tu solicitud *</label>
-        <ng-select
-          class="reduccion-select"
-          [items]="motivoOptions"
-          bindLabel="label"
-          bindValue="value"
-          [clearable]="false"
-          placeholder="Seleccionar..."
-          formControlName="motivoSolicitud"
-        ></ng-select>
-        @if (fieldError('motivoSolicitud'); as err) {
-          <div class="reduccion-error">{{ err }}</div>
-        }
+        <div class="reduccion-field">
+          <label class="reduccion-label">Motivo de tu solicitud *</label>
+          <ng-select
+            class="reduccion-select"
+            [items]="motivoOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            placeholder="Seleccionar..."
+            formControlName="motivoSolicitud"
+          ></ng-select>
+          @if (fieldError('motivoSolicitud'); as err) {
+            <div class="reduccion-error">{{ err }}</div>
+          }
+        </div>
       </div>
 
       <div class="reduccion-field">

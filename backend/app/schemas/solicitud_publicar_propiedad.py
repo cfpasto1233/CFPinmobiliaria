@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 MedioComunicacion = Literal["whatsapp", "llamada", "correo"]
 
 
-class SolicitudArrendarPropiedadForm(BaseModel):
+class SolicitudPublicarPropiedadForm(BaseModel):
     nombre_propietario: str = Field(max_length=255)
     medio_comunicacion: MedioComunicacion
     numero_contacto: str = Field(max_length=20)
@@ -17,7 +17,7 @@ class SolicitudArrendarPropiedadForm(BaseModel):
     observaciones: str | None = Field(default=None, max_length=500)
 
 
-class SolicitudArrendarPropiedadPublic(BaseModel):
+class SolicitudPublicarPropiedadPublic(BaseModel):
     id: uuid.UUID
     nombre_propietario: str
     medio_comunicacion: str | None
@@ -31,6 +31,6 @@ class SolicitudArrendarPropiedadPublic(BaseModel):
     model_config = {"from_attributes": True}
 
 
-class SolicitudesArrendarPropiedadPublic(BaseModel):
-    data: list[SolicitudArrendarPropiedadPublic]
+class SolicitudesPublicarPropiedadPublic(BaseModel):
+    data: list[SolicitudPublicarPropiedadPublic]
     count: int

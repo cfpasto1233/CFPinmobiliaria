@@ -1,6 +1,6 @@
 <div class="solicitudes-list">
   <div class="solicitudes-list-header">
-    <h1 class="solicitudes-list-title">Solicitudes de propietarios (arrendar propiedad)</h1>
+    <h1 class="solicitudes-list-title">Solicitudes de publicación</h1>
   </div>
 
   @if (error(); as err) {
@@ -50,6 +50,6 @@
   </div>
 
   @if (selected(); as solicitud) {
-    <app-solicitud-arrendar-propiedad-detalle-modal [solicitud]="solicitud" (closed)="closeDetalle()" />
+    <app-solicitud-publicar-propiedad-detalle-modal [solicitud]="solicitud" (closed)="closeDetalle()" />
   }
 </div>

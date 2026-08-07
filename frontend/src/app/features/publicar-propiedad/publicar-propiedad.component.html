@@ -9,46 +9,202 @@
     Volver al inicio
   </a>
 
-  <p class="publicar-propiedad-eyebrow">Servicio asistido</p>
-  <h1 class="publicar-propiedad-title">Publica tu propiedad con CFP Inmobiliaria</h1>
+  <p class="publicar-propiedad-kicker">— CFP Inmobiliaria · Publicaciones</p>
+
+  <h1 class="publicar-propiedad-title">
+    Publica tu propiedad con
+    <span class="is-accent">respaldo, visibilidad</span>
+    y resultados reales.
+  </h1>
+
   <p class="publicar-propiedad-subtitle">
-    Elige el plan que mejor se ajuste a lo que necesitas. Nuestro equipo se encarga de fotografiar,
-    publicar y promocionar tu propiedad.
+    Una publicación al día puede superar las <strong class="is-accent">1.000 vistas</strong> en redes sociales.
   </p>
+
+  <button type="button" class="publicar-propiedad-cta" (click)="scrollToForm()">
+    Publica ahora con CFP
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14" />
+      <path d="M12 5l7 7-7 7" />
+    </svg>
+  </button>
 </section>
 
-<section class="plans">
-  <div class="plans-grid">
-    @for (plan of plans; track plan.id) {
-      <div class="plan-card" [class.is-highlighted]="plan.highlighted">
-        @if (plan.badge) {
-          <div class="plan-badge">{{ plan.badge }}</div>
-        }
+<section class="valor-agregado">
+  <p class="valor-agregado-eyebrow">Por qué elegirnos</p>
+  <h2 class="valor-agregado-title">Valor agregado CFP</h2>
 
-        <div class="plan-card-body">
-          <p class="plan-eyebrow">{{ plan.eyebrow }}</p>
+  <div class="valor-agregado-grid">
+    <div class="valor-agregado-item">
+      <svg class="valor-agregado-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="22" x2="21" y2="22"></line>
+        <line x1="6" y1="18" x2="6" y2="11"></line>
+        <line x1="10" y1="18" x2="10" y2="11"></line>
+        <line x1="14" y1="18" x2="14" y2="11"></line>
+        <line x1="18" y1="18" x2="18" y2="11"></line>
+        <polygon points="12 2 21 7 3 7"></polygon>
+      </svg>
+      <h3 class="valor-agregado-item-title">Estudio financiero con bancos</h3>
+      <p class="valor-agregado-item-text">
+        Conectamos tu propiedad con entidades bancarias para facilitar créditos hipotecarios a
+        compradores calificados.
+      </p>
+    </div>
 
-          <p class="plan-price">
-            {{ plan.price }}<span class="plan-price-suffix">{{ plan.priceSuffix }}</span>
-          </p>
+    <div class="valor-agregado-item">
+      <svg class="valor-agregado-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="5" r="2"></circle>
+        <circle cx="5" cy="19" r="2"></circle>
+        <circle cx="19" cy="19" r="2"></circle>
+        <path d="M12 7v3.5M12 10.5l-5.5 6.5M12 10.5l5.5 6.5"></path>
+      </svg>
+      <h3 class="valor-agregado-item-title">Red de 10 inmobiliarias aliadas</h3>
+      <p class="valor-agregado-item-text">
+        Tu propiedad se difunde entre nuestra red de aliados estratégicos, multiplicando la
+        exposición y acelerando el cierre.
+      </p>
+    </div>
 
-          <ul class="plan-features">
-            @for (feature of plan.features; track feature) {
-              <li>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                {{ feature }}
-              </li>
-            }
-          </ul>
+    <div class="valor-agregado-item">
+      <svg class="valor-agregado-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 3h8a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"></path>
+        <path d="M7 5H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1"></path>
+        <line x1="8" y1="12" x2="16" y2="12"></line>
+        <line x1="8" y1="16" x2="16" y2="16"></line>
+      </svg>
+      <h3 class="valor-agregado-item-title">Acompañamiento total</h3>
+      <p class="valor-agregado-item-text">
+        Trámites notariales, revisión jurídica y negociación justa. Estamos contigo desde la
+        captación hasta la firma de escritura.
+      </p>
+    </div>
 
-          <button type="button" class="plan-cta" [class.is-solid]="plan.highlighted" (click)="selectPlan(plan.id)">
-            {{ plan.ctaLabel }}
-          </button>
-        </div>
+    <div class="valor-agregado-item">
+      <svg class="valor-agregado-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+      <h3 class="valor-agregado-item-title">Resultados comprobados</h3>
+      <p class="valor-agregado-item-text">
+        Mínimo 3 visitas semanales garantizadas. Promedio de venta: 3 meses. Tu propiedad no se
+        queda estancada.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="segmentacion">
+  <div class="segmentacion-inner">
+    <div class="segmentacion-icon-box">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"></circle>
+        <circle cx="12" cy="12" r="5"></circle>
+        <circle cx="12" cy="12" r="1.5"></circle>
+      </svg>
+    </div>
+
+    <div class="segmentacion-content">
+      <p class="segmentacion-eyebrow">Segmentación estratégica</p>
+      <h2 class="segmentacion-title">Tu inmueble llega al comprador correcto</h2>
+      <p class="segmentacion-text">
+        Tu propiedad se promociona a diario en <span class="is-accent">ferias inmobiliarias, tomas
+        empresariales</span> y <span class="is-accent">campañas digitales segmentadas</span>, con
+        precios desde <span class="is-accent">110 millones</span> hasta más de
+        <span class="is-accent">2.500 millones de pesos</span>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="comparativo">
+  <p class="comparativo-eyebrow">Comparativo</p>
+  <h2 class="comparativo-title">CFP vs otras inmobiliarias</h2>
+
+  <div class="comparativo-grid">
+    <div class="comparativo-panel">
+      <div class="comparativo-panel-header">
+        <span class="comparativo-panel-label">Lo que ofrecen</span>
+        <span class="comparativo-badge">Clasificados</span>
       </div>
-    }
+      <h3 class="comparativo-panel-title is-muted">Solo publican.</h3>
+      <ul class="comparativo-list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Foto básica, sin edición
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Portal único, sin red aliada
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Sin revisión jurídica
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Sin acompañamiento en negociación
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Pago mensual sin garantía de venta
+        </li>
+      </ul>
+    </div>
+
+    <div class="comparativo-panel is-highlighted">
+      <div class="comparativo-panel-header">
+        <span class="comparativo-panel-label">Lo que hacemos</span>
+        <span class="comparativo-badge is-solid">CFP Inmobiliaria</span>
+      </div>
+      <h3 class="comparativo-panel-title">Nos interesa que <span class="is-accent">se venda</span>.</h3>
+      <ul class="comparativo-list is-highlighted">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span class="is-accent-text">Sin pago inicial</span>&nbsp;— solo cobramos al vender
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Fotos y videos profesionales + dron
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Ferias, portafolio de aliados y campañas digitales
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Respaldo jurídico completo y notaría
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Entrega rápida de escritura y acompañamiento total
+        </li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -74,6 +230,24 @@
         </div>
 
         <div class="publicar-propiedad-field">
+          <label class="publicar-propiedad-label">Medio de comunicación *</label>
+          <ng-select
+            class="publicar-propiedad-select"
+            [items]="medioComunicacionOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            placeholder="Seleccionar..."
+            formControlName="medioComunicacion"
+          ></ng-select>
+          @if (fieldError('medioComunicacion'); as err) {
+            <div class="publicar-propiedad-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="publicar-propiedad-row">
+        <div class="publicar-propiedad-field">
           <label for="numeroContacto" class="publicar-propiedad-label">Número de contacto *</label>
           <input
             id="numeroContacto"
@@ -87,70 +261,49 @@
             <div class="publicar-propiedad-error">{{ err }}</div>
           }
         </div>
-      </div>
 
-      <div class="publicar-propiedad-field">
-        <label for="direccionInmueble" class="publicar-propiedad-label">Dirección del inmueble *</label>
-        <input
-          id="direccionInmueble"
-          type="text"
-          class="publicar-propiedad-input"
-          placeholder="Cra 15 #80-20, Bogotá"
-          [class.is-invalid]="fieldError('direccionInmueble')"
-          formControlName="direccionInmueble"
-        />
-        @if (fieldError('direccionInmueble'); as err) {
-          <div class="publicar-propiedad-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="publicar-propiedad-row">
         <div class="publicar-propiedad-field">
-          <label for="sectorBarrio" class="publicar-propiedad-label">Sector / Barrio *</label>
+          <label for="direccionInmueble" class="publicar-propiedad-label">Dirección del inmueble *</label>
           <input
-            id="sectorBarrio"
+            id="direccionInmueble"
             type="text"
             class="publicar-propiedad-input"
-            placeholder="Ej: Rosales, Santa Bárbara..."
-            [class.is-invalid]="fieldError('sectorBarrio')"
-            formControlName="sectorBarrio"
+            placeholder="Cra 15 #80-20, Pasto"
+            [class.is-invalid]="fieldError('direccionInmueble')"
+            formControlName="direccionInmueble"
           />
-          @if (fieldError('sectorBarrio'); as err) {
-            <div class="publicar-propiedad-error">{{ err }}</div>
-          }
-        </div>
-
-        <div class="publicar-propiedad-field">
-          <label class="publicar-propiedad-label">Tipo de operación *</label>
-          <ng-select
-            class="publicar-propiedad-select"
-            [items]="tipoOperacionOptions"
-            bindLabel="label"
-            bindValue="value"
-            [clearable]="false"
-            placeholder="Seleccionar..."
-            formControlName="tipoOperacion"
-          ></ng-select>
-          @if (fieldError('tipoOperacion'); as err) {
+          @if (fieldError('direccionInmueble'); as err) {
             <div class="publicar-propiedad-error">{{ err }}</div>
           }
         </div>
       </div>
 
       <div class="publicar-propiedad-field">
-        <label class="publicar-propiedad-label">Plan de interés *</label>
-        <ng-select
-          class="publicar-propiedad-select"
-          [items]="planOptions"
-          bindLabel="label"
-          bindValue="value"
-          [clearable]="false"
-          placeholder="Seleccionar..."
-          formControlName="planInteres"
-        ></ng-select>
-        @if (fieldError('planInteres'); as err) {
+        <label for="precioEstimado" class="publicar-propiedad-label">Precio estimado *</label>
+        <input
+          id="precioEstimado"
+          type="text"
+          class="publicar-propiedad-input"
+          placeholder="Ej: 300 millones"
+          [class.is-invalid]="fieldError('precioEstimado')"
+          formControlName="precioEstimado"
+        />
+        @if (fieldError('precioEstimado'); as err) {
           <div class="publicar-propiedad-error">{{ err }}</div>
         }
+      </div>
+
+      <div class="publicar-propiedad-field">
+        <label for="descripcionCaracteristicas" class="publicar-propiedad-label">
+          Descripción / características del inmueble
+        </label>
+        <textarea
+          id="descripcionCaracteristicas"
+          rows="3"
+          class="publicar-propiedad-input publicar-propiedad-textarea"
+          placeholder="Habitaciones, baños, área, acabados..."
+          formControlName="descripcionCaracteristicas"
+        ></textarea>
       </div>
 
       <div class="publicar-propiedad-field">
@@ -159,18 +312,19 @@
           id="observaciones"
           rows="3"
           class="publicar-propiedad-input publicar-propiedad-textarea"
-          placeholder="Áreas, estado, restricciones..."
-          [class.is-invalid]="fieldError('observaciones')"
+          placeholder="Restricciones, disponibilidad para visitas..."
           formControlName="observaciones"
         ></textarea>
-        @if (fieldError('observaciones'); as err) {
-          <div class="publicar-propiedad-error">{{ err }}</div>
-        }
       </div>
 
       <div class="publicar-propiedad-actions">
         <span class="publicar-propiedad-required-hint">* Campos obligatorios</span>
-        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
+        <button type="submit" class="btn btn-secondary" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Enviar solicitud
+        </button>
       </div>
     </div>
   </form>

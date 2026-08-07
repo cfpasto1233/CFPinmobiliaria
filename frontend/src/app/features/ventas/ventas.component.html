@@ -123,21 +123,19 @@
           </div>
         }
         @case ('otros') {
-          <div class="ventas-row">
-            <div class="ventas-field">
-              <label for="formaPagoOtro" class="ventas-label">Describe la forma de pago *</label>
-              <textarea
-                id="formaPagoOtro"
-                rows="3"
-                class="ventas-input ventas-textarea"
-                placeholder="Cuéntanos cómo planeas pagar"
-                [class.is-invalid]="fieldError('formaPagoOtro')"
-                formControlName="formaPagoOtro"
-              ></textarea>
-              @if (fieldError('formaPagoOtro'); as err) {
-                <div class="ventas-error">{{ err }}</div>
-              }
-            </div>
+          <div class="ventas-field">
+            <label for="formaPagoOtro" class="ventas-label">Describe la forma de pago *</label>
+            <textarea
+              id="formaPagoOtro"
+              rows="3"
+              class="ventas-input ventas-textarea"
+              placeholder="Cuéntanos cómo planeas pagar"
+              [class.is-invalid]="fieldError('formaPagoOtro')"
+              formControlName="formaPagoOtro"
+            ></textarea>
+            @if (fieldError('formaPagoOtro'); as err) {
+              <div class="ventas-error">{{ err }}</div>
+            }
           </div>
         }
       }
@@ -174,17 +172,15 @@
         </div>
       </div>
 
-      <div class="ventas-row">
-        <div class="ventas-field">
-          <label for="sugerencias" class="ventas-label">Sugerencias</label>
-          <textarea
-            id="sugerencias"
-            rows="3"
-            class="ventas-input ventas-textarea"
-            placeholder="¿Algo más que quieras contarnos? (opcional)"
-            formControlName="sugerencias"
-          ></textarea>
-        </div>
+      <div class="ventas-field">
+        <label for="sugerencias" class="ventas-label">Sugerencias</label>
+        <textarea
+          id="sugerencias"
+          rows="3"
+          class="ventas-input ventas-textarea"
+          placeholder="¿Algo más que quieras contarnos? (opcional)"
+          formControlName="sugerencias"
+        ></textarea>
       </div>
 
       <div class="ventas-actions">

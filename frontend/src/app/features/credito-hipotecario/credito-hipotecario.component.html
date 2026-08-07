@@ -21,65 +21,69 @@
     <div class="credito-card">
       <h2 class="credito-card-title">Datos de tu solicitud</h2>
 
-      <div class="credito-field">
-        <label for="nombreCompleto" class="credito-label">Nombre completo *</label>
-        <input
-          id="nombreCompleto"
-          type="text"
-          class="credito-input"
-          placeholder="Tu nombre"
-          [class.is-invalid]="fieldError('nombreCompleto')"
-          formControlName="nombreCompleto"
-        />
-        @if (fieldError('nombreCompleto'); as err) {
-          <div class="credito-error">{{ err }}</div>
-        }
+      <div class="credito-row">
+        <div class="credito-field">
+          <label for="nombreCompleto" class="credito-label">Nombre completo *</label>
+          <input
+            id="nombreCompleto"
+            type="text"
+            class="credito-input"
+            placeholder="Tu nombre"
+            [class.is-invalid]="fieldError('nombreCompleto')"
+            formControlName="nombreCompleto"
+          />
+          @if (fieldError('nombreCompleto'); as err) {
+            <div class="credito-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="credito-field">
+          <label for="numeroContacto" class="credito-label">Número de contacto *</label>
+          <input
+            id="numeroContacto"
+            type="tel"
+            class="credito-input"
+            placeholder="+57 300 000 0000"
+            [class.is-invalid]="fieldError('numeroContacto')"
+            formControlName="numeroContacto"
+          />
+          @if (fieldError('numeroContacto'); as err) {
+            <div class="credito-error">{{ err }}</div>
+          }
+        </div>
       </div>
 
-      <div class="credito-field">
-        <label for="numeroContacto" class="credito-label">Número de contacto *</label>
-        <input
-          id="numeroContacto"
-          type="tel"
-          class="credito-input"
-          placeholder="+57 300 000 0000"
-          [class.is-invalid]="fieldError('numeroContacto')"
-          formControlName="numeroContacto"
-        />
-        @if (fieldError('numeroContacto'); as err) {
-          <div class="credito-error">{{ err }}</div>
-        }
-      </div>
+      <div class="credito-row">
+        <div class="credito-field">
+          <label class="credito-label">Tipo de crédito *</label>
+          <ng-select
+            class="credito-select"
+            [items]="tipoCreditoOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            placeholder="Seleccionar..."
+            formControlName="tipoCredito"
+          ></ng-select>
+          @if (fieldError('tipoCredito'); as err) {
+            <div class="credito-error">{{ err }}</div>
+          }
+        </div>
 
-      <div class="credito-field">
-        <label class="credito-label">Tipo de crédito *</label>
-        <ng-select
-          class="credito-select"
-          [items]="tipoCreditoOptions"
-          bindLabel="label"
-          bindValue="value"
-          [clearable]="false"
-          placeholder="Seleccionar..."
-          formControlName="tipoCredito"
-        ></ng-select>
-        @if (fieldError('tipoCredito'); as err) {
-          <div class="credito-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="credito-field">
-        <label for="valorInmueble" class="credito-label">Valor aproximado del inmueble *</label>
-        <input
-          id="valorInmueble"
-          type="text"
-          class="credito-input"
-          placeholder="Ej: $180.000.000"
-          [class.is-invalid]="fieldError('valorInmueble')"
-          formControlName="valorInmueble"
-        />
-        @if (fieldError('valorInmueble'); as err) {
-          <div class="credito-error">{{ err }}</div>
-        }
+        <div class="credito-field">
+          <label for="valorInmueble" class="credito-label">Valor aproximado del inmueble *</label>
+          <input
+            id="valorInmueble"
+            type="text"
+            class="credito-input"
+            placeholder="Ej: $180.000.000"
+            [class.is-invalid]="fieldError('valorInmueble')"
+            formControlName="valorInmueble"
+          />
+          @if (fieldError('valorInmueble'); as err) {
+            <div class="credito-error">{{ err }}</div>
+          }
+        </div>
       </div>
 
       <div class="credito-field">

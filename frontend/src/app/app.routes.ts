@@ -194,6 +194,13 @@ export const routes: Routes = [
           ).then((m) => m.SolicitudesArrendarPropiedadListComponent),
       },
       {
+        path: 'solicitudes-publicar-propiedad',
+        loadComponent: () =>
+          import(
+            './features/admin/solicitudes-publicar-propiedad/solicitudes-publicar-propiedad-list.component'
+          ).then((m) => m.SolicitudesPublicarPropiedadListComponent),
+      },
+      {
         path: 'reportes-dano',
         loadComponent: () =>
           import('./features/admin/reportes-dano/reportes-dano-list.component').then(

@@ -23,7 +23,7 @@
 
       <div class="arrendar-propiedad-row">
         <div class="arrendar-propiedad-field">
-          <label for="nombrePropietario" class="arrendar-propiedad-label">Nombre del propietario *</label>
+          <label for="nombrePropietario" class="arrendar-propiedad-label">Nombre completo *</label>
           <input
             id="nombrePropietario"
             type="text"
@@ -38,13 +38,13 @@
         </div>
 
         <div class="arrendar-propiedad-field">
-          <label class="arrendar-propiedad-label">Medio de comunicación</label>
+          <label class="arrendar-propiedad-label">Medio de comunicación *</label>
           <ng-select
             class="arrendar-propiedad-select"
             [items]="medioComunicacionOptions"
             bindLabel="label"
             bindValue="value"
-            [clearable]="true"
+            [clearable]="false"
             placeholder="Seleccionar..."
             formControlName="medioComunicacion"
           ></ng-select>
@@ -86,21 +86,47 @@
         </div>
       </div>
 
-      <div class="arrendar-propiedad-row">
-        <div class="arrendar-propiedad-field">
-          <label for="observaciones" class="arrendar-propiedad-label">Observaciones</label>
-          <textarea
-            id="observaciones"
-            rows="3"
-            class="arrendar-propiedad-input arrendar-propiedad-textarea"
-            placeholder="Áreas, estado, restricciones..."
-            [class.is-invalid]="fieldError('observaciones')"
-            formControlName="observaciones"
-          ></textarea>
-          @if (fieldError('observaciones'); as err) {
-            <div class="arrendar-propiedad-error">{{ err }}</div>
-          }
-        </div>
+      <div class="arrendar-propiedad-field">
+        <label for="precioEstimado" class="arrendar-propiedad-label">Precio estimado *</label>
+        <input
+          id="precioEstimado"
+          type="text"
+          class="arrendar-propiedad-input"
+          placeholder="Ej: 1.2 millones/mes"
+          [class.is-invalid]="fieldError('precioEstimado')"
+          formControlName="precioEstimado"
+        />
+        @if (fieldError('precioEstimado'); as err) {
+          <div class="arrendar-propiedad-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="arrendar-propiedad-field">
+        <label for="descripcionCaracteristicas" class="arrendar-propiedad-label">
+          Descripción / características del inmueble
+        </label>
+        <textarea
+          id="descripcionCaracteristicas"
+          rows="3"
+          class="arrendar-propiedad-input arrendar-propiedad-textarea"
+          placeholder="Habitaciones, baños, área, acabados..."
+          formControlName="descripcionCaracteristicas"
+        ></textarea>
+      </div>
+
+      <div class="arrendar-propiedad-field">
+        <label for="observaciones" class="arrendar-propiedad-label">Observaciones</label>
+        <textarea
+          id="observaciones"
+          rows="3"
+          class="arrendar-propiedad-input arrendar-propiedad-textarea"
+          placeholder="Áreas, estado, restricciones..."
+          [class.is-invalid]="fieldError('observaciones')"
+          formControlName="observaciones"
+        ></textarea>
+        @if (fieldError('observaciones'); as err) {
+          <div class="arrendar-propiedad-error">{{ err }}</div>
+        }
       </div>
 
       <div class="arrendar-propiedad-actions">
