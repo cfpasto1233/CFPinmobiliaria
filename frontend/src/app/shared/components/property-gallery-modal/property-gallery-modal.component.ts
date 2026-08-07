@@ -12,7 +12,26 @@ import {
 } from '@angular/core';
 import { PropiedadPublic } from '../../../../client';
 
-type SpecIcon = 'bed' | 'bath' | 'area' | 'age' | 'parking' | 'check';
+type SpecIcon =
+  | 'bed'
+  | 'bath'
+  | 'area'
+  | 'age'
+  | 'parking'
+  | 'floor'
+  | 'eye'
+  | 'land'
+  | 'balcony'
+  | 'terrace'
+  | 'patio'
+  | 'storage'
+  | 'grill'
+  | 'pool'
+  | 'kitchen'
+  | 'gated'
+  | 'fee'
+  | 'utilities'
+  | 'exchange';
 
 interface SpecItem {
   icon: SpecIcon;
@@ -116,10 +135,10 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
       });
     }
     if (property.piso !== null) {
-      items.push({ icon: 'area', label: `Piso ${property.piso}` });
+      items.push({ icon: 'floor', label: `Piso ${property.piso}` });
     }
     if (property.vista !== null) {
-      items.push({ icon: 'area', label: `Vista ${property.vista}` });
+      items.push({ icon: 'eye', label: `Vista ${property.vista}` });
     }
     if (property.area_construida !== null) {
       items.push({ icon: 'area', label: `${property.area_construida} m² construidos` });
@@ -140,7 +159,7 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
       });
     }
     if (property.rural_urbano !== null) {
-      items.push({ icon: 'check', label: property.rural_urbano === 'rural' ? 'Rural' : 'Urbano' });
+      items.push({ icon: 'land', label: property.rural_urbano === 'rural' ? 'Rural' : 'Urbano' });
     }
     if (property.tiene_parqueadero) {
       const cantidad = property.num_parqueaderos
@@ -149,21 +168,21 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
       const tipo = property.tipo_parqueadero ? ` (${this.tipoParqueaderoLabel(property.tipo_parqueadero)})` : '';
       items.push({ icon: 'parking', label: `${cantidad}${tipo}` });
     }
-    if (property.balcon) items.push({ icon: 'check', label: 'Balcón' });
+    if (property.balcon) items.push({ icon: 'balcony', label: 'Balcón' });
     if (property.terraza) {
-      items.push({ icon: 'check', label: property.tipo_inmueble === 'finca' ? 'Terraza y/o patio' : 'Terraza' });
+      items.push({ icon: 'terrace', label: property.tipo_inmueble === 'finca' ? 'Terraza y/o patio' : 'Terraza' });
     }
     if (property.patio) {
-      items.push({ icon: 'check', label: property.tipo_inmueble === 'local' ? 'Patio/zona de lavado' : 'Patio' });
+      items.push({ icon: 'patio', label: property.tipo_inmueble === 'local' ? 'Patio/zona de lavado' : 'Patio' });
     }
-    if (property.bodega) items.push({ icon: 'check', label: 'Bodega' });
-    if (property.zona_bbq) items.push({ icon: 'check', label: 'Zona BBQ' });
-    if (property.piscina) items.push({ icon: 'check', label: 'Piscina' });
-    if (property.cocina) items.push({ icon: 'check', label: 'Cocina' });
-    if (property.conjunto_cerrado) items.push({ icon: 'check', label: 'Conjunto cerrado o edificio' });
+    if (property.bodega) items.push({ icon: 'storage', label: 'Bodega' });
+    if (property.zona_bbq) items.push({ icon: 'grill', label: 'Zona BBQ' });
+    if (property.piscina) items.push({ icon: 'pool', label: 'Piscina' });
+    if (property.cocina) items.push({ icon: 'kitchen', label: 'Cocina' });
+    if (property.conjunto_cerrado) items.push({ icon: 'gated', label: 'Conjunto cerrado o edificio' });
     if (property.valor_administracion !== null) {
       items.push({
-        icon: 'check',
+        icon: 'fee',
         label: `Administración: ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(Number(property.valor_administracion))}`,
       });
     }
@@ -173,11 +192,11 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
         property.tiene_acueducto ? 'acueducto' : null,
       ].filter((s): s is string => s !== null);
       items.push({
-        icon: 'check',
+        icon: 'utilities',
         label: servicios.length > 0 ? `Servicios: ${servicios.join(', ')}` : 'Servicios',
       });
     }
-    if (property.permite_permuta) items.push({ icon: 'check', label: 'Recibe permuta' });
+    if (property.permite_permuta) items.push({ icon: 'exchange', label: 'Recibe permuta' });
     return items;
   });
 
