@@ -17,12 +17,22 @@
       <p class="proyecto-story-description">{{ project().descripcion }}</p>
 
       @if (project().financiacion && project().financiacion_descripcion) {
-        <p class="proyecto-story-financiacion">{{ project().financiacion_descripcion }}</p>
+        <p class="proyecto-story-note">{{ project().financiacion_descripcion }}</p>
+      }
+
+      @if (project().credito_hipotecario && project().credito_hipotecario_descripcion) {
+        <p class="proyecto-story-note">{{ project().credito_hipotecario_descripcion }}</p>
       }
 
       <p class="proyecto-story-price">{{ project().precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</p>
 
-      @if (project().financiacion || project().credito_hipotecario) {
+      @if (
+        project().financiacion ||
+        project().credito_hipotecario ||
+        project().ascensor ||
+        project().conjunto_cerrado ||
+        project().area_m2
+      ) {
         <div class="proyecto-story-tags">
           @if (project().financiacion) {
             <span class="proyecto-story-tag">Financiación disponible</span>
@@ -30,12 +40,87 @@
           @if (project().credito_hipotecario) {
             <span class="proyecto-story-tag">Crédito hipotecario</span>
           }
+          @if (project().ascensor) {
+            <span class="proyecto-story-tag">Ascensor</span>
+          }
+          @if (project().conjunto_cerrado) {
+            <span class="proyecto-story-tag">Conjunto cerrado o edificio</span>
+          }
+          @if (administracionLabel(); as administracion) {
+            <span class="proyecto-story-tag">Administración: {{ administracion }}</span>
+          }
+          @if (project().area_m2) {
+            <span class="proyecto-story-tag">{{ project().area_m2 | number: '1.0-2' }} m² de área</span>
+          }
+        </div>
+      }
+
+      @if (zonasComunesLabels().length > 0) {
+        <div class="proyecto-story-section">
+          <h3 class="proyecto-story-section-title">Zonas comunes</h3>
+          <div class="proyecto-story-chips">
+            @for (zona of zonasComunesLabels(); track zona) {
+              <span class="proyecto-story-chip">{{ zona }}</span>
+            }
+          </div>
+        </div>
+      }
+
+      @if (tipos().length > 0) {
+        <div class="proyecto-story-section">
+          <h3 class="proyecto-story-section-title">Tipos de unidad disponibles</h3>
+          <div class="proyecto-story-tipos">
+            @for (tipo of tipos(); track tipo.id) {
+              <div class="proyecto-story-tipo-card">
+                <div class="proyecto-story-tipo-header">
+                  <span class="proyecto-story-tipo-categoria">{{ tipoLabel(tipo) }}</span>
+                  @if (tipo.precio) {
+                    <span class="proyecto-story-tipo-precio">
+                      {{ tipo.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+                    </span>
+                  } @else {
+                    <span class="proyecto-story-tipo-precio is-muted">Precio por definir</span>
+                  }
+                </div>
+
+                <p class="proyecto-story-tipo-specs">
+                  {{ tipo.habitaciones }} {{ tipo.habitaciones === 1 ? 'habitación' : 'habitaciones' }}
+                  · {{ tipo.banos }} {{ tipo.banos === 1 ? 'baño' : 'baños' }}
+                  · {{ vistaLabel(tipo) }}
+                  @if (tipo.area_m2) {
+                    · {{ tipo.area_m2 | number: '1.0-2' }} m²
+                  }
+                </p>
+
+                @if (tipo.balcon || tipo.terraza || tipo.parqueadero || tipo.patio) {
+                  <div class="proyecto-story-chips">
+                    @if (tipo.balcon) {
+                      <span class="proyecto-story-chip">Balcón</span>
+                    }
+                    @if (tipo.terraza) {
+                      <span class="proyecto-story-chip">Terraza</span>
+                    }
+                    @if (tipo.parqueadero) {
+                      <span class="proyecto-story-chip">Parqueadero</span>
+                    }
+                    @if (tipo.patio) {
+                      <span class="proyecto-story-chip">Patio</span>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </div>
       }
 
       <a [href]="whatsappHref()" target="_blank" rel="noopener" class="btn btn-primary proyecto-story-cta">
         Consultar por WhatsApp
       </a>
+
+      @if (project().fotos.length > 0) {
+        <app-project-fotos-carousel [fotos]="project().fotos" />
+      }
     </div>
   </div>
 </section>

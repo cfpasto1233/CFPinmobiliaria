@@ -83,6 +83,20 @@ export const proyectosReducer = createReducer(
   })),
   on(ProyectosActions.replaceFotoPortadaFailure, (state, { error }) => ({ ...state, error })),
 
+  on(ProyectosActions.addFotoSuccess, (state, { item }) => ({
+    ...state,
+    items: upsert(state.items, item),
+    selected: item,
+  })),
+  on(ProyectosActions.addFotoFailure, (state, { error }) => ({ ...state, error })),
+
+  on(ProyectosActions.removeFotoSuccess, (state, { item }) => ({
+    ...state,
+    items: upsert(state.items, item),
+    selected: item,
+  })),
+  on(ProyectosActions.removeFotoFailure, (state, { error }) => ({ ...state, error })),
+
   // Reordena de inmediato en el cliente (drag & drop debe sentirse instantáneo);
   // reorderSuccess reconcilia con el orden confirmado por el backend.
   on(ProyectosActions.reorder, (state, { ids }) => {

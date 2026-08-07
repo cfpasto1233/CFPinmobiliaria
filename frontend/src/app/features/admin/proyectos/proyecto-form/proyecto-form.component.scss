@@ -78,6 +78,69 @@
   margin-top: 0.35rem;
 }
 
+.proyecto-form-divider {
+  border: none;
+  border-top: 1px solid $cfpasto-border-light;
+  margin: 1.75rem 0;
+}
+
+.proyecto-form-count {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.05rem 0.45rem;
+  font-size: $cfpasto-text-xs;
+  font-weight: 600;
+  color: $cfpasto-text-muted;
+  background: $cfpasto-border-light;
+  border-radius: $cfpasto-radius-sm;
+}
+
+// --- Tipos de unidad (sección repetible) ---
+
+.proyecto-form-tipo-card {
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid $cfpasto-border-light;
+  border-radius: $cfpasto-radius-lg;
+  background: $cfpasto-bg-subtle;
+}
+
+.proyecto-form-tipo-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.proyecto-form-tipo-card-title {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-dark;
+}
+
+.proyecto-form-tipo-remove {
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  font-weight: 500;
+  color: $cfpasto-error;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.proyecto-form-tipo-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.proyecto-form-add-tipo {
+  width: 100%;
+}
+
 // --- Dropzone (foto de portada) ---
 
 .proyecto-form-dropzone {
@@ -189,6 +252,66 @@
   &:hover {
     color: $cfpasto-error;
   }
+}
+
+.proyecto-form-dropzone-compact {
+  padding: 1rem;
+  margin-top: 0.75rem;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.proyecto-form-foto-desc-input {
+  margin-top: 0.5rem;
+}
+
+.proyecto-form-fotos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 0.75rem;
+}
+
+.proyecto-form-foto-item {
+  position: relative;
+  aspect-ratio: 1;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: $cfpasto-radius-sm;
+    border: 1px solid $cfpasto-border;
+  }
+}
+
+.proyecto-form-foto-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.25rem 0.4rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-white;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 0 0 $cfpasto-radius-sm $cfpasto-radius-sm;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proyecto-form-foto-remove {
+  position: absolute;
+  top: -0.4rem;
+  right: -0.4rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: none;
+  background: $cfpasto-error;
+  color: $cfpasto-white;
+  line-height: 1;
+  cursor: pointer;
 }
 
 // --- Barra de acciones ---

@@ -102,7 +102,7 @@
   margin-bottom: 1rem;
 }
 
-.proyecto-story-financiacion {
+.proyecto-story-note {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
   line-height: 1.6;
@@ -138,6 +138,82 @@
   background: $cfpasto-white;
   color: $cfpasto-text-dark;
   border: 1px solid $cfpasto-border;
+}
+
+.proyecto-story-section {
+  margin-bottom: 1.75rem;
+}
+
+.proyecto-story-section-title {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-dark;
+  margin-bottom: 0.6rem;
+}
+
+.proyecto-story-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.proyecto-story-chip {
+  padding: 0.25rem 0.65rem;
+  border-radius: 50rem;
+  font-family: $cfpasto-font-body;
+  font-weight: 500;
+  font-size: $cfpasto-text-xs;
+  background: $cfpasto-bg-subtle;
+  color: $cfpasto-text-muted;
+  border: 1px solid $cfpasto-border-light;
+}
+
+.proyecto-story-tipos {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.proyecto-story-tipo-card {
+  padding: 1rem 1.1rem;
+  border: 1px solid $cfpasto-border-light;
+  border-radius: $cfpasto-radius-lg;
+  background: $cfpasto-white;
+}
+
+.proyecto-story-tipo-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.proyecto-story-tipo-categoria {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-base;
+  color: $cfpasto-text-dark;
+}
+
+.proyecto-story-tipo-precio {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-primary;
+  white-space: nowrap;
+
+  &.is-muted {
+    color: $cfpasto-text-light;
+    font-weight: 500;
+  }
+}
+
+.proyecto-story-tipo-specs {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin-bottom: 0.5rem;
 }
 
 .proyecto-story-cta {

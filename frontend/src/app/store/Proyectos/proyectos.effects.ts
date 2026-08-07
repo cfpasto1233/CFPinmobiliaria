@@ -141,6 +141,44 @@ export class ProyectosEffects {
     ),
   );
 
+  addFoto$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProyectosActions.addFoto),
+      exhaustMap(({ proyectoId, file, descripcion }) =>
+        this.uploadService.addFoto(proyectoId, file, descripcion).pipe(
+          map((item) => ProyectosActions.addFotoSuccess({ item })),
+          catchError((error) =>
+            of(
+              ProyectosActions.addFotoFailure({
+                error: extractErrorMessage(error, 'No pudimos agregar la foto.'),
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  removeFoto$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProyectosActions.removeFoto),
+      exhaustMap(({ proyectoId, fotoId }) =>
+        this.proyectosService
+          .deleteFotoEndpointApiV1ProyectosProyectoIdFotosFotoIdDelete(proyectoId, fotoId)
+          .pipe(
+            map((item) => ProyectosActions.removeFotoSuccess({ item })),
+            catchError((error) =>
+              of(
+                ProyectosActions.removeFotoFailure({
+                  error: extractErrorMessage(error, 'No pudimos eliminar la foto.'),
+                }),
+              ),
+            ),
+          ),
+      ),
+    ),
+  );
+
   // switchMap (no exhaustMap): cada nuevo drag debe cancelar el guardado anterior en curso,
   // si no la respuesta de un reorder viejo podría llegar después y pisar el orden más reciente.
   reorder$ = createEffect(() =>

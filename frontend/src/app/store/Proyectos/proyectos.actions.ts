@@ -36,6 +36,20 @@ export const ProyectosActions = {
     props<{ error: string }>(),
   ),
 
+  addFoto: createAction(
+    '[Proyectos] Add Foto',
+    props<{ proyectoId: string; file: File; descripcion: string | null }>(),
+  ),
+  addFotoSuccess: createAction('[Proyectos] Add Foto Success', props<{ item: ProyectoPublic }>()),
+  addFotoFailure: createAction('[Proyectos] Add Foto Failure', props<{ error: string }>()),
+
+  removeFoto: createAction(
+    '[Proyectos] Remove Foto',
+    props<{ proyectoId: string; fotoId: string }>(),
+  ),
+  removeFotoSuccess: createAction('[Proyectos] Remove Foto Success', props<{ item: ProyectoPublic }>()),
+  removeFotoFailure: createAction('[Proyectos] Remove Foto Failure', props<{ error: string }>()),
+
   reorder: createAction('[Proyectos] Reorder', props<{ ids: string[] }>()),
   reorderSuccess: createAction('[Proyectos] Reorder Success', props<{ items: ProyectoPublic[]; count: number }>()),
   reorderFailure: createAction('[Proyectos] Reorder Failure', props<{ error: string }>()),
