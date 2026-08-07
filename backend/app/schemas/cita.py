@@ -5,7 +5,7 @@ from typing import Literal
 from pydantic import BaseModel, Field, model_validator
 
 EstadoCita = Literal["pendiente", "confirmada", "cancelada", "completada"]
-HoraRecaudo = Literal["09:00", "11:00", "15:00", "18:00"]
+HoraRecaudo = Literal["09:00", "11:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
 
 
 class CitaForm(BaseModel):

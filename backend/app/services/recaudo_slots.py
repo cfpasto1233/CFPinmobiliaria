@@ -7,7 +7,7 @@ DURACION_CITA = timedelta(hours=1)
 
 HORAS_ESTANDAR = ["09:00", "11:00", "15:00", "18:00"]
 HORAS_SABADO = ["11:00", "15:00"]
-HORAS_AMARILLO_SEMANA = ["15:00", "16:00", "17:00"]
+HORAS_AMARILLO_SEMANA = ["14:00", "15:00", "16:00", "17:00", "18:00"]
 HORAS_AMARILLO_SABADO = ["15:00"]
 
 ColorDia = Literal["verde", "amarillo", "no_disponible"]
