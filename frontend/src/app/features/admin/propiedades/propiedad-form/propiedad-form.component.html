@@ -223,9 +223,9 @@
             </div>
           }
 
-          @if (mostrarCampo('areaConstruida') && !mostrarFrenteFondo()) {
+          @if (mostrarCampo('areaConstruida')) {
             <div class="propiedad-form-field">
-              <label for="areaConstruida" class="propiedad-form-label">Área construida (m²) *</label>
+              <label for="areaConstruida" class="propiedad-form-label">Área construida (m²)</label>
               <input
                 id="areaConstruida"
                 type="number"
@@ -241,9 +241,9 @@
             </div>
           }
 
-          @if (mostrarCampo('areaLote') && !mostrarFrenteFondo()) {
+          @if (mostrarCampo('areaLote')) {
             <div class="propiedad-form-field">
-              <label for="areaLote" class="propiedad-form-label">Área de lote (m²) *</label>
+              <label for="areaLote" class="propiedad-form-label">Área de lote (m²)</label>
               <input
                 id="areaLote"
                 type="number"
@@ -259,10 +259,10 @@
             </div>
           }
 
-          @if (mostrarFrenteFondo()) {
+          @if (mostrarCampo('frente')) {
             <div class="propiedad-form-row">
               <div class="propiedad-form-field">
-                <label for="frente" class="propiedad-form-label">Frente (m) *</label>
+                <label for="frente" class="propiedad-form-label">Frente (m)</label>
                 <input
                   id="frente"
                   type="number"
@@ -278,7 +278,7 @@
               </div>
 
               <div class="propiedad-form-field">
-                <label for="fondo" class="propiedad-form-label">Fondo (m) *</label>
+                <label for="fondo" class="propiedad-form-label">Fondo (m)</label>
                 <input
                   id="fondo"
                   type="number"
@@ -565,6 +565,30 @@
                 formControlName="permitePermuta"
               />
               <label for="permitePermuta" class="form-check-label">Recibe permuta</label>
+            </div>
+          </div>
+
+          <div class="propiedad-form-field">
+            <div class="form-check">
+              <input
+                id="tieneGravamenes"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="tieneGravamenes"
+              />
+              <label for="tieneGravamenes" class="form-check-label">Tiene gravámenes</label>
+            </div>
+          </div>
+
+          <div class="propiedad-form-field">
+            <div class="form-check">
+              <input
+                id="tieneHipoteca"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="tieneHipoteca"
+              />
+              <label for="tieneHipoteca" class="form-check-label">Tiene hipoteca</label>
             </div>
           </div>
 

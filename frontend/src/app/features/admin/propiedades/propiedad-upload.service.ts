@@ -54,6 +54,8 @@ export class PropiedadUploadService {
     body.append('tiene_alcantarillado', String(form.tiene_alcantarillado));
     body.append('tiene_acueducto', String(form.tiene_acueducto));
     body.append('permite_permuta', String(form.permite_permuta));
+    body.append('tiene_gravamenes', String(form.tiene_gravamenes));
+    body.append('tiene_hipoteca', String(form.tiene_hipoteca));
     if (form.adicionales !== null) body.append('adicionales', form.adicionales);
     body.append('foto_principal', fotoPrincipal);
 

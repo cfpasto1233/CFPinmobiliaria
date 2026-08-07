@@ -109,6 +109,8 @@ def create_propiedad_endpoint(
     tiene_acueducto: Annotated[bool, Form()] = False,
     permite_permuta: Annotated[bool, Form()] = False,
     adicionales: Annotated[str | None, Form()] = None,
+    tiene_gravamenes: Annotated[bool, Form()] = False,
+    tiene_hipoteca: Annotated[bool, Form()] = False,
 ) -> PropiedadPublic:
     # Qué campos son obligatorios/aplican depende de tipo_inmueble — esa matriz
     # vive en el model_validator de PropiedadForm y no se puede expresar con
@@ -153,6 +155,8 @@ def create_propiedad_endpoint(
             tiene_acueducto=tiene_acueducto,
             permite_permuta=permite_permuta,
             adicionales=adicionales,
+            tiene_gravamenes=tiene_gravamenes,
+            tiene_hipoteca=tiene_hipoteca,
         )
     except ValidationError as exc:
         raise HTTPException(status_code=422, detail=_mensaje_error_validacion(exc)) from exc

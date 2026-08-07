@@ -15,25 +15,34 @@ RuralUrbano = Literal["rural", "urbano"]
 # Los campos que no aparecen para un tipo dado se limpian a None/False al guardar.
 
 _CAMPOS_REQUERIDOS: dict[str, set[str]] = {
-    "casa": {"banos", "habitaciones", "area_construida", "area_lote"},
-    "apartamento": {"banos", "habitaciones", "area_construida", "piso", "vista"},
-    "apartaestudio": {"banos", "habitaciones", "area_construida"},
-    "finca": {"banos", "habitaciones", "area_construida", "area_lote"},
-    "oficina": {"banos", "area_construida", "piso", "vista"},
-    "local": {"banos", "frente", "fondo", "actividad"},
-    "lote": {"frente", "fondo", "rural_urbano"},
+    "casa": {"banos", "habitaciones"},
+    "apartamento": {"banos", "habitaciones", "piso", "vista"},
+    "apartaestudio": {"banos", "habitaciones"},
+    "finca": {"banos", "habitaciones"},
+    "oficina": {"banos", "piso", "vista"},
+    "local": {"banos", "actividad"},
+    "lote": {"rural_urbano"},
 }
 
-# Aplican para el tipo pero pueden quedar vacíos. area_construida/area_lote en
-# local/lote no las llena el usuario — se calculan de frente × fondo.
+# Aplican para el tipo pero pueden quedar vacíos. Los campos de área/medida
+# (area_construida, area_lote, frente, fondo) nunca son obligatorios en ningún
+# tipo — son datos que el admin puede no tener a mano al momento de publicar.
 _CAMPOS_OPCIONALES: dict[str, set[str]] = {
-    "casa": {"antiguedad", "valor_administracion", "zonas_comunes"},
-    "apartamento": {"antiguedad", "valor_administracion", "zonas_comunes"},
-    "apartaestudio": {"valor_administracion", "zonas_comunes"},
-    "finca": {"valor_administracion", "zonas_comunes"},
-    "oficina": {"valor_administracion"},
-    "local": {"area_construida"},
-    "lote": {"area_lote"},
+    "casa": {
+        "antiguedad",
+        "valor_administracion",
+        "zonas_comunes",
+        "area_construida",
+        "area_lote",
+        "frente",
+        "fondo",
+    },
+    "apartamento": {"antiguedad", "valor_administracion", "zonas_comunes", "area_construida"},
+    "apartaestudio": {"valor_administracion", "zonas_comunes", "area_construida"},
+    "finca": {"valor_administracion", "zonas_comunes", "area_construida", "area_lote"},
+    "oficina": {"valor_administracion", "area_construida"},
+    "local": {"area_construida", "frente", "fondo"},
+    "lote": {"area_lote", "frente", "fondo"},
 }
 
 # Checkboxes propios de cada tipo: siempre tienen un valor (True/False), nunca
@@ -99,18 +108,13 @@ _VALORES_TIPO_PARQUEADERO: dict[str, set[str]] = {
 _TIPOS_CON_CONJUNTO_CERRADO: set[str] = {"casa", "apartamento", "finca", "apartaestudio"}
 _TIPOS_CON_ADMIN_ANIDADA: set[str] = {"apartamento", "apartaestudio"}
 _TIPOS_CON_ADMIN_DIRECTA: set[str] = {"oficina"}
-_TIPOS_CON_FRENTE_FONDO: set[str] = {"local", "lote"}
 
 _LABELS: dict[str, str] = {
     "banos": "baños",
     "habitaciones": "habitaciones",
-    "area_construida": "área construida",
-    "area_lote": "área de lote",
     "antiguedad": "antigüedad",
     "piso": "piso",
     "vista": "vista (interna o externa)",
-    "frente": "frente",
-    "fondo": "fondo",
     "actividad": "actividad",
     "rural_urbano": "si es rural o urbano",
 }
@@ -170,6 +174,9 @@ class PropiedadForm(BaseModel):
     permite_permuta: bool = False
     adicionales: str | None = None
 
+    tiene_gravamenes: bool = False
+    tiene_hipoteca: bool = False
+
     @model_validator(mode="after")
     def _validar_detalle_segun_tipo_inmueble(self) -> "PropiedadForm":
         _normalizar_y_validar_detalle_inmueble(self)
@@ -220,6 +227,9 @@ class PropiedadUpdate(BaseModel):
     permite_permuta: bool | None = None
     adicionales: str | None = None
 
+    tiene_gravamenes: bool | None = None
+    tiene_hipoteca: bool | None = None
+
     @model_validator(mode="after")
     def _validar_detalle_segun_tipo_inmueble(self) -> "PropiedadUpdate":
         # El formulario de edición siempre reenvía el objeto completo (no es un PATCH
@@ -251,7 +261,6 @@ def _normalizar_y_validar_detalle_inmueble(obj: "PropiedadForm | PropiedadUpdate
 
     _normalizar_parqueadero(obj, tipo)
     _normalizar_conjunto_cerrado_y_administracion(obj, tipo)
-    _normalizar_frente_fondo(obj, tipo)
 
 
 def _normalizar_parqueadero(obj: "PropiedadForm | PropiedadUpdate", tipo: str) -> None:
@@ -305,22 +314,6 @@ def _normalizar_conjunto_cerrado_y_administracion(
         obj.tiene_administracion = False
         obj.valor_administracion = None
         obj.zonas_comunes = None
-
-
-def _normalizar_frente_fondo(obj: "PropiedadForm | PropiedadUpdate", tipo: str) -> None:
-    if tipo not in _TIPOS_CON_FRENTE_FONDO:
-        obj.frente = None
-        obj.fondo = None
-        return
-
-    if obj.frente is None or obj.fondo is None:
-        return
-
-    area = obj.frente * obj.fondo
-    if tipo == "local":
-        obj.area_construida = area
-    else:
-        obj.area_lote = area
 
 
 class PropiedadFotoPublic(BaseModel):
@@ -378,6 +371,9 @@ class PropiedadPublic(BaseModel):
 
     permite_permuta: bool
     adicionales: str | None
+
+    tiene_gravamenes: bool
+    tiene_hipoteca: bool
 
     model_config = {"from_attributes": True}
 

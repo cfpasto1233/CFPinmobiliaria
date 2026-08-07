@@ -31,7 +31,9 @@ type SpecIcon =
   | 'gated'
   | 'fee'
   | 'utilities'
-  | 'exchange';
+  | 'exchange'
+  | 'lien'
+  | 'mortgage';
 
 interface SpecItem {
   icon: SpecIcon;
@@ -197,6 +199,8 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
       });
     }
     if (property.permite_permuta) items.push({ icon: 'exchange', label: 'Recibe permuta' });
+    if (property.tiene_gravamenes) items.push({ icon: 'lien', label: 'Con gravámenes' });
+    if (property.tiene_hipoteca) items.push({ icon: 'mortgage', label: 'Con hipoteca' });
     return items;
   });
 

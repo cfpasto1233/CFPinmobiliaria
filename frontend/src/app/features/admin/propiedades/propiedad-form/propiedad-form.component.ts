@@ -58,23 +58,25 @@ const TODOS_LOS_CAMPOS_DETALLE: CampoDetalle[] = [
 ];
 
 const CAMPOS_REQUERIDOS: Record<TipoInmueble, CampoDetalle[]> = {
-  casa: ['banos', 'habitaciones', 'areaConstruida', 'areaLote'],
-  apartamento: ['banos', 'habitaciones', 'areaConstruida', 'piso', 'vista'],
-  apartaestudio: ['banos', 'habitaciones', 'areaConstruida'],
-  finca: ['banos', 'habitaciones', 'areaConstruida', 'areaLote'],
-  oficina: ['banos', 'areaConstruida', 'piso', 'vista'],
-  local: ['banos', 'frente', 'fondo', 'actividad'],
-  lote: ['frente', 'fondo', 'ruralUrbano'],
+  casa: ['banos', 'habitaciones'],
+  apartamento: ['banos', 'habitaciones', 'piso', 'vista'],
+  apartaestudio: ['banos', 'habitaciones'],
+  finca: ['banos', 'habitaciones'],
+  oficina: ['banos', 'piso', 'vista'],
+  local: ['banos', 'actividad'],
+  lote: ['ruralUrbano'],
 };
 
+// Los campos de área/medida (areaConstruida, areaLote, frente, fondo) nunca son
+// obligatorios en ningún tipo — son datos que el admin puede no tener a mano.
 const CAMPOS_OPCIONALES: Record<TipoInmueble, CampoDetalle[]> = {
-  casa: ['antiguedad', 'valorAdministracion', 'zonasComunes'],
-  apartamento: ['antiguedad', 'valorAdministracion', 'zonasComunes'],
-  apartaestudio: ['valorAdministracion', 'zonasComunes'],
-  finca: ['valorAdministracion', 'zonasComunes'],
-  oficina: ['valorAdministracion'],
-  local: [],
-  lote: [],
+  casa: ['antiguedad', 'valorAdministracion', 'zonasComunes', 'areaConstruida', 'areaLote', 'frente', 'fondo'],
+  apartamento: ['antiguedad', 'valorAdministracion', 'zonasComunes', 'areaConstruida'],
+  apartaestudio: ['valorAdministracion', 'zonasComunes', 'areaConstruida'],
+  finca: ['valorAdministracion', 'zonasComunes', 'areaConstruida', 'areaLote'],
+  oficina: ['valorAdministracion', 'areaConstruida'],
+  local: ['areaConstruida', 'frente', 'fondo'],
+  lote: ['areaLote', 'frente', 'fondo'],
 };
 
 // Checkboxes propios de cada tipo: siempre tienen valor, nunca son "obligatorios".
@@ -123,7 +125,6 @@ const OPCIONES_TIPO_PARQUEADERO: Partial<Record<TipoInmueble, { value: TipoParqu
 const TIPOS_CON_CONJUNTO_CERRADO: TipoInmueble[] = ['casa', 'apartamento', 'finca', 'apartaestudio'];
 const TIPOS_CON_ADMIN_ANIDADA: TipoInmueble[] = ['apartamento', 'apartaestudio'];
 const TIPOS_CON_ADMIN_DIRECTA: TipoInmueble[] = ['oficina'];
-const TIPOS_CON_FRENTE_FONDO: TipoInmueble[] = ['local', 'lote'];
 
 const VISTA_OPTIONS: { value: Vista; label: string }[] = [
   { value: 'interna', label: 'Interna' },
@@ -158,7 +159,7 @@ type FormFieldName =
   | 'ruralUrbano'
   | 'valorAdministracion';
 
-const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
+const REQUIRED_MESSAGES: Partial<Record<FormFieldName, string>> = {
   nombre: 'El nombre es obligatorio.',
   descripcion: 'La descripción es obligatoria.',
   ubicacion: 'La ubicación es obligatoria.',
@@ -171,10 +172,6 @@ const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   habitaciones: 'Indica el número de habitaciones.',
   numParqueaderos: 'Indica el número de parqueaderos.',
   tipoParqueadero: 'Indica el tipo de parqueadero.',
-  areaConstruida: 'Indica el área construida.',
-  areaLote: 'Indica el área de lote.',
-  frente: 'Indica el frente.',
-  fondo: 'Indica el fondo.',
   antiguedad: 'Indica la antigüedad.',
   piso: 'Indica el piso.',
   vista: 'Indica si la vista es interna o externa.',
@@ -276,6 +273,9 @@ export class PropiedadFormComponent implements OnInit {
 
     permitePermuta: [false],
     adicionales: [null as string | null],
+
+    tieneGravamenes: [false],
+    tieneHipoteca: [false],
   });
 
   // Signals derivados de los controles para poder mostrar/ocultar secciones del
@@ -322,9 +322,6 @@ export class PropiedadFormComponent implements OnInit {
   );
   protected readonly mostrarAdminDirecta = computed(() =>
     TIPOS_CON_ADMIN_DIRECTA.includes(this.tipoInmuebleValue() ?? 'casa'),
-  );
-  protected readonly mostrarFrenteFondo = computed(() =>
-    TIPOS_CON_FRENTE_FONDO.includes(this.tipoInmuebleValue() ?? 'casa'),
   );
 
   // terraza/patio son columnas compartidas entre tipos, pero el enunciado cambia:
@@ -413,6 +410,8 @@ export class PropiedadFormComponent implements OnInit {
           tieneAcueducto: item.tiene_acueducto,
           permitePermuta: item.permite_permuta,
           adicionales: item.adicionales,
+          tieneGravamenes: item.tiene_gravamenes,
+          tieneHipoteca: item.tiene_hipoteca,
         });
       }
     });
@@ -439,7 +438,7 @@ export class PropiedadFormComponent implements OnInit {
   protected fieldError(name: FormFieldName): string | null {
     const control = this.form.get(name);
     if (!control || !control.invalid || !(control.dirty || control.touched)) return null;
-    if (control.hasError('required')) return REQUIRED_MESSAGES[name];
+    if (control.hasError('required')) return REQUIRED_MESSAGES[name] ?? null;
     if (control.hasError('maxlength')) return 'Máximo 255 caracteres.';
     if (control.hasError('min')) return MIN_MESSAGES[name] ?? 'El valor no puede ser negativo.';
     if (control.hasError('pattern')) {
@@ -559,6 +558,9 @@ export class PropiedadFormComponent implements OnInit {
 
       permite_permuta: raw.permitePermuta ?? false,
       adicionales: raw.adicionales,
+
+      tiene_gravamenes: raw.tieneGravamenes ?? false,
+      tiene_hipoteca: raw.tieneHipoteca ?? false,
     };
 
     if (this.isEditMode && this.propiedadId) {

@@ -63,4 +63,7 @@ export interface PropiedadForm {
 
   permite_permuta: boolean;
   adicionales: string | null;
+
+  tiene_gravamenes: boolean;
+  tiene_hipoteca: boolean;
 }

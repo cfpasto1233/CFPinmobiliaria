@@ -51,18 +51,25 @@ class Propiedad(TimestampMixin, Base):
     cocina: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
 
     conjunto_cerrado: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
-    tiene_administracion: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
+    tiene_administracion: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default="false"
+    )
     valor_administracion: Mapped[Decimal | None] = mapped_column(Numeric(14, 2), nullable=True)
     zonas_comunes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     actividad: Mapped[str | None] = mapped_column(Text, nullable=True)
     rural_urbano: Mapped[str | None] = mapped_column(String(10), nullable=True)
     tiene_servicios: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
-    tiene_alcantarillado: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
+    tiene_alcantarillado: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default="false"
+    )
     tiene_acueducto: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
 
     permite_permuta: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     adicionales: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    tiene_gravamenes: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
+    tiene_hipoteca: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
 
     fotos: Mapped[list["PropiedadFoto"]] = relationship(
         cascade="all, delete-orphan",
