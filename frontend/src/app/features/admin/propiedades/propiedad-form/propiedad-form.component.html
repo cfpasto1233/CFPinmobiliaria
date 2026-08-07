@@ -102,6 +102,25 @@
               ></ng-select>
             </div>
           </div>
+
+          <div class="propiedad-form-field">
+            <label for="whatsapp" class="propiedad-form-label">WhatsApp de contacto *</label>
+            <input
+              id="whatsapp"
+              type="tel"
+              class="form-control"
+              placeholder="3001234567"
+              [class.is-invalid]="fieldError('whatsapp')"
+              formControlName="whatsapp"
+            />
+            <div class="propiedad-form-hint">
+              Debe ser un número de WhatsApp válido: los interesados en agendar una cita para esta
+              propiedad escribirán directamente a este número.
+            </div>
+            @if (fieldError('whatsapp'); as err) {
+              <div class="form-error">{{ err }}</div>
+            }
+          </div>
         </section>
 
         <hr class="propiedad-form-divider" />

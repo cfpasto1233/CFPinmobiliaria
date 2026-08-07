@@ -125,3 +125,23 @@
   font-size: $cfpasto-text-sm;
   color: $cfpasto-text-muted;
 }
+
+.property-cta {
+  display: block;
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: $cfpasto-radius;
+  background: $cfpasto-primary;
+  color: $cfpasto-white;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: $cfpasto-primary-dark;
+    color: $cfpasto-white;
+  }
+}

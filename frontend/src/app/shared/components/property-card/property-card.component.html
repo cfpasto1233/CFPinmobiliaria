@@ -33,6 +33,18 @@
         property().tipo === 'arriendo' ? '/mes' : ''
       }}</span>
     </p>
+
+    @if (whatsappHref(); as href) {
+      <a
+        [href]="href"
+        target="_blank"
+        rel="noopener"
+        class="property-cta"
+        (click)="$event.stopPropagation()"
+      >
+        Agendar cita
+      </a>
+    }
   </div>
 </article>
 

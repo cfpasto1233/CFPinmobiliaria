@@ -24,6 +24,7 @@ export interface PropiedadForm {
   nombre: string;
   descripcion: string;
   ubicacion: string;
+  whatsapp: string;
   precio: number;
   tipo: 'venta' | 'arriendo' | 'oferta';
   tipo_inmueble: TipoInmueble;

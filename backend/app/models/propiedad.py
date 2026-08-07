@@ -18,6 +18,7 @@ class Propiedad(TimestampMixin, Base):
     nombre: Mapped[str] = mapped_column(String(255), nullable=False)
     descripcion: Mapped[str] = mapped_column(Text, nullable=False)
     ubicacion: Mapped[str] = mapped_column(String(255), nullable=False)
+    whatsapp: Mapped[str | None] = mapped_column(String(20), nullable=True)
     precio: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
     tipo: Mapped[str] = mapped_column(String(20), nullable=False)
     foto_principal_key: Mapped[str] = mapped_column(String(500), nullable=False)

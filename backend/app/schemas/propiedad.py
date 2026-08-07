@@ -130,6 +130,7 @@ class PropiedadForm(BaseModel):
     nombre: str = Field(max_length=255)
     descripcion: str
     ubicacion: str = Field(max_length=255)
+    whatsapp: str = Field(min_length=10, max_length=10, pattern=r"^\d{10}$")
     precio: Decimal = Field(gt=0)
     tipo: TipoPropiedad
     tipo_inmueble: TipoInmueble
@@ -179,6 +180,7 @@ class PropiedadUpdate(BaseModel):
     nombre: str | None = Field(default=None, max_length=255)
     descripcion: str | None = None
     ubicacion: str | None = Field(default=None, max_length=255)
+    whatsapp: str | None = Field(default=None, min_length=10, max_length=10, pattern=r"^\d{10}$")
     precio: Decimal | None = Field(default=None, gt=0)
     tipo: TipoPropiedad | None = None
     tipo_inmueble: TipoInmueble | None = None
@@ -334,6 +336,7 @@ class PropiedadPublic(BaseModel):
     nombre: str
     descripcion: str
     ubicacion: str
+    whatsapp: str | None
     precio: Decimal
     tipo: str
     orden: int

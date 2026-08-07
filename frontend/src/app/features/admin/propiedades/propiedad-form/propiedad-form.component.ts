@@ -139,6 +139,7 @@ type FormFieldName =
   | 'nombre'
   | 'descripcion'
   | 'ubicacion'
+  | 'whatsapp'
   | 'precio'
   | 'tipo'
   | 'tipoInmueble'
@@ -161,6 +162,8 @@ const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   nombre: 'El nombre es obligatorio.',
   descripcion: 'La descripción es obligatoria.',
   ubicacion: 'La ubicación es obligatoria.',
+  whatsapp:
+    'El número de WhatsApp es obligatorio — a este número llegarán los interesados en agendar una cita.',
   precio: 'El precio es obligatorio.',
   tipo: 'Selecciona un tipo.',
   tipoInmueble: 'Selecciona el tipo de inmueble.',
@@ -234,6 +237,7 @@ export class PropiedadFormComponent implements OnInit {
     nombre: ['', [Validators.required, Validators.maxLength(255)]],
     descripcion: ['', Validators.required],
     ubicacion: ['', [Validators.required, Validators.maxLength(255)]],
+    whatsapp: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
     precio: [null as number | null, [Validators.required, Validators.min(1)]],
     tipo: ['venta' as 'venta' | 'arriendo' | 'oferta', Validators.required],
     tipoInmueble: ['casa' as TipoInmueble, Validators.required],
@@ -375,6 +379,7 @@ export class PropiedadFormComponent implements OnInit {
           nombre: item.nombre,
           descripcion: item.descripcion,
           ubicacion: item.ubicacion,
+          whatsapp: item.whatsapp ?? '',
           precio: Number(item.precio),
           tipo: item.tipo === 'arriendo' || item.tipo === 'oferta' ? item.tipo : 'venta',
           tipoInmueble: (item.tipo_inmueble as TipoInmueble | undefined) ?? 'casa',
@@ -437,6 +442,11 @@ export class PropiedadFormComponent implements OnInit {
     if (control.hasError('required')) return REQUIRED_MESSAGES[name];
     if (control.hasError('maxlength')) return 'Máximo 255 caracteres.';
     if (control.hasError('min')) return MIN_MESSAGES[name] ?? 'El valor no puede ser negativo.';
+    if (control.hasError('pattern')) {
+      return name === 'whatsapp'
+        ? 'Debe ser un número de 10 dígitos, sin indicativo (ej. 3001234567).'
+        : null;
+    }
     return null;
   }
 
@@ -510,6 +520,7 @@ export class PropiedadFormComponent implements OnInit {
       nombre: raw.nombre ?? '',
       descripcion: raw.descripcion ?? '',
       ubicacion: raw.ubicacion ?? '',
+      whatsapp: raw.whatsapp ?? '',
       precio: raw.precio ?? 0,
       tipo: raw.tipo ?? 'venta',
       tipo_inmueble: raw.tipoInmueble ?? 'casa',

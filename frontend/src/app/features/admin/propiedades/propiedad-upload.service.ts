@@ -21,6 +21,7 @@ export class PropiedadUploadService {
     body.append('nombre', form.nombre);
     body.append('descripcion', form.descripcion);
     body.append('ubicacion', form.ubicacion);
+    body.append('whatsapp', form.whatsapp);
     body.append('precio', String(form.precio));
     body.append('tipo', form.tipo);
     body.append('tipo_inmueble', form.tipo_inmueble);
