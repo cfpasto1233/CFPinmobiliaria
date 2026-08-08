@@ -1,109 +1,91 @@
 <app-navbar />
 
-<section class="publicar-cuenta">
-  <div class="publicar-cuenta-header">
-    <a routerLink="/" class="publicar-cuenta-back">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 12H5" />
-        <path d="M12 19l-7-7 7-7" />
-      </svg>
-      Volver al inicio
-    </a>
+<section class="planes-hero">
+  <a routerLink="/" class="planes-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5" />
+      <path d="M12 19l-7-7 7-7" />
+    </svg>
+    Volver al inicio
+  </a>
 
-    <p class="publicar-cuenta-eyebrow">Autogestión</p>
-    <h1 class="publicar-cuenta-title">Publica tu propiedad por tu cuenta</h1>
-    <p class="publicar-cuenta-subtitle">
-      Cuéntanos sobre tu propiedad y te contactaremos para darte acceso y ayudarte a publicarla
-      directamente en la plataforma.
-    </p>
+  <h1 class="planes-title">Planes que <span class="is-accent">venden</span></h1>
+  <p class="planes-subtitle">
+    Publicamos tu propiedad para que <strong>más personas la vean, confíen</strong> y se
+    comuniquen contigo.
+  </p>
+
+  <span class="planes-badge">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7" />
+      <path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10" />
+    </svg>
+    Solo para venta de propiedades
+  </span>
+</section>
+
+<section class="propuesta">
+  <div class="propuesta-icon-box">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="4" width="20" height="13" rx="2"></rect>
+      <line x1="8" y1="21" x2="16" y2="21"></line>
+      <line x1="12" y1="17" x2="12" y2="21"></line>
+    </svg>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="publicar-cuenta-card">
-      <h2 class="publicar-cuenta-card-title">Datos de tu propiedad</h2>
+  <div class="propuesta-content">
+    <p class="propuesta-eyebrow">Nuestra propuesta de valor</p>
+    <h2 class="propuesta-title">
+      Aumenta el número de interesados y la visibilidad de tu propiedad con nosotros.
+    </h2>
+    <p class="propuesta-text">
+      Aplicamos estrategias efectivas de marketing digital para lograr el mayor tráfico posible,
+      posicionando tu propiedad con contenido atractivo y presencia constante.
+    </p>
+    <p class="propuesta-text">
+      Tu propiedad será vista por más personas interesadas y contactos reales.
+    </p>
+    <p class="propuesta-text">
+      Aquí encontrarás información real y verificada por profesionales, para que cada comprador
+      sepa exactamente a qué atenerse, sin riesgos de estafas ni engaños.
+    </p>
+  </div>
+</section>
 
-      <div class="publicar-cuenta-field">
-        <label for="nombreCompleto" class="publicar-cuenta-label">Nombre completo *</label>
-        <input
-          id="nombreCompleto"
-          type="text"
-          class="publicar-cuenta-input"
-          placeholder="Tu nombre"
-          [class.is-invalid]="fieldError('nombreCompleto')"
-          formControlName="nombreCompleto"
-        />
-        @if (fieldError('nombreCompleto'); as err) {
-          <div class="publicar-cuenta-error">{{ err }}</div>
+<section class="planes">
+  <div class="planes-grid">
+    @for (plan of plans; track plan.id) {
+      <div class="plan-card" [class.is-highlighted]="!!plan.badge">
+        @if (plan.badge) {
+          <div class="plan-badge">{{ plan.badge }}</div>
         }
-      </div>
 
-      <div class="publicar-cuenta-field">
-        <label for="numeroContacto" class="publicar-cuenta-label">Número de contacto *</label>
-        <input
-          id="numeroContacto"
-          type="tel"
-          class="publicar-cuenta-input"
-          placeholder="+57 300 000 0000"
-          [class.is-invalid]="fieldError('numeroContacto')"
-          formControlName="numeroContacto"
-        />
-        @if (fieldError('numeroContacto'); as err) {
-          <div class="publicar-cuenta-error">{{ err }}</div>
-        }
-      </div>
+        <div class="plan-card-body">
+          <p class="plan-nombre">{{ plan.nombre }}</p>
+          <p class="plan-precio">{{ plan.precio }}</p>
 
-      <div class="publicar-cuenta-field">
-        <label class="publicar-cuenta-label">Tipo de operación *</label>
-        <ng-select
-          class="publicar-cuenta-select"
-          [items]="tipoOperacionOptions"
-          bindLabel="label"
-          bindValue="value"
-          [clearable]="false"
-          placeholder="Seleccionar..."
-          formControlName="tipoOperacion"
-        ></ng-select>
-        @if (fieldError('tipoOperacion'); as err) {
-          <div class="publicar-cuenta-error">{{ err }}</div>
-        }
-      </div>
+          <ul class="plan-features">
+            @for (feature of plan.features; track feature) {
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                {{ feature }}
+              </li>
+            }
+          </ul>
 
-      <div class="publicar-cuenta-field">
-        <label for="direccionInmueble" class="publicar-cuenta-label">Dirección o sector del inmueble *</label>
-        <input
-          id="direccionInmueble"
-          type="text"
-          class="publicar-cuenta-input"
-          placeholder="Cra 15 #80-20, Bogotá"
-          [class.is-invalid]="fieldError('direccionInmueble')"
-          formControlName="direccionInmueble"
-        />
-        @if (fieldError('direccionInmueble'); as err) {
-          <div class="publicar-cuenta-error">{{ err }}</div>
-        }
+          <a [href]="plan.whatsappHref" target="_blank" rel="noopener" class="plan-cta">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.876.52 3.63 1.42 5.13L2 22l4.995-1.397A9.945 9.945 0 0 0 12 22c5.522 0 10-4.478 10-10S17.523 2 12.001 2zm0 18.09a8.075 8.075 0 0 1-4.115-1.115l-.295-.175-3.06.857.821-2.995-.192-.307A8.06 8.06 0 0 1 3.91 12c0-4.465 3.626-8.09 8.09-8.09 4.464 0 8.09 3.625 8.09 8.09 0 4.464-3.626 8.09-8.09 8.09z" />
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+            </svg>
+            Obtén tu plan aquí
+          </a>
+        </div>
       </div>
-
-      <div class="publicar-cuenta-field">
-        <label for="observaciones" class="publicar-cuenta-label">Observaciones</label>
-        <textarea
-          id="observaciones"
-          rows="3"
-          class="publicar-cuenta-input publicar-cuenta-textarea"
-          placeholder="Áreas, estado, restricciones..."
-          [class.is-invalid]="fieldError('observaciones')"
-          formControlName="observaciones"
-        ></textarea>
-        @if (fieldError('observaciones'); as err) {
-          <div class="publicar-cuenta-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="publicar-cuenta-actions">
-        <span class="publicar-cuenta-required-hint">* Campos obligatorios</span>
-        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
-      </div>
-    </div>
-  </form>
+    }
+  </div>
 </section>
 
 <app-footer />
