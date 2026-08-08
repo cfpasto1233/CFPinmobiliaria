@@ -280,6 +280,20 @@
   cursor: pointer;
 }
 
+.propiedad-form-video-preview {
+  width: 100%;
+  max-width: 360px;
+  border-radius: $cfpasto-radius-lg;
+  border: 1px solid $cfpasto-border;
+  background: $cfpasto-bg-subtle;
+}
+
+.propiedad-form-video-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
 // --- Barra de acciones ---
 
 .propiedad-form-actions {

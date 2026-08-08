@@ -141,6 +141,7 @@ export class SolicitudesDocumentosPropietarioEffects {
               SolicitudesDocumentosPropietarioActions.checkTokenSuccess({
                 valido: response.valido,
                 motivo: response.motivo ?? null,
+                planContratado: response.plan_contratado ?? null,
               }),
             ),
             catchError((error) =>

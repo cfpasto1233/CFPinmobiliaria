@@ -67,7 +67,7 @@ export const SolicitudesDocumentosPropietarioActions = {
   ),
   checkTokenSuccess: createAction(
     '[SolicitudesDocumentosPropietario] Check Token Success',
-    props<{ valido: boolean; motivo: string | null }>(),
+    props<{ valido: boolean; motivo: string | null; planContratado: string | null }>(),
   ),
   checkTokenFailure: createAction(
     '[SolicitudesDocumentosPropietario] Check Token Failure',

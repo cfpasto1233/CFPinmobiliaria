@@ -14,8 +14,10 @@ from app.crud.propiedad import (
     get_propiedad_by_id,
     get_propiedad_foto_by_id,
     list_propiedades,
+    remove_video,
     reorder_propiedades,
     replace_foto_principal,
+    set_video,
     update_propiedad,
 )
 from app.crud.solicitud_documento_propietario import (
@@ -115,6 +117,7 @@ def create_propiedad_endpoint(
     adicionales: Annotated[str | None, Form()] = None,
     tiene_gravamenes: Annotated[bool, Form()] = False,
     tiene_hipoteca: Annotated[bool, Form()] = False,
+    video: Annotated[UploadFile | None, File()] = None,
 ) -> PropiedadPublic:
     # Qué campos son obligatorios/aplican depende de tipo_inmueble — esa matriz
     # vive en el model_validator de PropiedadForm y no se puede expresar con
@@ -166,7 +169,11 @@ def create_propiedad_endpoint(
         raise HTTPException(status_code=422, detail=_mensaje_error_validacion(exc)) from exc
     storage.validate_image(foto_principal)
     key = storage.upload_image(foto_principal, folder="propiedades")
-    return create_propiedad(session=session, form=form, foto_principal_key=key)
+    video_key = None
+    if video is not None:
+        storage.validate_video(video)
+        video_key = storage.upload_video(video, folder="propiedades")
+    return create_propiedad(session=session, form=form, foto_principal_key=key, video_key=video_key)
 
 
 @router.post("/publicar-con-token/{token}", response_model=PropiedadPublic)
@@ -217,12 +224,17 @@ def create_propiedad_con_token_endpoint(
     adicionales: Annotated[str | None, Form()] = None,
     tiene_gravamenes: Annotated[bool, Form()] = False,
     tiene_hipoteca: Annotated[bool, Form()] = False,
+    video: Annotated[UploadFile | None, File()] = None,
 ) -> PropiedadPublic:
     solicitud = get_solicitud_documento_by_token(session=session, token=token)
     if not solicitud:
         raise HTTPException(
             status_code=410, detail="Este link no es válido, ya expiró o ya fue utilizado."
         )
+    # El campo de video en el formulario público solo se habilita para planes que lo
+    # incluyen — se valida también acá y no solo ocultando el campo en el frontend.
+    if video is not None and solicitud.plan_contratado not in ("estandar", "premium"):
+        raise HTTPException(status_code=400, detail="Tu plan no incluye la opción de subir video.")
     try:
         form = PropiedadForm(
             nombre=nombre,
@@ -269,12 +281,17 @@ def create_propiedad_con_token_endpoint(
         raise HTTPException(status_code=422, detail=_mensaje_error_validacion(exc)) from exc
     storage.validate_image(foto_principal)
     key = storage.upload_image(foto_principal, folder="propiedades")
+    video_key = None
+    if video is not None:
+        storage.validate_video(video)
+        video_key = storage.upload_video(video, folder="propiedades")
     propiedad = create_propiedad(
         session=session,
         form=form,
         foto_principal_key=key,
         destacada=True,
         solicitud_documento_id=solicitud.id,
+        video_key=video_key,
     )
     marcar_token_usado(session=session, db_obj=solicitud)
     return propiedad
@@ -322,6 +339,39 @@ def replace_foto_principal_endpoint(
     key = storage.upload_image(file, folder="propiedades")
     old_key = replace_foto_principal(session=session, propiedad=propiedad, key=key)
     storage.delete_object(old_key)
+    return propiedad
+
+
+@router.post("/{propiedad_id}/video", response_model=PropiedadPublic)
+def set_video_endpoint(
+    propiedad_id: uuid.UUID,
+    session: SessionDep,
+    _: SuperUser,
+    file: Annotated[UploadFile, File()],
+) -> PropiedadPublic:
+    propiedad = get_propiedad_by_id(session=session, propiedad_id=propiedad_id)
+    if not propiedad:
+        raise HTTPException(status_code=404, detail="Propiedad no encontrada.")
+    storage.validate_video(file)
+    key = storage.upload_video(file, folder="propiedades")
+    old_key = set_video(session=session, propiedad=propiedad, key=key)
+    if old_key:
+        storage.delete_object(old_key)
+    return propiedad
+
+
+@router.delete("/{propiedad_id}/video", response_model=PropiedadPublic)
+def remove_video_endpoint(
+    propiedad_id: uuid.UUID,
+    session: SessionDep,
+    _: SuperUser,
+) -> PropiedadPublic:
+    propiedad = get_propiedad_by_id(session=session, propiedad_id=propiedad_id)
+    if not propiedad:
+        raise HTTPException(status_code=404, detail="Propiedad no encontrada.")
+    old_key = remove_video(session=session, propiedad=propiedad)
+    if old_key:
+        storage.delete_object(old_key)
     return propiedad
 
 

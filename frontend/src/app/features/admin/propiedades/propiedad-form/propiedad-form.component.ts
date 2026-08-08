@@ -36,6 +36,8 @@ import {
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_VIDEO_TYPES = ['video/mp4'];
+const MAX_VIDEO_SIZE_BYTES = 50 * 1024 * 1024;
 
 type FormFieldName =
   | 'nombre'
@@ -269,6 +271,12 @@ export class PropiedadFormComponent implements OnInit {
   protected readonly fotoPrincipalDragOver = signal(false);
   protected readonly fotoAdicionalDragOver = signal(false);
 
+  // Video opcional — sin restricción de plan en el form de admin (a diferencia del
+  // formulario público por token, ver publicar-mi-propiedad.component.ts).
+  protected readonly videoFile = signal<File | null>(null);
+  protected readonly videoError = signal<string | null>(null);
+  protected readonly videoDragOver = signal(false);
+
   constructor() {
     effect(() => {
       const item = this.selected();
@@ -406,6 +414,39 @@ export class PropiedadFormComponent implements OnInit {
     this.store.dispatch(PropiedadesActions.removeFoto({ propiedadId: this.propiedadId, fotoId }));
   }
 
+  protected onVideoDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.videoDragOver.set(true);
+  }
+
+  protected onVideoDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.videoDragOver.set(false);
+  }
+
+  protected onVideoDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.videoDragOver.set(false);
+    this.handleVideo(event.dataTransfer?.files?.[0] ?? null);
+  }
+
+  protected onVideoSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.handleVideo(input.files?.[0] ?? null);
+    input.value = '';
+  }
+
+  protected onRemoveVideoSeleccionado(): void {
+    this.videoFile.set(null);
+    this.videoError.set(null);
+  }
+
+  protected onRemoveVideo(): void {
+    if (!this.propiedadId) return;
+    if (!confirm('¿Eliminar el video?')) return;
+    this.store.dispatch(PropiedadesActions.removeVideo({ propiedadId: this.propiedadId }));
+  }
+
   protected onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -474,7 +515,13 @@ export class PropiedadFormComponent implements OnInit {
       return;
     }
 
-    this.store.dispatch(PropiedadesActions.create({ form, fotoPrincipal: this.fotoPrincipalFile()! }));
+    this.store.dispatch(
+      PropiedadesActions.create({
+        form,
+        fotoPrincipal: this.fotoPrincipalFile()!,
+        video: this.videoFile(),
+      }),
+    );
   }
 
   private updateDetalleValidators(tipo: TipoInmueble | null): void {
@@ -538,6 +585,34 @@ export class PropiedadFormComponent implements OnInit {
     }
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
       return 'La imagen supera el tamaño máximo permitido (5 MB).';
+    }
+    return null;
+  }
+
+  private handleVideo(file: File | null): void {
+    if (!file) return;
+
+    const validationError = this.validateVideo(file);
+    if (validationError) {
+      this.videoError.set(validationError);
+      return;
+    }
+    this.videoError.set(null);
+
+    if (this.isEditMode && this.propiedadId) {
+      this.store.dispatch(PropiedadesActions.setVideo({ propiedadId: this.propiedadId, file }));
+      return;
+    }
+
+    this.videoFile.set(file);
+  }
+
+  private validateVideo(file: File): string | null {
+    if (!ALLOWED_VIDEO_TYPES.includes(file.type)) {
+      return 'Formato no soportado. Usa MP4.';
+    }
+    if (file.size > MAX_VIDEO_SIZE_BYTES) {
+      return 'El video supera el tamaño máximo permitido (50 MB).';
     }
     return null;
   }

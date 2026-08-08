@@ -97,6 +97,17 @@
     user-select: none;
   }
 
+  // A diferencia de la foto, el video necesita recibir sus propios eventos de
+  // puntero para que los controles nativos (play, barra de progreso) funcionen.
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: $cfpasto-text-dark;
+  }
+
   &.is-active {
     cursor: default;
     box-shadow:
@@ -186,6 +197,7 @@
 }
 
 .gallery-thumb {
+  position: relative;
   flex: 0 0 auto;
   width: 4rem;
   height: 3rem;
@@ -214,6 +226,16 @@
     opacity: 1;
     border-color: $cfpasto-primary;
   }
+}
+
+.gallery-thumb-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 26, 46, 0.45);
+  color: $cfpasto-white;
 }
 
 .gallery-modal-info {

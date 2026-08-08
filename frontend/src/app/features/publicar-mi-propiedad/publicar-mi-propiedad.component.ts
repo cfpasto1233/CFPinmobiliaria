@@ -39,6 +39,9 @@ import {
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_VIDEO_TYPES = ['video/mp4'];
+const MAX_VIDEO_SIZE_BYTES = 50 * 1024 * 1024;
+const PLANES_CON_VIDEO = ['estandar', 'premium'];
 
 type FormFieldName =
   | 'nombre'
@@ -268,6 +271,16 @@ export class PublicarMiPropiedadComponent implements OnInit {
   protected readonly fotoPrincipalError = signal<string | null>(null);
   protected readonly fotoPrincipalDragOver = signal(false);
 
+  // Solo se ofrece si el plan contratado en la solicitud de documentos lo incluye
+  // (ver planes en publicar-por-tu-cuenta.component.ts) — validado también en el
+  // backend (create_propiedad_con_token_endpoint), no solo ocultando el campo acá.
+  protected readonly mostrarVideo = computed(() =>
+    PLANES_CON_VIDEO.includes(this.tokenCheck()?.planContratado ?? ''),
+  );
+  protected readonly videoFile = signal<File | null>(null);
+  protected readonly videoError = signal<string | null>(null);
+  protected readonly videoDragOver = signal(false);
+
   private wasSubmitting = false;
 
   constructor() {
@@ -344,6 +357,33 @@ export class PublicarMiPropiedadComponent implements OnInit {
     this.fotoPrincipalError.set(null);
   }
 
+  protected onVideoDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.videoDragOver.set(true);
+  }
+
+  protected onVideoDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.videoDragOver.set(false);
+  }
+
+  protected onVideoDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.videoDragOver.set(false);
+    this.handleVideo(event.dataTransfer?.files?.[0] ?? null);
+  }
+
+  protected onVideoSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.handleVideo(input.files?.[0] ?? null);
+    input.value = '';
+  }
+
+  protected onRemoveVideoSeleccionado(): void {
+    this.videoFile.set(null);
+    this.videoError.set(null);
+  }
+
   protected onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -406,6 +446,7 @@ export class PublicarMiPropiedadComponent implements OnInit {
           tiene_hipoteca: raw.tieneHipoteca ?? false,
         },
         fotoPrincipal: this.fotoPrincipalFile()!,
+        video: this.mostrarVideo() ? this.videoFile() : null,
       }),
     );
   }
@@ -451,6 +492,28 @@ export class PublicarMiPropiedadComponent implements OnInit {
     }
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
       return 'La imagen supera el tamaño máximo permitido (5 MB).';
+    }
+    return null;
+  }
+
+  private handleVideo(file: File | null): void {
+    if (!file) return;
+
+    const validationError = this.validateVideo(file);
+    if (validationError) {
+      this.videoError.set(validationError);
+      return;
+    }
+    this.videoError.set(null);
+    this.videoFile.set(file);
+  }
+
+  private validateVideo(file: File): string | null {
+    if (!ALLOWED_VIDEO_TYPES.includes(file.type)) {
+      return 'Formato no soportado. Usa MP4.';
+    }
+    if (file.size > MAX_VIDEO_SIZE_BYTES) {
+      return 'El video supera el tamaño máximo permitido (50 MB).';
     }
     return null;
   }

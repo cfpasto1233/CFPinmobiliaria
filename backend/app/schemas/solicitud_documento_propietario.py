@@ -43,3 +43,4 @@ class SolicitudesDocumentosPropietarioPublic(BaseModel):
 class SolicitudDocumentoTokenCheck(BaseModel):
     valido: bool
     motivo: str | None = None
+    plan_contratado: str | None = None

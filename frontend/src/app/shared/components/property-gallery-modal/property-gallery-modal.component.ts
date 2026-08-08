@@ -40,6 +40,8 @@ interface SpecItem {
   label: string;
 }
 
+type GallerySlide = { type: 'photo'; url: string } | { type: 'video'; url: string };
+
 @Component({
   selector: 'app-property-gallery-modal',
   standalone: true,
@@ -67,14 +69,17 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
   private dragPointerId: number | null = null;
   private dragMoved = false;
 
-  protected readonly photos = computed(() => {
+  protected readonly slides = computed<GallerySlide[]>(() => {
     const property = this.property();
-    return [property.foto_principal_url, ...property.fotos.map((foto) => foto.url)];
+    const fotos: GallerySlide[] = [property.foto_principal_url, ...property.fotos.map((foto) => foto.url)].map(
+      (url) => ({ type: 'photo' as const, url }),
+    );
+    return property.video_url ? [...fotos, { type: 'video' as const, url: property.video_url }] : fotos;
   });
 
-  // Con una sola foto no hay vecinas que asomar — el efecto "coverflow" se
-  // desactiva y la imagen ocupa todo el ancho (ver .is-single en el SCSS).
-  protected readonly hasMultiplePhotos = computed(() => this.photos().length > 1);
+  // Con un solo slide no hay vecinos que asomar — el efecto "coverflow" se
+  // desactiva y ocupa todo el ancho (ver .is-single en el SCSS).
+  protected readonly hasMultiplePhotos = computed(() => this.slides().length > 1);
 
   protected readonly trackTransform = computed(() => {
     if (!this.hasMultiplePhotos()) {
@@ -252,12 +257,12 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
   }
 
   protected next(): void {
-    const total = this.photos().length;
+    const total = this.slides().length;
     this.activeIndex.update((current) => (current + 1) % total);
   }
 
   protected prev(): void {
-    const total = this.photos().length;
+    const total = this.slides().length;
     this.activeIndex.update((current) => (current - 1 + total) % total);
   }
 
@@ -266,7 +271,7 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
   }
 
   protected onPointerDown(event: PointerEvent): void {
-    if (this.photos().length <= 1) {
+    if (this.slides().length <= 1) {
       return;
     }
     this.dragStartX = event.clientX;

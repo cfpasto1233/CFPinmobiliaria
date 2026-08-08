@@ -16,7 +16,7 @@ export const PropiedadesActions = {
 
   create: createAction(
     '[Propiedades] Create',
-    props<{ form: PropiedadForm; fotoPrincipal: File }>(),
+    props<{ form: PropiedadForm; fotoPrincipal: File; video: File | null }>(),
   ),
   createSuccess: createAction('[Propiedades] Create Success', props<{ item: PropiedadPublic }>()),
   createFailure: createAction('[Propiedades] Create Failure', props<{ error: string }>()),
@@ -25,7 +25,7 @@ export const PropiedadesActions = {
   // validar los documentos del propietario (ver store/SolicitudesDocumentosPropietario).
   createConToken: createAction(
     '[Propiedades] Create Con Token',
-    props<{ token: string; form: PropiedadForm; fotoPrincipal: File }>(),
+    props<{ token: string; form: PropiedadForm; fotoPrincipal: File; video: File | null }>(),
   ),
   createConTokenSuccess: createAction(
     '[Propiedades] Create Con Token Success',
@@ -60,6 +60,20 @@ export const PropiedadesActions = {
   ),
   removeFotoSuccess: createAction('[Propiedades] Remove Foto Success', props<{ item: PropiedadPublic }>()),
   removeFotoFailure: createAction('[Propiedades] Remove Foto Failure', props<{ error: string }>()),
+
+  setVideo: createAction(
+    '[Propiedades] Set Video',
+    props<{ propiedadId: string; file: File }>(),
+  ),
+  setVideoSuccess: createAction('[Propiedades] Set Video Success', props<{ item: PropiedadPublic }>()),
+  setVideoFailure: createAction('[Propiedades] Set Video Failure', props<{ error: string }>()),
+
+  removeVideo: createAction('[Propiedades] Remove Video', props<{ propiedadId: string }>()),
+  removeVideoSuccess: createAction(
+    '[Propiedades] Remove Video Success',
+    props<{ item: PropiedadPublic }>(),
+  ),
+  removeVideoFailure: createAction('[Propiedades] Remove Video Failure', props<{ error: string }>()),
 
   replaceFotoPrincipal: createAction(
     '[Propiedades] Replace Foto Principal',

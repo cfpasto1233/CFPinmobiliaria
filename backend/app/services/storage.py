@@ -14,6 +14,9 @@ MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB
 ALLOWED_DOCUMENT_TYPES = {"application/pdf"}
 MAX_DOCUMENT_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
 
+ALLOWED_VIDEO_TYPES = {"video/mp4"}
+MAX_VIDEO_SIZE_BYTES = 50 * 1024 * 1024  # 50 MB
+
 _client = None
 _presign_client = None
 
@@ -123,6 +126,28 @@ def validate_document(upload_file: UploadFile) -> None:
 def upload_document(upload_file: UploadFile, *, folder: str) -> str:
     ensure_bucket()
     key = f"{folder}/{uuid.uuid4()}.pdf"
+    _get_client().upload_fileobj(
+        upload_file.file,
+        settings.MINIO_BUCKET,
+        key,
+        ExtraArgs={"ContentType": upload_file.content_type},
+    )
+    return key
+
+
+def validate_video(upload_file: UploadFile) -> None:
+    if upload_file.content_type not in ALLOWED_VIDEO_TYPES:
+        raise HTTPException(status_code=400, detail="El video debe ser un archivo MP4.")
+    if upload_file.size is not None and upload_file.size > MAX_VIDEO_SIZE_BYTES:
+        raise HTTPException(
+            status_code=400,
+            detail="El video supera el tamaño máximo permitido (50 MB).",
+        )
+
+
+def upload_video(upload_file: UploadFile, *, folder: str) -> str:
+    ensure_bucket()
+    key = f"{folder}/{uuid.uuid4()}.mp4"
     _get_client().upload_fileobj(
         upload_file.file,
         settings.MINIO_BUCKET,

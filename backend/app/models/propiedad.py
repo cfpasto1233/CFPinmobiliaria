@@ -78,6 +78,10 @@ class Propiedad(TimestampMixin, Base):
         ForeignKey("solicitudes_documentos_propietario.id", ondelete="SET NULL"), nullable=True
     )
 
+    # Video opcional (MP4, sin transcodificar — ver storage.py::validate_video). Solo
+    # disponible para planes estándar/premium en el flujo por token, sin restricción en admin.
+    video_key: Mapped[str | None] = mapped_column(String(500), nullable=True)
+
     fotos: Mapped[list["PropiedadFoto"]] = relationship(
         cascade="all, delete-orphan",
         order_by="PropiedadFoto.orden",
@@ -88,3 +92,9 @@ class Propiedad(TimestampMixin, Base):
         from app.services.storage import public_url
 
         return public_url(self.foto_principal_key)
+
+    @property
+    def video_url(self) -> str | None:
+        from app.services.storage import public_url
+
+        return public_url(self.video_key) if self.video_key else None

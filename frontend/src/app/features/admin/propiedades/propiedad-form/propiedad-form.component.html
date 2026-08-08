@@ -723,6 +723,66 @@
             </div>
           }
         </section>
+
+        <hr class="propiedad-form-divider" />
+
+        <section class="propiedad-form-section">
+          <h2 class="propiedad-form-section-title">Video (opcional)</h2>
+
+          @if (isEditMode && selected()?.video_url; as videoUrl) {
+            <div class="propiedad-form-field">
+              <label class="propiedad-form-label">Video actual</label>
+              <video [src]="videoUrl" controls preload="none" class="propiedad-form-video-preview"></video>
+              <div class="propiedad-form-video-actions">
+                <label class="propiedad-form-clear">
+                  Cambiar video
+                  <input type="file" accept="video/mp4" class="visually-hidden" (change)="onVideoSelected($event)" />
+                </label>
+                <button type="button" class="propiedad-form-clear" (click)="onRemoveVideo()">Quitar video</button>
+              </div>
+              @if (videoError(); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+          } @else if (videoFile(); as file) {
+            <div class="propiedad-form-field">
+              <label class="propiedad-form-label">Video seleccionado</label>
+              <p class="propiedad-form-dropzone-text">{{ file.name }}</p>
+              <button type="button" class="propiedad-form-clear" (click)="onRemoveVideoSeleccionado()">
+                Quitar selección
+              </button>
+            </div>
+          } @else {
+            <div class="propiedad-form-field">
+              <div
+                class="propiedad-form-dropzone propiedad-form-dropzone-compact"
+                [class.is-dragover]="videoDragOver()"
+                [class.has-error]="videoError()"
+                (click)="videoInput.click()"
+                (dragover)="onVideoDragOver($event)"
+                (dragleave)="onVideoDragLeave($event)"
+                (drop)="onVideoDrop($event)"
+              >
+                <svg class="propiedad-form-dropzone-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                </svg>
+                <p class="propiedad-form-dropzone-text">Arrastra un video o haz clic para seleccionar</p>
+                <p class="propiedad-form-dropzone-hint">MP4 · máx. 50MB</p>
+              </div>
+              <input
+                #videoInput
+                type="file"
+                accept="video/mp4"
+                class="visually-hidden"
+                (change)="onVideoSelected($event)"
+              />
+              @if (videoError(); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+          }
+        </section>
       </div>
 
       <div class="propiedad-form-actions">

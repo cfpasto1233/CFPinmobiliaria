@@ -53,8 +53,8 @@ export class PropiedadesEffects {
   create$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PropiedadesActions.create),
-      exhaustMap(({ form, fotoPrincipal }) =>
-        this.uploadService.createPropiedad(form, fotoPrincipal).pipe(
+      exhaustMap(({ form, fotoPrincipal, video }) =>
+        this.uploadService.createPropiedad(form, fotoPrincipal, video).pipe(
           map((item) => PropiedadesActions.createSuccess({ item })),
           catchError((error) =>
             of(
@@ -74,8 +74,8 @@ export class PropiedadesEffects {
   createConToken$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PropiedadesActions.createConToken),
-      exhaustMap(({ token, form, fotoPrincipal }) =>
-        this.uploadService.createPropiedadConToken(token, form, fotoPrincipal).pipe(
+      exhaustMap(({ token, form, fotoPrincipal, video }) =>
+        this.uploadService.createPropiedadConToken(token, form, fotoPrincipal, video).pipe(
           map((item) => PropiedadesActions.createConTokenSuccess({ item })),
           catchError((error) =>
             of(
@@ -192,6 +192,42 @@ export class PropiedadesEffects {
             of(
               PropiedadesActions.replaceFotoPrincipalFailure({
                 error: extractErrorMessage(error, 'No pudimos reemplazar la foto principal.'),
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  setVideo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PropiedadesActions.setVideo),
+      exhaustMap(({ propiedadId, file }) =>
+        this.uploadService.setVideo(propiedadId, file).pipe(
+          map((item) => PropiedadesActions.setVideoSuccess({ item })),
+          catchError((error) =>
+            of(
+              PropiedadesActions.setVideoFailure({
+                error: extractErrorMessage(error, 'No pudimos guardar el video.'),
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  removeVideo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PropiedadesActions.removeVideo),
+      exhaustMap(({ propiedadId }) =>
+        this.uploadService.removeVideo(propiedadId).pipe(
+          map((item) => PropiedadesActions.removeVideoSuccess({ item })),
+          catchError((error) =>
+            of(
+              PropiedadesActions.removeVideoFailure({
+                error: extractErrorMessage(error, 'No pudimos quitar el video.'),
               }),
             ),
           ),

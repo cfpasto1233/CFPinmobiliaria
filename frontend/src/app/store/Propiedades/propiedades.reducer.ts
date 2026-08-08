@@ -110,6 +110,20 @@ export const propiedadesReducer = createReducer(
   })),
   on(PropiedadesActions.replaceFotoPrincipalFailure, (state, { error }) => ({ ...state, error })),
 
+  on(PropiedadesActions.setVideoSuccess, (state, { item }) => ({
+    ...state,
+    items: upsert(state.items, item),
+    selected: item,
+  })),
+  on(PropiedadesActions.setVideoFailure, (state, { error }) => ({ ...state, error })),
+
+  on(PropiedadesActions.removeVideoSuccess, (state, { item }) => ({
+    ...state,
+    items: upsert(state.items, item),
+    selected: item,
+  })),
+  on(PropiedadesActions.removeVideoFailure, (state, { error }) => ({ ...state, error })),
+
   // Reordena de inmediato en el cliente (drag & drop debe sentirse instantáneo);
   // reorderSuccess reconcilia con el orden confirmado por el backend.
   on(PropiedadesActions.reorder, (state, { ids }) => {

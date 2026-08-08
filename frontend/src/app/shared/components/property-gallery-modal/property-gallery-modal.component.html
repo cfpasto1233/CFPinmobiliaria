@@ -13,7 +13,7 @@
         (pointerup)="onPointerUp($event)"
         (pointercancel)="onPointerUp($event)"
       >
-        @for (photo of photos(); track photo; let i = $index) {
+        @for (slide of slides(); track i; let i = $index) {
           <div
             class="gallery-modal-slide"
             [class.is-active]="i === activeIndex()"
@@ -22,12 +22,21 @@
             [style.z-index]="slideZIndex(i)"
             (click)="onSlideClick(i)"
           >
-            <img [src]="photo" [alt]="property().nombre + ' foto ' + (i + 1)" draggable="false" />
+            @if (slide.type === 'video') {
+              <video
+                [src]="slide.url"
+                controls
+                preload="none"
+                [poster]="property().foto_principal_url"
+              ></video>
+            } @else {
+              <img [src]="slide.url" [alt]="property().nombre + ' foto ' + (i + 1)" draggable="false" />
+            }
           </div>
         }
       </div>
 
-      @if (photos().length > 1) {
+      @if (slides().length > 1) {
         <button type="button" class="gallery-nav gallery-nav-prev" aria-label="Foto anterior" (click)="prev()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -59,15 +68,24 @@
           </svg>
         </button>
 
-        <span class="gallery-counter">{{ activeIndex() + 1 }} / {{ photos().length }}</span>
+        <span class="gallery-counter">{{ activeIndex() + 1 }} / {{ slides().length }}</span>
       }
     </div>
 
-    @if (photos().length > 1) {
+    @if (slides().length > 1) {
       <div class="gallery-thumbs">
-        @for (photo of photos(); track photo; let i = $index) {
+        @for (slide of slides(); track i; let i = $index) {
           <button type="button" class="gallery-thumb" [class.is-active]="i === activeIndex()" (click)="goTo(i)">
-            <img [src]="photo" [alt]="property().nombre + ' foto ' + (i + 1)" />
+            @if (slide.type === 'video') {
+              <img [src]="property().foto_principal_url" [alt]="property().nombre + ' video'" />
+              <span class="gallery-thumb-play">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                </svg>
+              </span>
+            } @else {
+              <img [src]="slide.url" [alt]="property().nombre + ' foto ' + (i + 1)" />
+            }
           </button>
         }
       </div>

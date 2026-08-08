@@ -335,6 +335,7 @@ class PropiedadPublic(BaseModel):
     orden: int
     destacada: bool
     foto_principal_url: str
+    video_url: str | None
     fotos: list[PropiedadFotoPublic]
     tipo_inmueble: str
 

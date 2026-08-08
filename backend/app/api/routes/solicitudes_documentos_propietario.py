@@ -118,4 +118,4 @@ def check_token_endpoint(token: str, session: SessionDep) -> SolicitudDocumentoT
         return SolicitudDocumentoTokenCheck(
             valido=False, motivo="Este link no es válido, ya expiró o ya fue utilizado."
         )
-    return SolicitudDocumentoTokenCheck(valido=True)
+    return SolicitudDocumentoTokenCheck(valido=True, plan_contratado=solicitud.plan_contratado)

@@ -17,8 +17,12 @@ export class PropiedadUploadService {
   private readonly httpClient = inject(HttpClient);
   private readonly basePath = inject(BASE_PATH_DEFAULT);
 
-  createPropiedad(form: PropiedadForm, fotoPrincipal: File): Observable<PropiedadPublic> {
-    const body = this.buildPropiedadFormData(form, fotoPrincipal);
+  createPropiedad(
+    form: PropiedadForm,
+    fotoPrincipal: File,
+    video: File | null,
+  ): Observable<PropiedadPublic> {
+    const body = this.buildPropiedadFormData(form, fotoPrincipal, video);
     return this.httpClient.post<PropiedadPublic>(`${this.basePath}/api/v1/propiedades/`, body);
   }
 
@@ -26,15 +30,20 @@ export class PropiedadUploadService {
     token: string,
     form: PropiedadForm,
     fotoPrincipal: File,
+    video: File | null,
   ): Observable<PropiedadPublic> {
-    const body = this.buildPropiedadFormData(form, fotoPrincipal);
+    const body = this.buildPropiedadFormData(form, fotoPrincipal, video);
     return this.httpClient.post<PropiedadPublic>(
       `${this.basePath}/api/v1/propiedades/publicar-con-token/${token}`,
       body,
     );
   }
 
-  private buildPropiedadFormData(form: PropiedadForm, fotoPrincipal: File): FormData {
+  private buildPropiedadFormData(
+    form: PropiedadForm,
+    fotoPrincipal: File,
+    video: File | null,
+  ): FormData {
     const body = new FormData();
     body.append('nombre', form.nombre);
     body.append('descripcion', form.descripcion);
@@ -76,8 +85,25 @@ export class PropiedadUploadService {
     body.append('tiene_hipoteca', String(form.tiene_hipoteca));
     if (form.adicionales !== null) body.append('adicionales', form.adicionales);
     body.append('foto_principal', fotoPrincipal);
+    if (video) body.append('video', video);
 
     return body;
+  }
+
+  setVideo(propiedadId: string, file: File): Observable<PropiedadPublic> {
+    const body = new FormData();
+    body.append('file', file);
+
+    return this.httpClient.post<PropiedadPublic>(
+      `${this.basePath}/api/v1/propiedades/${propiedadId}/video`,
+      body,
+    );
+  }
+
+  removeVideo(propiedadId: string): Observable<PropiedadPublic> {
+    return this.httpClient.delete<PropiedadPublic>(
+      `${this.basePath}/api/v1/propiedades/${propiedadId}/video`,
+    );
   }
 
   addFoto(propiedadId: string, file: File): Observable<PropiedadPublic> {

@@ -15,6 +15,7 @@ def create_propiedad(
     foto_principal_key: str,
     destacada: bool = False,
     solicitud_documento_id: uuid.UUID | None = None,
+    video_key: str | None = None,
 ) -> Propiedad:
     max_orden = session.scalar(select(func.max(Propiedad.orden))) or 0
     # Los nombres de PropiedadForm calzan 1:1 con las columnas de Propiedad, así
@@ -26,6 +27,7 @@ def create_propiedad(
         orden=max_orden + 1,
         destacada=destacada,
         solicitud_documento_id=solicitud_documento_id,
+        video_key=video_key,
     )
     session.add(db_obj)
     session.commit()
@@ -71,6 +73,8 @@ def get_propiedad_by_id(*, session: Session, propiedad_id: uuid.UUID) -> Propied
 
 def delete_propiedad(*, session: Session, db_obj: Propiedad) -> list[str]:
     keys = [db_obj.foto_principal_key] + [foto.key for foto in db_obj.fotos]
+    if db_obj.video_key:
+        keys.append(db_obj.video_key)
     session.delete(db_obj)
     session.commit()
     return keys
@@ -98,6 +102,24 @@ def delete_propiedad_foto(*, session: Session, db_obj: PropiedadFoto) -> str:
 def replace_foto_principal(*, session: Session, propiedad: Propiedad, key: str) -> str:
     old_key = propiedad.foto_principal_key
     propiedad.foto_principal_key = key
+    session.add(propiedad)
+    session.commit()
+    session.refresh(propiedad)
+    return old_key
+
+
+def set_video(*, session: Session, propiedad: Propiedad, key: str) -> str | None:
+    old_key = propiedad.video_key
+    propiedad.video_key = key
+    session.add(propiedad)
+    session.commit()
+    session.refresh(propiedad)
+    return old_key
+
+
+def remove_video(*, session: Session, propiedad: Propiedad) -> str | None:
+    old_key = propiedad.video_key
+    propiedad.video_key = None
     session.add(propiedad)
     session.commit()
     session.refresh(propiedad)

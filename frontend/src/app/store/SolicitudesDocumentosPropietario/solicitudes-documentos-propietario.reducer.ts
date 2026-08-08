@@ -8,6 +8,7 @@ import { SolicitudesDocumentosPropietarioActions } from './solicitudes-documento
 export interface TokenCheckState {
   valido: boolean;
   motivo: string | null;
+  planContratado: string | null;
 }
 
 export interface SolicitudesDocumentosPropietarioState {
@@ -114,14 +115,17 @@ export const solicitudesDocumentosPropietarioReducer = createReducer(
     tokenChecking: true,
     tokenCheck: null,
   })),
-  on(SolicitudesDocumentosPropietarioActions.checkTokenSuccess, (state, { valido, motivo }) => ({
-    ...state,
-    tokenChecking: false,
-    tokenCheck: { valido, motivo },
-  })),
+  on(
+    SolicitudesDocumentosPropietarioActions.checkTokenSuccess,
+    (state, { valido, motivo, planContratado }) => ({
+      ...state,
+      tokenChecking: false,
+      tokenCheck: { valido, motivo, planContratado },
+    }),
+  ),
   on(SolicitudesDocumentosPropietarioActions.checkTokenFailure, (state) => ({
     ...state,
     tokenChecking: false,
-    tokenCheck: { valido: false, motivo: 'No pudimos validar este link.' },
+    tokenCheck: { valido: false, motivo: 'No pudimos validar este link.', planContratado: null },
   })),
 );
