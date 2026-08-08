@@ -1,7 +1,7 @@
 <app-navbar />
 
-<section class="credito">
-  <div class="credito-header">
+<section class="credito-hero">
+  <div class="credito-hero-content">
     <a routerLink="/" class="credito-back">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M19 12H5" />
@@ -10,119 +10,90 @@
       Volver al inicio
     </a>
 
-    <p class="credito-eyebrow">Crédito hipotecario</p>
-    <h1 class="credito-title">Encuentra el crédito hipotecario ideal para ti</h1>
-    <p class="credito-subtitle">
-      Cuéntanos sobre la propiedad que quieres financiar y un asesor te contactará con las mejores opciones.
+    <p class="credito-kicker">Créditos hipotecarios — Broker CFP</p>
+
+    <h1 class="credito-title">
+      Elige el crédito hipotecario
+      <span class="is-accent">que te conviene.</span>
+    </h1>
+
+    <p class="credito-text">
+      Comparamos por ti entre los principales bancos para que obtengas la mejor opción de crédito
+      de forma rápida, segura y confiable.
+    </p>
+
+    <span class="credito-divider"></span>
+
+    <p class="credito-text-sm">
+      Con CFP Inmobiliaria encuentras el crédito hipotecario más conveniente, rápido y confiable.
     </p>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="credito-card">
-      <h2 class="credito-card-title">Datos de tu solicitud</h2>
-
-      <div class="credito-row">
-        <div class="credito-field">
-          <label for="nombreCompleto" class="credito-label">Nombre completo *</label>
-          <input
-            id="nombreCompleto"
-            type="text"
-            class="credito-input"
-            placeholder="Tu nombre"
-            [class.is-invalid]="fieldError('nombreCompleto')"
-            formControlName="nombreCompleto"
-          />
-          @if (fieldError('nombreCompleto'); as err) {
-            <div class="credito-error">{{ err }}</div>
-          }
-        </div>
-
-        <div class="credito-field">
-          <label for="numeroContacto" class="credito-label">Número de contacto *</label>
-          <input
-            id="numeroContacto"
-            type="tel"
-            class="credito-input"
-            placeholder="+57 300 000 0000"
-            [class.is-invalid]="fieldError('numeroContacto')"
-            formControlName="numeroContacto"
-          />
-          @if (fieldError('numeroContacto'); as err) {
-            <div class="credito-error">{{ err }}</div>
-          }
-        </div>
-      </div>
-
-      <div class="credito-row">
-        <div class="credito-field">
-          <label class="credito-label">Tipo de crédito *</label>
-          <ng-select
-            class="credito-select"
-            [items]="tipoCreditoOptions"
-            bindLabel="label"
-            bindValue="value"
-            [clearable]="false"
-            placeholder="Seleccionar..."
-            formControlName="tipoCredito"
-          ></ng-select>
-          @if (fieldError('tipoCredito'); as err) {
-            <div class="credito-error">{{ err }}</div>
-          }
-        </div>
-
-        <div class="credito-field">
-          <label for="valorInmueble" class="credito-label">Valor aproximado del inmueble *</label>
-          <input
-            id="valorInmueble"
-            type="text"
-            class="credito-input"
-            placeholder="Ej: $180.000.000"
-            [class.is-invalid]="fieldError('valorInmueble')"
-            formControlName="valorInmueble"
-          />
-          @if (fieldError('valorInmueble'); as err) {
-            <div class="credito-error">{{ err }}</div>
-          }
-        </div>
-      </div>
-
-      <div class="credito-field">
-        <label for="ingresosMensuales" class="credito-label">Ingresos mensuales aproximados</label>
-        <input
-          id="ingresosMensuales"
-          type="text"
-          class="credito-input"
-          placeholder="Ej: $4.500.000"
-          [class.is-invalid]="fieldError('ingresosMensuales')"
-          formControlName="ingresosMensuales"
-        />
-        @if (fieldError('ingresosMensuales'); as err) {
-          <div class="credito-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="credito-field">
-        <label for="mensaje" class="credito-label">Mensaje</label>
-        <textarea
-          id="mensaje"
-          rows="3"
-          class="credito-input credito-textarea"
-          placeholder="Cuéntanos más detalles de tu solicitud..."
-          [class.is-invalid]="fieldError('mensaje')"
-          formControlName="mensaje"
-        ></textarea>
-        @if (fieldError('mensaje'); as err) {
-          <div class="credito-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="credito-actions">
-        <span class="credito-required-hint">* Campos obligatorios</span>
-        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
-      </div>
+  <div class="credito-hero-media">
+    <div class="credito-image-placeholder credito-image-placeholder--laptop">
+      <span>Imagen: mockup del comparador (laptop)</span>
     </div>
-  </form>
+  </div>
 </section>
 
+<section class="credito-bancos">
+  <h2 class="credito-bancos-title">Comparamos entre 9 bancos líderes</h2>
+  <span class="credito-divider credito-divider--center"></span>
+
+  <div class="credito-bancos-grid">
+    @for (banco of bancos; track banco) {
+      <div class="credito-banco-chip">{{ banco }}</div>
+    }
+  </div>
+</section>
+
+<section class="credito-features">
+  <div class="credito-features-grid">
+    @for (feature of features; track feature.numero) {
+      <div class="credito-features-item">
+        <span class="credito-features-numero">{{ feature.numero }}</span>
+        <h3 class="credito-features-item-title">{{ feature.titulo }}</h3>
+        <p class="credito-features-item-text">{{ feature.texto }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="credito-cta-section">
+  <div class="credito-cta">
+    <div class="credito-cta-content">
+      <h2 class="credito-cta-title">
+        Tu nuevo hogar,
+        <span class="is-accent">más cerca de lo que crees.</span>
+      </h2>
+      <p class="credito-cta-text">
+        Nuestro equipo de expertos trabaja por ti para que consigas el crédito hipotecario que
+        realmente te conviene.
+      </p>
+
+      <a [href]="whatsappHref" target="_blank" rel="noopener noreferrer" class="credito-cta-btn">
+        Compara tu crédito en minutos
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="M12 5l7 7-7 7" />
+        </svg>
+      </a>
+
+      <p class="credito-cta-hint">Sin costo &middot; 100% online &middot; Respuesta rápida</p>
+    </div>
+
+    <div class="credito-cta-media">
+      <div class="credito-image-placeholder credito-image-placeholder--casa is-on-dark">
+        <span>Imagen: fachada de vivienda</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<p class="credito-disclaimer">
+  Las tasas, plazos, cuotas y condiciones dependen de cada banco y del perfil del solicitante.
+  <br />
+  La aprobación del crédito está sujeta a políticas de cada entidad financiera.
+</p>
+
 <app-footer />
-<app-publicar-whatsapp-fab />

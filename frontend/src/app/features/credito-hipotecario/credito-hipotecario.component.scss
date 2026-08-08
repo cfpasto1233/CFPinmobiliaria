@@ -4,22 +4,26 @@
   display: block;
 }
 
-.credito {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8rem 1.5rem 4rem;
-  background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
-
-  @media (max-width: 767.98px) {
-    padding: 7rem 1.25rem 3rem;
-  }
+.is-accent {
+  color: $cfpasto-accent-dark;
 }
 
-.credito-header {
-  max-width: 600px;
-  margin: 0 auto 2.5rem;
-  text-align: center;
+// ─── Hero ───────────────────────────────────────────────────────────────────
+
+.credito-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8rem 1.5rem 5rem;
+
+  @media (max-width: 991.98px) {
+    grid-template-columns: 1fr;
+    padding: 7rem 1.5rem 3.5rem;
+    text-align: center;
+  }
 }
 
 .credito-back {
@@ -29,217 +33,316 @@
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.65);
+  color: $cfpasto-text-muted;
   text-decoration: none;
   margin-bottom: 1.5rem;
   transition: color 0.2s ease;
 
   &:hover {
-    color: $cfpasto-white;
+    color: $cfpasto-primary;
+  }
+
+  @media (max-width: 991.98px) {
+    justify-content: center;
   }
 }
 
-.credito-eyebrow {
+.credito-kicker {
   font-family: $cfpasto-font-body;
   font-weight: 600;
   font-size: $cfpasto-text-sm;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: $cfpasto-accent;
-  margin-bottom: 0.75rem;
+  color: $cfpasto-accent-dark;
+  margin-bottom: 1rem;
 }
 
 .credito-title {
   font-family: $cfpasto-font-heading;
   font-weight: 700;
-  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-  color: $cfpasto-white;
-  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.15;
+  color: $cfpasto-primary;
+  margin: 0 0 1.25rem;
 }
 
-.credito-subtitle {
+.credito-text {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-base;
-  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  color: $cfpasto-text-muted;
+  max-width: 480px;
   margin: 0;
-}
 
-.credito-card {
-  width: 100%;
-  max-width: 880px;
-  padding: 2rem;
-  background: rgba($cfpasto-primary-dark, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: $cfpasto-radius-xl;
-  box-shadow: $cfpasto-shadow-lg;
-
-  @media (max-width: 575.98px) {
-    padding: 1.5rem;
+  @media (max-width: 991.98px) {
+    margin: 0 auto;
   }
 }
 
-.credito-card-title {
-  font-family: $cfpasto-font-heading;
-  font-weight: 700;
-  font-size: $cfpasto-text-lg;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: $cfpasto-accent;
-  margin: 0 0 1.75rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+.credito-text-sm {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  line-height: 1.6;
+  color: $cfpasto-text-muted;
+  max-width: 440px;
+  margin: 0;
+
+  @media (max-width: 991.98px) {
+    margin: 0 auto;
+  }
 }
 
-.credito-row {
+.credito-divider {
+  display: block;
+  width: 48px;
+  height: 3px;
+  border-radius: 50rem;
+  background: $cfpasto-accent;
+  margin: 1.5rem 0;
+
+  &--center {
+    margin: 0.75rem auto 2.5rem;
+  }
+
+  .credito-hero-content & {
+    @media (max-width: 991.98px) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+.credito-hero-media {
+  display: flex;
+}
+
+// ─── Placeholders de imagen ─────────────────────────────────────────────────
+
+.credito-image-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem;
+  border: 2px dashed $cfpasto-border;
+  border-radius: $cfpasto-radius-xl;
+  background: $cfpasto-bg-subtle;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-light;
+
+  &.is-on-dark {
+    border-color: rgba($cfpasto-white, 0.3);
+    background: rgba($cfpasto-white, 0.04);
+    color: rgba($cfpasto-white, 0.6);
+  }
+}
+
+// ─── Bancos ─────────────────────────────────────────────────────────────────
+
+.credito-bancos {
+  padding: 4rem 1.5rem;
+  background: $cfpasto-white;
+  text-align: center;
+}
+
+.credito-bancos-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.6vw, 1.875rem);
+  color: $cfpasto-primary;
+  margin: 0;
+}
+
+.credito-bancos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.credito-banco-chip {
+  padding: 1.1rem 1.5rem;
+  min-width: 150px;
+  background: $cfpasto-bg-subtle;
+  border: 1px solid $cfpasto-border-light;
+  border-radius: $cfpasto-radius-lg;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+}
+
+// ─── Grid numerado 01–04 ────────────────────────────────────────────────────
+
+.credito-features {
+  padding: 5rem 1.5rem;
+  background: $cfpasto-bg;
+}
+
+.credito-features-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: left;
+
+  @media (max-width: 991.98px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @media (max-width: 575.98px) {
     grid-template-columns: 1fr;
   }
+}
 
-  .credito-field {
-    margin-bottom: 0;
+.credito-features-item {
+  padding-left: 1.5rem;
+  border-left: 1px solid $cfpasto-border;
+
+  &:first-child {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  @media (max-width: 991.98px) {
+    border-left: none;
+    padding-left: 0;
   }
 }
 
-.credito-field {
-  margin-bottom: 1.5rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.credito-label {
+.credito-features-numero {
   display: block;
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-accent-dark;
+  margin-bottom: 0.75rem;
+}
+
+.credito-features-item-title {
   font-family: $cfpasto-font-body;
   font-weight: 700;
-  font-size: $cfpasto-text-xs;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: $cfpasto-accent;
-  margin-bottom: 0.5rem;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.02em;
+  color: $cfpasto-primary;
+  margin: 0 0 0.6rem;
 }
 
-.credito-input {
-  width: 100%;
-  padding: 0.85rem 1rem;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: $cfpasto-radius-lg;
-  color: $cfpasto-white;
+.credito-features-item-text {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.35);
-  }
-
-  &:focus {
-    outline: none;
-    border-color: $cfpasto-accent;
-    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
-  }
-
-  &.is-invalid {
-    border-color: $cfpasto-error-light;
-
-    &:focus {
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
-    }
-  }
+  line-height: 1.6;
+  color: $cfpasto-text-muted;
+  margin: 0;
 }
 
-.credito-textarea {
-  min-height: 90px;
-  resize: vertical;
+// ─── Panel CTA oscuro ───────────────────────────────────────────────────────
+
+.credito-cta-section {
+  padding: 0 1.5rem 5rem;
+  background: $cfpasto-white;
 }
 
-.credito-error {
-  font-family: $cfpasto-font-body;
-  font-size: $cfpasto-text-xs;
-  color: #ffb4b4;
-  margin-top: 0.4rem;
-}
-
-.credito-actions {
-  display: flex;
+.credito-cta {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3.5rem;
+  background: $cfpasto-primary;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
 
-  @media (max-width: 575.98px) {
-    flex-direction: column-reverse;
-    align-items: stretch;
+  @media (max-width: 991.98px) {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 2.5rem 1.75rem;
   }
 }
 
-.credito-required-hint {
+.credito-cta-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  line-height: 1.2;
+  color: $cfpasto-white;
+  margin: 0 0 1rem;
+
+  .is-accent {
+    color: $cfpasto-accent;
+  }
+}
+
+.credito-cta-text {
   font-family: $cfpasto-font-body;
-  font-size: $cfpasto-text-xs;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: $cfpasto-text-base;
+  line-height: 1.6;
+  color: rgba($cfpasto-white, 0.75);
+  max-width: 440px;
+  margin: 0 0 1.75rem;
+
+  @media (max-width: 991.98px) {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
-// --- ng-select sobre fondo oscuro ---
-// Sin [appendTo]="'body'" el panel queda dentro del árbol del componente,
-// así que ::ng-deep con el atributo de encapsulación de Angular sí lo alcanza.
+.credito-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.75rem;
+  background: $cfpasto-accent;
+  border-radius: $cfpasto-radius;
+  color: $cfpasto-text-dark;
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 
-:host ::ng-deep .credito-select {
-  .ng-select-container {
-    min-height: 0;
-    padding: 0.35rem 0.25rem;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: $cfpasto-radius-lg;
-    color: $cfpasto-white;
+  &:hover {
+    background: $cfpasto-accent-light;
+    color: $cfpasto-text-dark;
+    transform: translateY(-2px);
   }
 
-  &.ng-select-focused .ng-select-container {
-    border-color: $cfpasto-accent;
-    box-shadow: 0 0 0 3px rgba($cfpasto-accent, 0.25);
-  }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
 
-  .ng-value,
-  .ng-input > input {
-    color: $cfpasto-white;
-  }
-
-  .ng-placeholder {
-    color: rgba(255, 255, 255, 0.35);
-  }
-
-  .ng-arrow-wrapper .ng-arrow {
-    border-top-color: rgba(255, 255, 255, 0.55);
-  }
-
-  .ng-dropdown-panel {
-    background: $cfpasto-primary-dark;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: $cfpasto-radius-lg;
-    box-shadow: $cfpasto-shadow-lg;
-    margin-top: 0.35rem;
-    overflow: hidden;
-
-    .ng-dropdown-panel-items .ng-option {
-      background: transparent;
-      color: rgba(255, 255, 255, 0.85);
-
-      &.ng-option-marked {
-        background: rgba(255, 255, 255, 0.08);
-      }
-
-      &.ng-option-selected {
-        background: rgba($cfpasto-accent, 0.16);
-        color: $cfpasto-accent;
-        font-weight: 600;
-      }
+    &:hover {
+      transform: none;
     }
   }
+}
+
+.credito-cta-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: rgba($cfpasto-white, 0.55);
+  margin: 1rem 0 0;
+}
+
+// ─── Disclaimer ─────────────────────────────────────────────────────────────
+
+.credito-disclaimer {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  line-height: 1.6;
+  color: $cfpasto-text-light;
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
 }
