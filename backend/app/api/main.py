@@ -12,6 +12,7 @@ from app.api.routes import (
     solicitudes_arriendo,
     solicitudes_documentos_propietario,
     solicitudes_publicar_propiedad,
+    solicitudes_sugerencias,
     solicitudes_venta,
     users,
     utils,
@@ -29,6 +30,7 @@ api_router.include_router(solicitudes_venta.router)
 api_router.include_router(solicitudes_arriendo.router)
 api_router.include_router(solicitudes_arrendar_propiedad.router)
 api_router.include_router(solicitudes_publicar_propiedad.router)
+api_router.include_router(solicitudes_sugerencias.router)
 api_router.include_router(solicitudes_documentos_propietario.router)
 api_router.include_router(reportes_dano.router)
 api_router.include_router(utils.router)

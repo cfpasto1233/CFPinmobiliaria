@@ -18,6 +18,10 @@ import {
   SolicitudesPublicarPropiedadState,
   solicitudesPublicarPropiedadReducer,
 } from './SolicitudesPublicarPropiedad/solicitudes-publicar-propiedad.reducer';
+import {
+  SolicitudesSugerenciasState,
+  solicitudesSugerenciasReducer,
+} from './SolicitudesSugerencias/solicitudes-sugerencias.reducer';
 import { SolicitudesVentaState, solicitudesVentaReducer } from './SolicitudesVenta/solicitudes-venta.reducer';
 
 export interface RootReducerState {
@@ -30,6 +34,7 @@ export interface RootReducerState {
   solicitudesArriendo: SolicitudesArriendoState;
   solicitudesArrendarPropiedad: SolicitudesArrendarPropiedadState;
   solicitudesPublicarPropiedad: SolicitudesPublicarPropiedadState;
+  solicitudesSugerencias: SolicitudesSugerenciasState;
   solicitudesDocumentosPropietario: SolicitudesDocumentosPropietarioState;
   reportesDano: ReportesDanoState;
 }
@@ -44,6 +49,7 @@ export const rootReducer: ActionReducerMap<RootReducerState> = {
   solicitudesArriendo: solicitudesArriendoReducer,
   solicitudesArrendarPropiedad: solicitudesArrendarPropiedadReducer,
   solicitudesPublicarPropiedad: solicitudesPublicarPropiedadReducer,
+  solicitudesSugerencias: solicitudesSugerenciasReducer,
   solicitudesDocumentosPropietario: solicitudesDocumentosPropietarioReducer,
   reportesDano: reportesDanoReducer,
 };

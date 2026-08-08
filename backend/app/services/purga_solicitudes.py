@@ -6,6 +6,7 @@ from app.crud.reporte_dano import delete_reportes_dano_antiguos
 from app.crud.solicitud_arrendar_propiedad import delete_solicitudes_arrendar_propiedad_antiguas
 from app.crud.solicitud_arriendo import delete_solicitudes_arriendo_antiguas
 from app.crud.solicitud_publicar_propiedad import delete_solicitudes_publicar_propiedad_antiguas
+from app.crud.solicitud_sugerencia import delete_solicitudes_sugerencias_antiguas
 from app.crud.solicitud_venta import delete_solicitudes_venta_antiguas
 
 # SolicitudDocumentoPropietario queda excluida a propósito: guarda los documentos
@@ -26,6 +27,7 @@ def purgar_solicitudes_antiguas() -> None:
         borradas_publicar_propiedad = delete_solicitudes_publicar_propiedad_antiguas(
             session=session, dias=dias
         )
+        borradas_sugerencias = delete_solicitudes_sugerencias_antiguas(session=session, dias=dias)
         borradas_reportes_dano = delete_reportes_dano_antiguos(session=session, dias=dias)
 
     if (
@@ -33,15 +35,18 @@ def purgar_solicitudes_antiguas() -> None:
         or borradas_arriendo
         or borradas_arrendar_propiedad
         or borradas_publicar_propiedad
+        or borradas_sugerencias
         or borradas_reportes_dano
     ):
         logger.info(
             "Purga de solicitudes antiguas (>%s días): %s de venta, %s de arriendo, "
-            "%s de arrendar-propiedad, %s de publicar-propiedad, %s de reportes de daño",
+            "%s de arrendar-propiedad, %s de publicar-propiedad, %s de sugerencias, "
+            "%s de reportes de daño",
             dias,
             borradas_venta,
             borradas_arriendo,
             borradas_arrendar_propiedad,
             borradas_publicar_propiedad,
+            borradas_sugerencias,
             borradas_reportes_dano,
         )

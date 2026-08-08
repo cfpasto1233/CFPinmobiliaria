@@ -46,6 +46,7 @@ export class SidebarComponent {
           path: '/admin/solicitudes-publicar-propiedad',
           icon: 'requests',
         },
+        { label: 'Sugerencias', path: '/admin/solicitudes-sugerencias', icon: 'requests' },
         {
           label: 'Documentos de propietarios',
           path: '/admin/solicitudes-documentos-propietario',

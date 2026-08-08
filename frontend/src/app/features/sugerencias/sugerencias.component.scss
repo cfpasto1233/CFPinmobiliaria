@@ -1,0 +1,284 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.is-accent {
+  color: $cfpasto-accent-dark;
+}
+
+// ─── Hero ───────────────────────────────────────────────────────────────────
+
+.sugerencias-hero {
+  padding: 8rem 1.5rem 3rem;
+  background: $cfpasto-white;
+  text-align: center;
+
+  @media (max-width: 767.98px) {
+    padding: 7rem 1.5rem 2.5rem;
+  }
+}
+
+.sugerencias-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $cfpasto-primary;
+  }
+}
+
+.sugerencias-kicker {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent-dark;
+  margin-bottom: 1rem;
+}
+
+.sugerencias-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.15;
+  color: $cfpasto-primary;
+  max-width: 680px;
+  margin: 0 auto 1.25rem;
+}
+
+.sugerencias-subtitle {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  color: $cfpasto-text-muted;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+// ─── Formulario ─────────────────────────────────────────────────────────────
+
+.sugerencias-form-section {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1.5rem 6rem;
+  background: rgba($cfpasto-primary, 0.04);
+}
+
+.sugerencias-card {
+  width: 100%;
+  max-width: 720px;
+  padding: 2rem 2.5rem;
+  background: $cfpasto-white;
+  border: 1.5px solid $cfpasto-primary;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+
+  @media (max-width: 575.98px) {
+    padding: 1.5rem;
+  }
+}
+
+.sugerencias-card-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-lg;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $cfpasto-primary;
+  margin: 0 0 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid $cfpasto-border;
+}
+
+.sugerencias-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+
+  .sugerencias-field {
+    margin-bottom: 0;
+  }
+}
+
+.sugerencias-field {
+  margin-bottom: 1.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.sugerencias-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $cfpasto-primary;
+  margin-bottom: 0.5rem;
+}
+
+.sugerencias-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: $cfpasto-white;
+  border: 1.5px solid rgba($cfpasto-primary, 0.3);
+  border-radius: $cfpasto-radius-lg;
+  color: $cfpasto-text-dark;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &::placeholder {
+    color: $cfpasto-text-light;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $cfpasto-primary;
+    box-shadow: 0 0 0 3px rgba($cfpasto-primary, 0.15);
+  }
+
+  &.is-invalid {
+    border-color: $cfpasto-error;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($cfpasto-error, 0.15);
+    }
+  }
+}
+
+.sugerencias-textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.sugerencias-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-error;
+  margin-top: 0.4rem;
+}
+
+.sugerencias-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid $cfpasto-border;
+
+  @media (max-width: 575.98px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.sugerencias-required-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-muted;
+}
+
+// ─── Toggle Sí/No (¿deseas que te contactemos?) ────────────────────────────
+
+.sugerencias-toggle {
+  display: inline-flex;
+  border: 1.5px solid rgba($cfpasto-primary, 0.3);
+  border-radius: $cfpasto-radius-lg;
+  overflow: hidden;
+}
+
+.sugerencias-toggle-btn {
+  padding: 0.6rem 1.75rem;
+  background: $cfpasto-white;
+  border: none;
+  color: $cfpasto-text-dark;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &:not(:last-child) {
+    border-right: 1.5px solid rgba($cfpasto-primary, 0.3);
+  }
+
+  &.is-active {
+    background: $cfpasto-primary;
+    color: $cfpasto-white;
+  }
+}
+
+// --- ng-select (medio de comunicación) sobre fondo claro ---
+// Sin [appendTo]="'body'" el panel queda dentro del árbol del componente,
+// así que ::ng-deep con el atributo de encapsulación de Angular sí lo alcanza.
+
+:host ::ng-deep .sugerencias-select {
+  .ng-select-container {
+    min-height: 0;
+    padding: 0.35rem 0.25rem;
+    background: $cfpasto-white;
+    border: 1.5px solid rgba($cfpasto-primary, 0.3);
+    border-radius: $cfpasto-radius-lg;
+    color: $cfpasto-text-dark;
+  }
+
+  &.ng-select-focused .ng-select-container {
+    border-color: $cfpasto-primary;
+    box-shadow: 0 0 0 3px rgba($cfpasto-primary, 0.15);
+  }
+
+  .ng-value,
+  .ng-input > input {
+    color: $cfpasto-text-dark;
+  }
+
+  .ng-placeholder {
+    color: $cfpasto-text-light;
+  }
+
+  .ng-arrow-wrapper .ng-arrow {
+    border-top-color: $cfpasto-text-muted;
+  }
+
+  .ng-dropdown-panel {
+    background: $cfpasto-white;
+    border: 1px solid $cfpasto-border;
+    border-radius: $cfpasto-radius-lg;
+    box-shadow: $cfpasto-shadow-lg;
+    margin-top: 0.35rem;
+    overflow: hidden;
+
+    .ng-dropdown-panel-items .ng-option {
+      background: transparent;
+      color: $cfpasto-text-dark;
+
+      &.ng-option-marked {
+        background: rgba($cfpasto-primary, 0.06);
+      }
+
+      &.ng-option-selected {
+        background: rgba($cfpasto-primary, 0.1);
+        color: $cfpasto-primary;
+        font-weight: 600;
+      }
+    }
+  }
+}

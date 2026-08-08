@@ -1,0 +1,128 @@
+<app-navbar />
+
+<section class="sugerencias-hero">
+  <a routerLink="/" class="sugerencias-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5" />
+      <path d="M12 19l-7-7 7-7" />
+    </svg>
+    Volver al inicio
+  </a>
+
+  <p class="sugerencias-kicker">— CFP Inmobiliaria · Sugerencias</p>
+
+  <h1 class="sugerencias-title">Tu opinión nos ayuda a <span class="is-accent">mejorar</span>.</h1>
+
+  <p class="sugerencias-subtitle">
+    Cuéntanos qué podemos hacer mejor. Leemos cada sugerencia que recibimos.
+  </p>
+</section>
+
+<section class="sugerencias-form-section">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="sugerencias-card">
+      <h2 class="sugerencias-card-title">Tu sugerencia</h2>
+
+      <div class="sugerencias-row">
+        <div class="sugerencias-field">
+          <label for="nombre" class="sugerencias-label">Nombre *</label>
+          <input
+            id="nombre"
+            type="text"
+            class="sugerencias-input"
+            placeholder="Tu nombre"
+            [class.is-invalid]="fieldError('nombre')"
+            formControlName="nombre"
+          />
+          @if (fieldError('nombre'); as err) {
+            <div class="sugerencias-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="sugerencias-field">
+          <label class="sugerencias-label">Medio de comunicación *</label>
+          <ng-select
+            class="sugerencias-select"
+            [items]="medioComunicacionOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            placeholder="Seleccionar..."
+            formControlName="medioComunicacion"
+          ></ng-select>
+          @if (fieldError('medioComunicacion'); as err) {
+            <div class="sugerencias-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="sugerencias-field">
+        <label for="numeroContacto" class="sugerencias-label">Número de contacto *</label>
+        <input
+          id="numeroContacto"
+          type="tel"
+          class="sugerencias-input"
+          placeholder="+57 300 000 0000"
+          [class.is-invalid]="fieldError('numeroContacto')"
+          formControlName="numeroContacto"
+        />
+        @if (fieldError('numeroContacto'); as err) {
+          <div class="sugerencias-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="sugerencias-field">
+        <label for="sugerencia" class="sugerencias-label">Tu sugerencia *</label>
+        <textarea
+          id="sugerencia"
+          rows="4"
+          class="sugerencias-input sugerencias-textarea"
+          placeholder="Cuéntanos qué podemos mejorar..."
+          [class.is-invalid]="fieldError('sugerencia')"
+          formControlName="sugerencia"
+        ></textarea>
+        @if (fieldError('sugerencia'); as err) {
+          <div class="sugerencias-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="sugerencias-field">
+        <label class="sugerencias-label">¿Deseas que te contactemos? *</label>
+        <div class="sugerencias-toggle" role="group" aria-label="¿Deseas que te contactemos?">
+          <button
+            type="button"
+            class="sugerencias-toggle-btn"
+            [class.is-active]="form.get('deseaContacto')?.value === true"
+            (click)="setDeseaContacto(true)"
+          >
+            Sí
+          </button>
+          <button
+            type="button"
+            class="sugerencias-toggle-btn"
+            [class.is-active]="form.get('deseaContacto')?.value === false"
+            (click)="setDeseaContacto(false)"
+          >
+            No
+          </button>
+        </div>
+        @if (fieldError('deseaContacto'); as err) {
+          <div class="sugerencias-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="sugerencias-actions">
+        <span class="sugerencias-required-hint">* Campos obligatorios</span>
+        <button type="submit" class="btn btn-secondary" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Enviar sugerencia
+        </button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<app-footer />
+<app-publicar-whatsapp-fab />

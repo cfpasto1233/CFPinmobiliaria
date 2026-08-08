@@ -77,6 +77,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'sugerencias',
+    loadComponent: () =>
+      import('./features/sugerencias/sugerencias.component').then((m) => m.SugerenciasComponent),
+  },
+  {
     path: 'publicar-por-tu-cuenta',
     loadComponent: () =>
       import('./features/publicar-por-tu-cuenta/publicar-por-tu-cuenta.component').then(
@@ -206,6 +211,13 @@ export const routes: Routes = [
           import(
             './features/admin/solicitudes-publicar-propiedad/solicitudes-publicar-propiedad-list.component'
           ).then((m) => m.SolicitudesPublicarPropiedadListComponent),
+      },
+      {
+        path: 'solicitudes-sugerencias',
+        loadComponent: () =>
+          import(
+            './features/admin/solicitudes-sugerencias/solicitudes-sugerencias-list.component'
+          ).then((m) => m.SolicitudesSugerenciasListComponent),
       },
       {
         path: 'solicitudes-documentos-propietario',

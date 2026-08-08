@@ -10,6 +10,7 @@ from app.models.solicitud_arrendar_propiedad import SolicitudArrendarPropiedad
 from app.models.solicitud_arriendo import SolicitudArriendo
 from app.models.solicitud_documento_propietario import SolicitudDocumentoPropietario
 from app.models.solicitud_publicar_propiedad import SolicitudPublicarPropiedad
+from app.models.solicitud_sugerencia import SolicitudSugerencia
 from app.models.solicitud_venta import SolicitudVenta
 from app.models.user import User
 
@@ -26,6 +27,7 @@ __all__ = [
     "SolicitudArriendo",
     "SolicitudDocumentoPropietario",
     "SolicitudPublicarPropiedad",
+    "SolicitudSugerencia",
     "SolicitudVenta",
     "User",
 ]
