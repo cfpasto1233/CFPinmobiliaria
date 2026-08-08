@@ -58,6 +58,19 @@ export const propiedadesReducer = createReducer(
   })),
   on(PropiedadesActions.createFailure, (state, { error }) => ({ ...state, loading: false, error })),
 
+  on(PropiedadesActions.createConToken, (state) => ({ ...state, loading: true, error: null })),
+  on(PropiedadesActions.createConTokenSuccess, (state, { item }) => ({
+    ...state,
+    items: upsert(state.items, item),
+    selected: item,
+    loading: false,
+  })),
+  on(PropiedadesActions.createConTokenFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
   on(PropiedadesActions.update, (state) => ({ ...state, loading: true, error: null })),
   on(PropiedadesActions.updateSuccess, (state, { item }) => ({
     ...state,

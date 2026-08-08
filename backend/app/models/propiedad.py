@@ -2,7 +2,7 @@ import uuid
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, Integer, Numeric, String, Text
+from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, TimestampMixin
@@ -70,6 +70,13 @@ class Propiedad(TimestampMixin, Base):
 
     tiene_gravamenes: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     tiene_hipoteca: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
+
+    # Propiedad publicada por el propietario mismo vía el link único de 48h (pago
+    # gestionado por fuera del sistema) — se posiciona primero en listados públicos.
+    destacada: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
+    solicitud_documento_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("solicitudes_documentos_propietario.id", ondelete="SET NULL"), nullable=True
+    )
 
     fotos: Mapped[list["PropiedadFoto"]] = relationship(
         cascade="all, delete-orphan",

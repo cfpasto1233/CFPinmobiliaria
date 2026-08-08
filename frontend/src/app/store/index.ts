@@ -11,6 +11,10 @@ import {
 } from './SolicitudesArrendarPropiedad/solicitudes-arrendar-propiedad.reducer';
 import { SolicitudesArriendoState, solicitudesArriendoReducer } from './SolicitudesArriendo/solicitudes-arriendo.reducer';
 import {
+  SolicitudesDocumentosPropietarioState,
+  solicitudesDocumentosPropietarioReducer,
+} from './SolicitudesDocumentosPropietario/solicitudes-documentos-propietario.reducer';
+import {
   SolicitudesPublicarPropiedadState,
   solicitudesPublicarPropiedadReducer,
 } from './SolicitudesPublicarPropiedad/solicitudes-publicar-propiedad.reducer';
@@ -26,6 +30,7 @@ export interface RootReducerState {
   solicitudesArriendo: SolicitudesArriendoState;
   solicitudesArrendarPropiedad: SolicitudesArrendarPropiedadState;
   solicitudesPublicarPropiedad: SolicitudesPublicarPropiedadState;
+  solicitudesDocumentosPropietario: SolicitudesDocumentosPropietarioState;
   reportesDano: ReportesDanoState;
 }
 
@@ -39,6 +44,7 @@ export const rootReducer: ActionReducerMap<RootReducerState> = {
   solicitudesArriendo: solicitudesArriendoReducer,
   solicitudesArrendarPropiedad: solicitudesArrendarPropiedadReducer,
   solicitudesPublicarPropiedad: solicitudesPublicarPropiedadReducer,
+  solicitudesDocumentosPropietario: solicitudesDocumentosPropietarioReducer,
   reportesDano: reportesDanoReducer,
 };
 

@@ -8,6 +8,10 @@ from app.crud.solicitud_arriendo import delete_solicitudes_arriendo_antiguas
 from app.crud.solicitud_publicar_propiedad import delete_solicitudes_publicar_propiedad_antiguas
 from app.crud.solicitud_venta import delete_solicitudes_venta_antiguas
 
+# SolicitudDocumentoPropietario queda excluida a propósito: guarda los documentos
+# legales (cédula, escritura, comprobante de pago) de una Propiedad que puede seguir
+# publicada bien pasados los 15 días de retención del resto de solicitudes.
+
 logger = logging.getLogger(__name__)
 
 

@@ -68,6 +68,27 @@ export class PropiedadesEffects {
     ),
   );
 
+  // Sin efecto de navegación: a diferencia de create$ (admin), esto lo dispara la página
+  // pública /publicar-mi-propiedad/:token, que muestra un estado de confirmación propio en
+  // vez de redirigir.
+  createConToken$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PropiedadesActions.createConToken),
+      exhaustMap(({ token, form, fotoPrincipal }) =>
+        this.uploadService.createPropiedadConToken(token, form, fotoPrincipal).pipe(
+          map((item) => PropiedadesActions.createConTokenSuccess({ item })),
+          catchError((error) =>
+            of(
+              PropiedadesActions.createConTokenFailure({
+                error: extractErrorMessage(error, 'No pudimos publicar tu propiedad.'),
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
   update$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PropiedadesActions.update),

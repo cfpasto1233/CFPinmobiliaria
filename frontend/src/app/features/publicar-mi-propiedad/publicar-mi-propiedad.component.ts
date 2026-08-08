@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Meta } from '@angular/platform-browser';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Store } from '@ngrx/store';
+import { FooterComponent } from '../../layouts/footer/footer.component';
+import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import {
-  PropiedadForm,
   RuralUrbano,
   TipoInmueble,
   TipoParqueadero,
   Vista,
-} from '../../../../store/Propiedades/propiedad-form.model';
+} from '../../store/Propiedades/propiedad-form.model';
 import {
   CAMPOS_BOOL_PROPIOS,
   CAMPOS_DETALLE_MIN,
@@ -26,13 +28,14 @@ import {
   TIPOS_CON_PARQUEADERO_SIMPLE,
   TODOS_LOS_CAMPOS_DETALLE,
   VISTA_OPTIONS,
-} from '../../../../store/Propiedades/propiedad-form-fields';
-import { PropiedadesActions } from '../../../../store/Propiedades/propiedades.actions';
+} from '../../store/Propiedades/propiedad-form-fields';
+import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
+import { selectPropiedadesError, selectPropiedadesLoading } from '../../store/Propiedades/propiedades.selectors';
+import { SolicitudesDocumentosPropietarioActions } from '../../store/SolicitudesDocumentosPropietario/solicitudes-documentos-propietario.actions';
 import {
-  selectPropiedadSelected,
-  selectPropiedadesError,
-  selectPropiedadesLoading,
-} from '../../../../store/Propiedades/propiedades.selectors';
+  selectSolicitudDocumentoTokenCheck,
+  selectSolicitudDocumentoTokenChecking,
+} from '../../store/SolicitudesDocumentosPropietario/solicitudes-documentos-propietario.selectors';
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
@@ -92,25 +95,28 @@ const MIN_MESSAGES: Partial<Record<FormFieldName, string>> = {
 };
 
 @Component({
-  selector: 'app-propiedad-form',
+  selector: 'app-publicar-mi-propiedad',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, NgSelectModule],
+  imports: [NavbarComponent, FooterComponent, RouterLink, ReactiveFormsModule, NgSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './propiedad-form.component.html',
-  styleUrl: './propiedad-form.component.scss',
+  templateUrl: './publicar-mi-propiedad.component.html',
+  styleUrl: './publicar-mi-propiedad.component.scss',
 })
-export class PropiedadFormComponent implements OnInit {
+export class PublicarMiPropiedadComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly store = inject(Store);
   private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
+  private readonly meta = inject(Meta);
 
-  protected readonly propiedadId = this.route.snapshot.paramMap.get('id');
-  protected readonly isEditMode = !!this.propiedadId;
+  protected readonly token = this.route.snapshot.paramMap.get('token') ?? '';
+
+  protected readonly tokenChecking = this.store.selectSignal(selectSolicitudDocumentoTokenChecking);
+  protected readonly tokenCheck = this.store.selectSignal(selectSolicitudDocumentoTokenCheck);
 
   protected readonly loading = this.store.selectSignal(selectPropiedadesLoading);
   protected readonly error = this.store.selectSignal(selectPropiedadesError);
-  protected readonly selected = this.store.selectSignal(selectPropiedadSelected);
+
+  protected readonly publicado = signal(false);
 
   protected readonly tipoOptions = [
     { value: 'venta', label: 'Venta' },
@@ -181,6 +187,7 @@ export class PropiedadFormComponent implements OnInit {
 
   // Signals derivados de los controles para poder mostrar/ocultar secciones del
   // template reactivamente (OnPush) sin suscribirse manualmente en la vista.
+  // Mismo patrón que PropiedadFormComponent (admin) — ver ese archivo para el detalle.
   private readonly tipoInmuebleValue = toSignal(this.form.controls.tipoInmueble.valueChanges, {
     initialValue: this.form.controls.tipoInmueble.value,
   });
@@ -225,9 +232,6 @@ export class PropiedadFormComponent implements OnInit {
     TIPOS_CON_ADMIN_DIRECTA.includes(this.tipoInmuebleValue() ?? 'casa'),
   );
 
-  // terraza/patio son columnas compartidas entre tipos, pero el enunciado cambia:
-  // en finca "terraza" representa "Terraza y/o Patio"; en local/oficina "patio"
-  // se reutiliza con su propio rótulo.
   protected readonly terrazaLabel = computed(() =>
     this.tipoInmuebleValue() === 'finca' ? 'Terraza y/o Patio' : 'Terraza',
   );
@@ -253,9 +257,6 @@ export class PropiedadFormComponent implements OnInit {
     initialValue: this.form.controls.tieneServicios.value,
   });
 
-  // ¿Se muestra el input de valor de administración? Para casa/finca va directo
-  // (sin el booleano "tiene administración" de por medio); para apartamento y
-  // apartaestudio depende de ese booleano.
   protected readonly mostrarValorAdministracion = computed(() => {
     if (!this.mostrarCampo('valorAdministracion')) return false;
     if (this.mostrarAdminAnidada()) return this.tieneAdministracionValue() === true;
@@ -265,60 +266,22 @@ export class PropiedadFormComponent implements OnInit {
   protected readonly fotoPrincipalFile = signal<File | null>(null);
   protected readonly fotoPrincipalPreview = signal<string | null>(null);
   protected readonly fotoPrincipalError = signal<string | null>(null);
-  protected readonly fotoAdicionalError = signal<string | null>(null);
   protected readonly fotoPrincipalDragOver = signal(false);
-  protected readonly fotoAdicionalDragOver = signal(false);
+
+  private wasSubmitting = false;
 
   constructor() {
+    // El estado de confirmación se muestra solo cuando termina un envío exitoso
+    // (loading true -> false sin error) — mismo patrón que CargaDocumentosModalComponent.
     effect(() => {
-      const item = this.selected();
-      if (item && this.isEditMode) {
-        this.form.patchValue({
-          nombre: item.nombre,
-          descripcion: item.descripcion,
-          ubicacion: item.ubicacion,
-          whatsapp: item.whatsapp ?? '',
-          precio: Number(item.precio),
-          tipo: item.tipo === 'arriendo' || item.tipo === 'oferta' ? item.tipo : 'venta',
-          tipoInmueble: (item.tipo_inmueble as TipoInmueble | undefined) ?? 'casa',
-          banos: item.banos,
-          habitaciones: item.habitaciones,
-          tieneParqueadero: item.tiene_parqueadero,
-          numParqueaderos: item.num_parqueaderos,
-          tipoParqueadero: (item.tipo_parqueadero as TipoParqueadero | null) ?? null,
-          areaConstruida: item.area_construida !== null ? Number(item.area_construida) : null,
-          areaLote: item.area_lote !== null ? Number(item.area_lote) : null,
-          frente: item.frente !== null ? Number(item.frente) : null,
-          fondo: item.fondo !== null ? Number(item.fondo) : null,
-          antiguedad: item.antiguedad,
-          piso: item.piso,
-          vista: (item.vista as Vista | null) ?? null,
-          balcon: item.balcon,
-          terraza: item.terraza,
-          patio: item.patio,
-          bodega: item.bodega,
-          zonaBbq: item.zona_bbq,
-          piscina: item.piscina,
-          cocina: item.cocina,
-          conjuntoCerrado: item.conjunto_cerrado,
-          tieneAdministracion: item.tiene_administracion,
-          valorAdministracion: item.valor_administracion !== null ? Number(item.valor_administracion) : null,
-          zonasComunes: item.zonas_comunes,
-          actividad: item.actividad,
-          ruralUrbano: (item.rural_urbano as RuralUrbano | null) ?? null,
-          tieneServicios: item.tiene_servicios,
-          tieneAlcantarillado: item.tiene_alcantarillado,
-          tieneAcueducto: item.tiene_acueducto,
-          permitePermuta: item.permite_permuta,
-          adicionales: item.adicionales,
-          tieneGravamenes: item.tiene_gravamenes,
-          tieneHipoteca: item.tiene_hipoteca,
-        });
+      const submitting = this.loading();
+      const err = this.error();
+      if (this.wasSubmitting && !submitting && !err) {
+        this.publicado.set(true);
       }
+      this.wasSubmitting = submitting;
     });
 
-    // Qué campos son obligatorios depende del tipo de inmueble — se actualizan
-    // los validators en caliente en vez de duplicar la matriz en el template.
     this.form.controls.tipoInmueble.valueChanges.subscribe((tipo) => {
       this.updateDetalleValidators(tipo);
       this.updateParqueaderoValidators(tipo, this.form.controls.tieneParqueadero.value);
@@ -331,8 +294,11 @@ export class PropiedadFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.propiedadId) {
-      this.store.dispatch(PropiedadesActions.loadOne({ id: this.propiedadId }));
+    // Link de un solo uso enviado por WhatsApp — no debe aparecer en buscadores.
+    this.meta.addTag({ name: 'robots', content: 'noindex, nofollow' });
+
+    if (this.token) {
+      this.store.dispatch(SolicitudesDocumentosPropietarioActions.checkToken({ token: this.token }));
     }
   }
 
@@ -372,38 +338,10 @@ export class PropiedadFormComponent implements OnInit {
     input.value = '';
   }
 
-  protected onFotoAdicionalDragOver(event: DragEvent): void {
-    event.preventDefault();
-    this.fotoAdicionalDragOver.set(true);
-  }
-
-  protected onFotoAdicionalDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    this.fotoAdicionalDragOver.set(false);
-  }
-
-  protected onFotosAdicionalesDrop(event: DragEvent): void {
-    event.preventDefault();
-    this.fotoAdicionalDragOver.set(false);
-    this.handleFotosAdicionales(event.dataTransfer?.files ?? null);
-  }
-
-  protected onFotosAdicionalesSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.handleFotosAdicionales(input.files);
-    input.value = '';
-  }
-
   protected onRemoveFotoPrincipalSeleccionada(): void {
     this.fotoPrincipalFile.set(null);
     this.fotoPrincipalPreview.set(null);
     this.fotoPrincipalError.set(null);
-  }
-
-  protected onRemoveFoto(fotoId: string): void {
-    if (!this.propiedadId) return;
-    if (!confirm('¿Eliminar esta foto?')) return;
-    this.store.dispatch(PropiedadesActions.removeFoto({ propiedadId: this.propiedadId, fotoId }));
   }
 
   protected onSubmit(): void {
@@ -411,70 +349,65 @@ export class PropiedadFormComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-
-    // La limpieza de campos que no aplican para el tipo de inmueble elegido (p.
-    // ej. "balcón" en un lote) la hace el backend en PropiedadForm/PropiedadUpdate
-    // — acá solo se arma el objeto con los valores crudos del formulario.
-    const raw = this.form.getRawValue();
-    const form: PropiedadForm = {
-      nombre: raw.nombre ?? '',
-      descripcion: raw.descripcion ?? '',
-      ubicacion: raw.ubicacion ?? '',
-      whatsapp: raw.whatsapp ?? '',
-      precio: raw.precio ?? 0,
-      tipo: raw.tipo ?? 'venta',
-      tipo_inmueble: raw.tipoInmueble ?? 'casa',
-
-      banos: raw.banos,
-      habitaciones: raw.habitaciones,
-      tiene_parqueadero: raw.tieneParqueadero ?? false,
-      num_parqueaderos: raw.numParqueaderos,
-      tipo_parqueadero: raw.tipoParqueadero,
-      area_construida: raw.areaConstruida,
-      area_lote: raw.areaLote,
-      frente: raw.frente,
-      fondo: raw.fondo,
-      antiguedad: raw.antiguedad,
-      piso: raw.piso,
-      vista: raw.vista,
-
-      balcon: raw.balcon ?? false,
-      terraza: raw.terraza ?? false,
-      patio: raw.patio ?? false,
-      bodega: raw.bodega ?? false,
-      zona_bbq: raw.zonaBbq ?? false,
-      piscina: raw.piscina ?? false,
-      cocina: raw.cocina ?? false,
-
-      conjunto_cerrado: raw.conjuntoCerrado ?? false,
-      tiene_administracion: raw.tieneAdministracion ?? false,
-      valor_administracion: raw.valorAdministracion,
-      zonas_comunes: raw.zonasComunes,
-
-      actividad: raw.actividad,
-      rural_urbano: raw.ruralUrbano,
-      tiene_servicios: raw.tieneServicios ?? false,
-      tiene_alcantarillado: raw.tieneAlcantarillado ?? false,
-      tiene_acueducto: raw.tieneAcueducto ?? false,
-
-      permite_permuta: raw.permitePermuta ?? false,
-      adicionales: raw.adicionales,
-
-      tiene_gravamenes: raw.tieneGravamenes ?? false,
-      tiene_hipoteca: raw.tieneHipoteca ?? false,
-    };
-
-    if (this.isEditMode && this.propiedadId) {
-      this.store.dispatch(PropiedadesActions.update({ id: this.propiedadId, changes: form }));
-      return;
-    }
-
     if (!this.fotoPrincipalFile()) {
       this.fotoPrincipalError.set('La foto principal es obligatoria.');
       return;
     }
 
-    this.store.dispatch(PropiedadesActions.create({ form, fotoPrincipal: this.fotoPrincipalFile()! }));
+    const raw = this.form.getRawValue();
+    this.store.dispatch(
+      PropiedadesActions.createConToken({
+        token: this.token,
+        form: {
+          nombre: raw.nombre ?? '',
+          descripcion: raw.descripcion ?? '',
+          ubicacion: raw.ubicacion ?? '',
+          whatsapp: raw.whatsapp ?? '',
+          precio: raw.precio ?? 0,
+          tipo: raw.tipo ?? 'venta',
+          tipo_inmueble: raw.tipoInmueble ?? 'casa',
+
+          banos: raw.banos,
+          habitaciones: raw.habitaciones,
+          tiene_parqueadero: raw.tieneParqueadero ?? false,
+          num_parqueaderos: raw.numParqueaderos,
+          tipo_parqueadero: raw.tipoParqueadero,
+          area_construida: raw.areaConstruida,
+          area_lote: raw.areaLote,
+          frente: raw.frente,
+          fondo: raw.fondo,
+          antiguedad: raw.antiguedad,
+          piso: raw.piso,
+          vista: raw.vista,
+
+          balcon: raw.balcon ?? false,
+          terraza: raw.terraza ?? false,
+          patio: raw.patio ?? false,
+          bodega: raw.bodega ?? false,
+          zona_bbq: raw.zonaBbq ?? false,
+          piscina: raw.piscina ?? false,
+          cocina: raw.cocina ?? false,
+
+          conjunto_cerrado: raw.conjuntoCerrado ?? false,
+          tiene_administracion: raw.tieneAdministracion ?? false,
+          valor_administracion: raw.valorAdministracion,
+          zonas_comunes: raw.zonasComunes,
+
+          actividad: raw.actividad,
+          rural_urbano: raw.ruralUrbano,
+          tiene_servicios: raw.tieneServicios ?? false,
+          tiene_alcantarillado: raw.tieneAlcantarillado ?? false,
+          tiene_acueducto: raw.tieneAcueducto ?? false,
+
+          permite_permuta: raw.permitePermuta ?? false,
+          adicionales: raw.adicionales,
+
+          tiene_gravamenes: raw.tieneGravamenes ?? false,
+          tiene_hipoteca: raw.tieneHipoteca ?? false,
+        },
+        fotoPrincipal: this.fotoPrincipalFile()!,
+      }),
+    );
   }
 
   private updateDetalleValidators(tipo: TipoInmueble | null): void {
@@ -508,28 +441,8 @@ export class PropiedadFormComponent implements OnInit {
       return;
     }
     this.fotoPrincipalError.set(null);
-
-    if (this.isEditMode && this.propiedadId) {
-      this.store.dispatch(PropiedadesActions.replaceFotoPrincipal({ propiedadId: this.propiedadId, file }));
-      return;
-    }
-
     this.fotoPrincipalFile.set(file);
     this.fotoPrincipalPreview.set(URL.createObjectURL(file));
-  }
-
-  private handleFotosAdicionales(files: FileList | null): void {
-    if (!files || !this.propiedadId) return;
-
-    this.fotoAdicionalError.set(null);
-    for (const file of Array.from(files)) {
-      const validationError = this.validateImage(file);
-      if (validationError) {
-        this.fotoAdicionalError.set(validationError);
-        continue;
-      }
-      this.store.dispatch(PropiedadesActions.addFoto({ propiedadId: this.propiedadId, file }));
-    }
   }
 
   private validateImage(file: File): string | null {

@@ -1,0 +1,271 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: contents;
+}
+
+.carga-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 46, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 1050;
+}
+
+.carga-modal {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: $cfpasto-white;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+}
+
+.carga-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.75rem 3.25rem 1.5rem 1.75rem;
+  background: $cfpasto-primary;
+  border-radius: $cfpasto-radius-xl $cfpasto-radius-xl 0 0;
+}
+
+.carga-modal-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin: 0 0 0.35rem;
+}
+
+.carga-modal-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-xl;
+  color: $cfpasto-white;
+  margin: 0;
+}
+
+.carga-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: $cfpasto-white;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+}
+
+.carga-modal-body {
+  padding: 1.75rem;
+}
+
+.carga-modal-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  background: rgba(37, 211, 102, 0.08);
+  border: 1px solid rgba(37, 211, 102, 0.25);
+  border-radius: $cfpasto-radius-lg;
+  color: $cfpasto-text-dark;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  line-height: 1.5;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: #25d366;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+}
+
+.carga-modal-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+
+  .carga-modal-field {
+    margin-bottom: 0;
+  }
+}
+
+.carga-modal-field {
+  margin-bottom: 1.25rem;
+}
+
+.carga-modal-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $cfpasto-primary;
+  margin-bottom: 0.4rem;
+}
+
+.carga-modal-input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  background: $cfpasto-white;
+  border: 1.5px solid rgba($cfpasto-primary, 0.3);
+  border-radius: $cfpasto-radius-lg;
+  color: $cfpasto-text-dark;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $cfpasto-primary;
+    box-shadow: 0 0 0 3px rgba($cfpasto-primary, 0.15);
+  }
+
+  &.is-invalid {
+    border-color: $cfpasto-error;
+  }
+}
+
+.carga-modal-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-error;
+  margin-top: 0.35rem;
+}
+
+.carga-modal-divider {
+  border: none;
+  border-top: 1px solid $cfpasto-border-light;
+  margin: 1.5rem 0;
+}
+
+.carga-modal-docs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.carga-modal-doc-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: $cfpasto-bg-subtle;
+  border: 1px solid $cfpasto-border-light;
+  border-radius: $cfpasto-radius-lg;
+  flex-wrap: wrap;
+}
+
+.carga-modal-doc-label {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-dark;
+}
+
+.carga-modal-doc-hint {
+  font-weight: 400;
+  color: $cfpasto-text-muted;
+  font-size: $cfpasto-text-xs;
+}
+
+.carga-modal-doc-upload {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  background: $cfpasto-white;
+  border: 1.5px solid $cfpasto-primary;
+  border-radius: $cfpasto-radius;
+  color: $cfpasto-primary;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba($cfpasto-primary, 0.06);
+  }
+}
+
+.carga-modal-doc-filename {
+  flex: 1;
+  min-width: 0;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-muted;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.carga-modal-doc-remove {
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  font-weight: 600;
+  color: $cfpasto-error;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.carga-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.75rem;
+  border-top: 1px solid $cfpasto-border-light;
+
+  @media (max-width: 575.98px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.carga-modal-required-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-muted;
+}
+
+:host ::ng-deep .ng-select-container {
+  min-height: 0;
+  padding: 0.3rem 0.25rem;
+  border: 1.5px solid rgba($cfpasto-primary, 0.3) !important;
+  border-radius: $cfpasto-radius-lg !important;
+}

@@ -84,6 +84,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'publicar-mi-propiedad/:token',
+    loadComponent: () =>
+      import('./features/publicar-mi-propiedad/publicar-mi-propiedad.component').then(
+        (m) => m.PublicarMiPropiedadComponent,
+      ),
+  },
+  {
     path: 'auth/login',
     loadComponent: () =>
       import('./features/auth/login/login').then((m) => m.LoginComponent),
@@ -199,6 +206,13 @@ export const routes: Routes = [
           import(
             './features/admin/solicitudes-publicar-propiedad/solicitudes-publicar-propiedad-list.component'
           ).then((m) => m.SolicitudesPublicarPropiedadListComponent),
+      },
+      {
+        path: 'solicitudes-documentos-propietario',
+        loadComponent: () =>
+          import(
+            './features/admin/solicitudes-documentos-propietario/solicitudes-documentos-propietario-list.component'
+          ).then((m) => m.SolicitudesDocumentosPropietarioListComponent),
       },
       {
         path: 'reportes-dano',

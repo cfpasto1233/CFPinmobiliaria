@@ -18,6 +18,10 @@ from app.crud.propiedad import (
     replace_foto_principal,
     update_propiedad,
 )
+from app.crud.solicitud_documento_propietario import (
+    get_solicitud_documento_by_token,
+    marcar_token_usado,
+)
 from app.schemas.propiedad import (
     PropiedadesPublic,
     PropiedadesReorder,
@@ -163,6 +167,117 @@ def create_propiedad_endpoint(
     storage.validate_image(foto_principal)
     key = storage.upload_image(foto_principal, folder="propiedades")
     return create_propiedad(session=session, form=form, foto_principal_key=key)
+
+
+@router.post("/publicar-con-token/{token}", response_model=PropiedadPublic)
+def create_propiedad_con_token_endpoint(
+    token: str,
+    session: SessionDep,
+    # Mismo bloque de Form() que create_propiedad_endpoint — FastAPI resuelve los
+    # parámetros por introspección de firma, así que no se puede compartir; en vez de
+    # SuperUser, el "acceso" lo da un link único de 48h generado por el superadmin al
+    # validar los documentos del propietario (ver solicitudes_documentos_propietario.py).
+    nombre: Annotated[str, Form(min_length=1, max_length=255)],
+    descripcion: Annotated[str, Form(min_length=1)],
+    ubicacion: Annotated[str, Form(min_length=1, max_length=255)],
+    whatsapp: Annotated[str, Form(min_length=10, max_length=10, pattern=r"^\d{10}$")],
+    precio: Annotated[Decimal, Form(gt=0)],
+    tipo: Annotated[TipoPropiedad, Form()],
+    tipo_inmueble: Annotated[TipoInmueble, Form()],
+    foto_principal: Annotated[UploadFile, File()],
+    banos: Annotated[int | None, Form(ge=0)] = None,
+    habitaciones: Annotated[int | None, Form(ge=0)] = None,
+    tiene_parqueadero: Annotated[bool, Form()] = False,
+    num_parqueaderos: Annotated[int | None, Form(ge=0)] = None,
+    tipo_parqueadero: Annotated[TipoParqueadero | None, Form()] = None,
+    area_construida: Annotated[Decimal | None, Form(gt=0)] = None,
+    area_lote: Annotated[Decimal | None, Form(gt=0)] = None,
+    frente: Annotated[Decimal | None, Form(gt=0)] = None,
+    fondo: Annotated[Decimal | None, Form(gt=0)] = None,
+    antiguedad: Annotated[int | None, Form(ge=0)] = None,
+    piso: Annotated[int | None, Form()] = None,
+    vista: Annotated[Vista | None, Form()] = None,
+    balcon: Annotated[bool, Form()] = False,
+    terraza: Annotated[bool, Form()] = False,
+    patio: Annotated[bool, Form()] = False,
+    bodega: Annotated[bool, Form()] = False,
+    zona_bbq: Annotated[bool, Form()] = False,
+    piscina: Annotated[bool, Form()] = False,
+    cocina: Annotated[bool, Form()] = False,
+    conjunto_cerrado: Annotated[bool, Form()] = False,
+    tiene_administracion: Annotated[bool, Form()] = False,
+    valor_administracion: Annotated[Decimal | None, Form(ge=0)] = None,
+    zonas_comunes: Annotated[str | None, Form()] = None,
+    actividad: Annotated[str | None, Form()] = None,
+    rural_urbano: Annotated[RuralUrbano | None, Form()] = None,
+    tiene_servicios: Annotated[bool, Form()] = False,
+    tiene_alcantarillado: Annotated[bool, Form()] = False,
+    tiene_acueducto: Annotated[bool, Form()] = False,
+    permite_permuta: Annotated[bool, Form()] = False,
+    adicionales: Annotated[str | None, Form()] = None,
+    tiene_gravamenes: Annotated[bool, Form()] = False,
+    tiene_hipoteca: Annotated[bool, Form()] = False,
+) -> PropiedadPublic:
+    solicitud = get_solicitud_documento_by_token(session=session, token=token)
+    if not solicitud:
+        raise HTTPException(
+            status_code=410, detail="Este link no es válido, ya expiró o ya fue utilizado."
+        )
+    try:
+        form = PropiedadForm(
+            nombre=nombre,
+            descripcion=descripcion,
+            ubicacion=ubicacion,
+            whatsapp=whatsapp,
+            precio=precio,
+            tipo=tipo,
+            tipo_inmueble=tipo_inmueble,
+            banos=banos,
+            habitaciones=habitaciones,
+            tiene_parqueadero=tiene_parqueadero,
+            num_parqueaderos=num_parqueaderos,
+            tipo_parqueadero=tipo_parqueadero,
+            area_construida=area_construida,
+            area_lote=area_lote,
+            frente=frente,
+            fondo=fondo,
+            antiguedad=antiguedad,
+            piso=piso,
+            vista=vista,
+            balcon=balcon,
+            terraza=terraza,
+            patio=patio,
+            bodega=bodega,
+            zona_bbq=zona_bbq,
+            piscina=piscina,
+            cocina=cocina,
+            conjunto_cerrado=conjunto_cerrado,
+            tiene_administracion=tiene_administracion,
+            valor_administracion=valor_administracion,
+            zonas_comunes=zonas_comunes,
+            actividad=actividad,
+            rural_urbano=rural_urbano,
+            tiene_servicios=tiene_servicios,
+            tiene_alcantarillado=tiene_alcantarillado,
+            tiene_acueducto=tiene_acueducto,
+            permite_permuta=permite_permuta,
+            adicionales=adicionales,
+            tiene_gravamenes=tiene_gravamenes,
+            tiene_hipoteca=tiene_hipoteca,
+        )
+    except ValidationError as exc:
+        raise HTTPException(status_code=422, detail=_mensaje_error_validacion(exc)) from exc
+    storage.validate_image(foto_principal)
+    key = storage.upload_image(foto_principal, folder="propiedades")
+    propiedad = create_propiedad(
+        session=session,
+        form=form,
+        foto_principal_key=key,
+        destacada=True,
+        solicitud_documento_id=solicitud.id,
+    )
+    marcar_token_usado(session=session, db_obj=solicitud)
+    return propiedad
 
 
 @router.patch("/{propiedad_id}", response_model=PropiedadPublic)

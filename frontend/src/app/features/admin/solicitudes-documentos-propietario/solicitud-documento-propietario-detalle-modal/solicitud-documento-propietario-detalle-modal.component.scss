@@ -1,0 +1,240 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: contents;
+}
+
+.detalle-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 46, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 1050;
+}
+
+.detalle-modal {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: $cfpasto-white;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+}
+
+.detalle-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.75rem 3.25rem 1.5rem 1.75rem;
+  background: $cfpasto-primary;
+  border-radius: $cfpasto-radius-xl $cfpasto-radius-xl 0 0;
+}
+
+.detalle-modal-eyebrow {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $cfpasto-accent;
+  margin: 0 0 0.35rem;
+}
+
+.detalle-modal-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-xl;
+  color: $cfpasto-white;
+  margin: 0;
+}
+
+.detalle-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: $cfpasto-white;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+}
+
+.detalle-modal-body {
+  padding: 1.75rem;
+}
+
+.detalle-modal-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.detalle-modal-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 50rem;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: $cfpasto-primary;
+  color: $cfpasto-white;
+
+  &.detalle-modal-badge-outline {
+    background: $cfpasto-white;
+    color: $cfpasto-primary;
+    border: 1.5px solid $cfpasto-primary;
+  }
+}
+
+.detalle-modal-grid {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.detalle-modal-field {
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid $cfpasto-border-light;
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  dt {
+    font-family: $cfpasto-font-body;
+    font-weight: 700;
+    font-size: $cfpasto-text-xs;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $cfpasto-primary;
+    margin-bottom: 0.35rem;
+  }
+
+  dd {
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-base;
+    color: $cfpasto-text-dark;
+    margin: 0;
+    word-break: break-word;
+  }
+}
+
+.detalle-modal-fotos {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid $cfpasto-border-light;
+}
+
+.detalle-modal-fotos-label {
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-xs;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $cfpasto-primary;
+  margin: 0 0 0.75rem;
+}
+
+.detalle-modal-fotos-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin: 0;
+}
+
+.detalle-modal-docs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  a {
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-sm;
+    font-weight: 500;
+    color: $cfpasto-primary;
+    text-decoration: underline;
+
+    &:hover {
+      color: $cfpasto-accent-dark;
+    }
+  }
+}
+
+.detalle-modal-validar,
+.detalle-modal-link {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid $cfpasto-border-light;
+}
+
+.detalle-modal-link-row {
+  display: flex;
+  gap: 0.5rem;
+
+  @media (max-width: 575.98px) {
+    flex-direction: column;
+  }
+
+  .form-control {
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-sm;
+  }
+
+  .btn {
+    white-space: nowrap;
+  }
+}
+
+.detalle-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1.25rem 1.75rem;
+  border-top: 1px solid $cfpasto-border-light;
+}
+
+@media (max-width: 575.98px) {
+  .detalle-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .detalle-modal {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: $cfpasto-radius-xl $cfpasto-radius-xl 0 0;
+  }
+
+  .detalle-modal-header {
+    padding: 1.5rem 3rem 1.25rem 1.25rem;
+  }
+
+  .detalle-modal-body {
+    padding: 1.25rem;
+  }
+}

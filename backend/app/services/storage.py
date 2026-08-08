@@ -11,6 +11,9 @@ from app.core.config import settings
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB
 
+ALLOWED_DOCUMENT_TYPES = {"application/pdf"}
+MAX_DOCUMENT_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
+
 _client = None
 _presign_client = None
 
@@ -98,6 +101,28 @@ def upload_image(upload_file: UploadFile, *, folder: str) -> str:
     ensure_bucket()
     ext = Path(upload_file.filename or "").suffix or ".jpg"
     key = f"{folder}/{uuid.uuid4()}{ext}"
+    _get_client().upload_fileobj(
+        upload_file.file,
+        settings.MINIO_BUCKET,
+        key,
+        ExtraArgs={"ContentType": upload_file.content_type},
+    )
+    return key
+
+
+def validate_document(upload_file: UploadFile) -> None:
+    if upload_file.content_type not in ALLOWED_DOCUMENT_TYPES:
+        raise HTTPException(status_code=400, detail="El documento debe ser un PDF.")
+    if upload_file.size is not None and upload_file.size > MAX_DOCUMENT_SIZE_BYTES:
+        raise HTTPException(
+            status_code=400,
+            detail="El documento supera el tamaño máximo permitido (10 MB).",
+        )
+
+
+def upload_document(upload_file: UploadFile, *, folder: str) -> str:
+    ensure_bucket()
+    key = f"{folder}/{uuid.uuid4()}.pdf"
     _get_client().upload_fileobj(
         upload_file.file,
         settings.MINIO_BUCKET,

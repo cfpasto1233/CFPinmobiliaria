@@ -1,0 +1,101 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.documentos-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.documentos-list-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-text-dark;
+  margin: 0;
+}
+
+.card {
+  border-radius: $cfpasto-radius-xl;
+  overflow: hidden;
+  box-shadow: $cfpasto-shadow-md;
+}
+
+.documentos-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.documentos-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(160px, 1.2fr) minmax(140px, 1fr) minmax(120px, 0.9fr) minmax(110px, 0.8fr)
+    minmax(140px, 1fr) 8rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  min-width: 940px;
+}
+
+.documentos-grid-head {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $cfpasto-text-light;
+  background: $cfpasto-bg-subtle;
+  border-bottom: 1px solid $cfpasto-border-light;
+}
+
+.documentos-row {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-dark;
+  background: $cfpasto-surface;
+  border-bottom: 1px solid $cfpasto-border-light;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: $cfpasto-bg-subtle;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.documentos-cell-nombre {
+  font-weight: 500;
+}
+
+.documentos-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 50rem;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-muted;
+  background: $cfpasto-bg-subtle;
+  border: 1px solid $cfpasto-border;
+
+  &.is-validado {
+    color: $cfpasto-success;
+    background: rgba($cfpasto-success, 0.12);
+    border-color: transparent;
+  }
+}
+
+.documentos-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
+}

@@ -1,0 +1,682 @@
+<app-navbar />
+
+<section class="publicar-hero">
+  <h1 class="publicar-title">Publica tu <span class="is-accent">propiedad</span></h1>
+  <p class="publicar-subtitle">
+    Completa los datos de tu propiedad. Este link es de un solo uso, así que no lo cierres antes
+    de terminar.
+  </p>
+</section>
+
+<section class="publicar-body">
+  @if (tokenChecking()) {
+    <div class="publicar-estado">
+      <span class="spinner-border" role="status"></span>
+      <p>Verificando tu link...</p>
+    </div>
+  } @else if (tokenCheck() && !tokenCheck()!.valido) {
+    <div class="publicar-estado publicar-estado-error">
+      <h2>Este link no es válido</h2>
+      <p>{{ tokenCheck()!.motivo ?? 'Este link ya expiró o ya fue utilizado.' }}</p>
+      <p class="publicar-estado-hint">
+        Si crees que esto es un error, contáctanos para que te enviemos un nuevo link.
+      </p>
+    </div>
+  } @else if (publicado()) {
+    <div class="publicar-estado publicar-estado-success">
+      <h2>¡Tu propiedad fue publicada!</h2>
+      <p>Nuestro equipo la revisará pronto. Ya puedes verla en nuestro catálogo.</p>
+      <a routerLink="/propiedades" class="btn btn-secondary">Ver propiedades</a>
+    </div>
+  } @else if (tokenCheck()?.valido) {
+    @if (error(); as err) {
+      <div class="alert alert-danger">{{ err }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="card border-0">
+        <div class="card-body p-4 p-lg-5">
+          <section class="propiedad-form-section">
+            <h2 class="propiedad-form-section-title">Información general</h2>
+
+            <div class="propiedad-form-field">
+              <label for="nombre" class="propiedad-form-label">Nombre *</label>
+              <input
+                id="nombre"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="fieldError('nombre')"
+                formControlName="nombre"
+              />
+              @if (fieldError('nombre'); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+
+            <div class="propiedad-form-field">
+              <label for="descripcion" class="propiedad-form-label">Descripción *</label>
+              <textarea
+                id="descripcion"
+                class="form-control"
+                rows="4"
+                [class.is-invalid]="fieldError('descripcion')"
+                formControlName="descripcion"
+              ></textarea>
+              @if (fieldError('descripcion'); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+          </section>
+
+          <hr class="propiedad-form-divider" />
+
+          <section class="propiedad-form-section">
+            <h2 class="propiedad-form-section-title">Ubicación y precio</h2>
+
+            <div class="propiedad-form-row">
+              <div class="propiedad-form-field">
+                <label for="ubicacion" class="propiedad-form-label">Ubicación *</label>
+                <input
+                  id="ubicacion"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="fieldError('ubicacion')"
+                  formControlName="ubicacion"
+                />
+                @if (fieldError('ubicacion'); as err) {
+                  <div class="form-error">{{ err }}</div>
+                }
+              </div>
+
+              <div class="propiedad-form-field">
+                <label for="precio" class="propiedad-form-label">Precio *</label>
+                <div class="input-group propiedad-form-price" [class.is-invalid]="fieldError('precio')">
+                  <span class="input-group-text">$</span>
+                  <input
+                    id="precio"
+                    type="number"
+                    min="1"
+                    class="form-control"
+                    [class.is-invalid]="fieldError('precio')"
+                    formControlName="precio"
+                  />
+                  <span class="input-group-text">COP</span>
+                </div>
+                @if (fieldError('precio'); as err) {
+                  <div class="form-error">{{ err }}</div>
+                }
+              </div>
+
+              <div class="propiedad-form-field">
+                <label class="propiedad-form-label">Tipo *</label>
+                <ng-select
+                  [items]="tipoOptions"
+                  bindLabel="label"
+                  bindValue="value"
+                  [clearable]="false"
+                  [appendTo]="'body'"
+                  formControlName="tipo"
+                ></ng-select>
+              </div>
+            </div>
+
+            <div class="propiedad-form-field">
+              <label for="whatsapp" class="propiedad-form-label">WhatsApp de contacto *</label>
+              <input
+                id="whatsapp"
+                type="tel"
+                class="form-control"
+                placeholder="3001234567"
+                [class.is-invalid]="fieldError('whatsapp')"
+                formControlName="whatsapp"
+              />
+              <div class="propiedad-form-hint">
+                Debe ser un número de WhatsApp válido: los interesados en agendar una cita para
+                esta propiedad escribirán directamente a este número.
+              </div>
+              @if (fieldError('whatsapp'); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+          </section>
+
+          <hr class="propiedad-form-divider" />
+
+          <section class="propiedad-form-section">
+            <h2 class="propiedad-form-section-title">Detalles del inmueble</h2>
+
+            <div class="propiedad-form-field">
+              <label class="propiedad-form-label">Tipo de inmueble *</label>
+              <ng-select
+                [items]="tipoInmuebleOptions"
+                bindLabel="label"
+                bindValue="value"
+                [clearable]="false"
+                [appendTo]="'body'"
+                formControlName="tipoInmueble"
+              ></ng-select>
+            </div>
+
+            <div class="propiedad-form-row">
+              @if (mostrarCampo('banos')) {
+                <div class="propiedad-form-field">
+                  <label for="banos" class="propiedad-form-label">Baños *</label>
+                  <input
+                    id="banos"
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    [class.is-invalid]="fieldError('banos')"
+                    formControlName="banos"
+                  />
+                  @if (fieldError('banos'); as err) {
+                    <div class="form-error">{{ err }}</div>
+                  }
+                </div>
+              }
+
+              @if (mostrarCampo('habitaciones')) {
+                <div class="propiedad-form-field">
+                  <label for="habitaciones" class="propiedad-form-label">Habitaciones *</label>
+                  <input
+                    id="habitaciones"
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    [class.is-invalid]="fieldError('habitaciones')"
+                    formControlName="habitaciones"
+                  />
+                  @if (fieldError('habitaciones'); as err) {
+                    <div class="form-error">{{ err }}</div>
+                  }
+                </div>
+              }
+
+              @if (mostrarCampo('piso')) {
+                <div class="propiedad-form-field">
+                  <label for="piso" class="propiedad-form-label">Piso *</label>
+                  <input
+                    id="piso"
+                    type="number"
+                    class="form-control"
+                    [class.is-invalid]="fieldError('piso')"
+                    formControlName="piso"
+                  />
+                  @if (fieldError('piso'); as err) {
+                    <div class="form-error">{{ err }}</div>
+                  }
+                </div>
+              }
+
+              @if (mostrarCampo('antiguedad')) {
+                <div class="propiedad-form-field">
+                  <label for="antiguedad" class="propiedad-form-label">Antigüedad (años)</label>
+                  <input
+                    id="antiguedad"
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    [class.is-invalid]="fieldError('antiguedad')"
+                    formControlName="antiguedad"
+                  />
+                  @if (fieldError('antiguedad'); as err) {
+                    <div class="form-error">{{ err }}</div>
+                  }
+                </div>
+              }
+            </div>
+
+            @if (mostrarCampo('vista')) {
+              <div class="propiedad-form-field">
+                <label class="propiedad-form-label">Vista *</label>
+                <ng-select
+                  [items]="vistaOptions"
+                  bindLabel="label"
+                  bindValue="value"
+                  [clearable]="false"
+                  [appendTo]="'body'"
+                  formControlName="vista"
+                ></ng-select>
+              </div>
+            }
+
+            @if (mostrarCampo('areaConstruida')) {
+              <div class="propiedad-form-field">
+                <label for="areaConstruida" class="propiedad-form-label">Área construida (m²)</label>
+                <input
+                  id="areaConstruida"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  class="form-control"
+                  [class.is-invalid]="fieldError('areaConstruida')"
+                  formControlName="areaConstruida"
+                />
+                @if (fieldError('areaConstruida'); as err) {
+                  <div class="form-error">{{ err }}</div>
+                }
+              </div>
+            }
+
+            @if (mostrarCampo('areaLote')) {
+              <div class="propiedad-form-field">
+                <label for="areaLote" class="propiedad-form-label">Área de lote (m²)</label>
+                <input
+                  id="areaLote"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  class="form-control"
+                  [class.is-invalid]="fieldError('areaLote')"
+                  formControlName="areaLote"
+                />
+                @if (fieldError('areaLote'); as err) {
+                  <div class="form-error">{{ err }}</div>
+                }
+              </div>
+            }
+
+            @if (mostrarCampo('frente')) {
+              <div class="propiedad-form-row">
+                <div class="propiedad-form-field">
+                  <label for="frente" class="propiedad-form-label">Frente (m)</label>
+                  <input
+                    id="frente"
+                    type="number"
+                    min="0.01"
+                    step="0.01"
+                    class="form-control"
+                    [class.is-invalid]="fieldError('frente')"
+                    formControlName="frente"
+                  />
+                  @if (fieldError('frente'); as err) {
+                    <div class="form-error">{{ err }}</div>
+                  }
+                </div>
+
+                <div class="propiedad-form-field">
+                  <label for="fondo" class="propiedad-form-label">Fondo (m)</label>
+                  <input
+                    id="fondo"
+                    type="number"
+                    min="0.01"
+                    step="0.01"
+                    class="form-control"
+                    [class.is-invalid]="fieldError('fondo')"
+                    formControlName="fondo"
+                  />
+                  @if (fieldError('fondo'); as err) {
+                    <div class="form-error">{{ err }}</div>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (mostrarCampo('actividad')) {
+              <div class="propiedad-form-field">
+                <label for="actividad" class="propiedad-form-label">Actividad *</label>
+                <input
+                  id="actividad"
+                  type="text"
+                  class="form-control"
+                  placeholder="Ej: Comercial, restaurante, oficina..."
+                  [class.is-invalid]="fieldError('actividad')"
+                  formControlName="actividad"
+                />
+                @if (fieldError('actividad'); as err) {
+                  <div class="form-error">{{ err }}</div>
+                }
+              </div>
+            }
+
+            @if (mostrarCampo('ruralUrbano')) {
+              <div class="propiedad-form-field">
+                <label class="propiedad-form-label">Rural o urbano *</label>
+                <ng-select
+                  [items]="ruralUrbanoOptions"
+                  bindLabel="label"
+                  bindValue="value"
+                  [clearable]="false"
+                  [appendTo]="'body'"
+                  formControlName="ruralUrbano"
+                ></ng-select>
+              </div>
+            }
+
+            @if (mostrarBool('balcon') || mostrarBool('terraza') || mostrarBool('patio') || mostrarBool('bodega') || mostrarBool('zonaBbq') || mostrarBool('piscina') || mostrarBool('cocina')) {
+              <div class="propiedad-form-checks">
+                @if (mostrarBool('balcon')) {
+                  <div class="form-check">
+                    <input id="balcon" type="checkbox" class="form-check-input" formControlName="balcon" />
+                    <label for="balcon" class="form-check-label">Balcón</label>
+                  </div>
+                }
+                @if (mostrarBool('terraza')) {
+                  <div class="form-check">
+                    <input id="terraza" type="checkbox" class="form-check-input" formControlName="terraza" />
+                    <label for="terraza" class="form-check-label">{{ terrazaLabel() }}</label>
+                  </div>
+                }
+                @if (mostrarBool('patio')) {
+                  <div class="form-check">
+                    <input id="patio" type="checkbox" class="form-check-input" formControlName="patio" />
+                    <label for="patio" class="form-check-label">{{ patioLabel() }}</label>
+                  </div>
+                }
+                @if (mostrarBool('bodega')) {
+                  <div class="form-check">
+                    <input id="bodega" type="checkbox" class="form-check-input" formControlName="bodega" />
+                    <label for="bodega" class="form-check-label">Bodega</label>
+                  </div>
+                }
+                @if (mostrarBool('zonaBbq')) {
+                  <div class="form-check">
+                    <input id="zonaBbq" type="checkbox" class="form-check-input" formControlName="zonaBbq" />
+                    <label for="zonaBbq" class="form-check-label">Zona BBQ</label>
+                  </div>
+                }
+                @if (mostrarBool('piscina')) {
+                  <div class="form-check">
+                    <input id="piscina" type="checkbox" class="form-check-input" formControlName="piscina" />
+                    <label for="piscina" class="form-check-label">Piscina</label>
+                  </div>
+                }
+                @if (mostrarBool('cocina')) {
+                  <div class="form-check">
+                    <input id="cocina" type="checkbox" class="form-check-input" formControlName="cocina" />
+                    <label for="cocina" class="form-check-label">Cocina</label>
+                  </div>
+                }
+              </div>
+            }
+
+            @if (mostrarParqueadero()) {
+              <div class="propiedad-form-field">
+                <div class="form-check">
+                  <input
+                    id="tieneParqueadero"
+                    type="checkbox"
+                    class="form-check-input"
+                    formControlName="tieneParqueadero"
+                  />
+                  <label for="tieneParqueadero" class="form-check-label">Tiene parqueadero</label>
+                </div>
+              </div>
+
+              @if (tieneParqueaderoValue() && mostrarParqueaderoDetalle()) {
+                <div class="propiedad-form-row">
+                  <div class="propiedad-form-field">
+                    <label for="numParqueaderos" class="propiedad-form-label">Número de parqueaderos *</label>
+                    <input
+                      id="numParqueaderos"
+                      type="number"
+                      min="1"
+                      class="form-control"
+                      [class.is-invalid]="fieldError('numParqueaderos')"
+                      formControlName="numParqueaderos"
+                    />
+                    @if (fieldError('numParqueaderos'); as err) {
+                      <div class="form-error">{{ err }}</div>
+                    }
+                  </div>
+
+                  <div class="propiedad-form-field">
+                    <label class="propiedad-form-label">Tipo de parqueadero *</label>
+                    <ng-select
+                      [items]="opcionesTipoParqueadero()"
+                      bindLabel="label"
+                      bindValue="value"
+                      [clearable]="false"
+                      [appendTo]="'body'"
+                      formControlName="tipoParqueadero"
+                    ></ng-select>
+                    @if (fieldError('tipoParqueadero'); as err) {
+                      <div class="form-error">{{ err }}</div>
+                    }
+                  </div>
+                </div>
+              }
+            }
+
+            @if (mostrarConjuntoCerrado()) {
+              <div class="propiedad-form-field">
+                <div class="form-check">
+                  <input
+                    id="conjuntoCerrado"
+                    type="checkbox"
+                    class="form-check-input"
+                    formControlName="conjuntoCerrado"
+                  />
+                  <label for="conjuntoCerrado" class="form-check-label">Conjunto cerrado o edificio</label>
+                </div>
+              </div>
+
+              @if (conjuntoCerradoValue()) {
+                @if (mostrarAdminAnidada()) {
+                  <div class="propiedad-form-field">
+                    <div class="form-check">
+                      <input
+                        id="tieneAdministracion"
+                        type="checkbox"
+                        class="form-check-input"
+                        formControlName="tieneAdministracion"
+                      />
+                      <label for="tieneAdministracion" class="form-check-label">
+                        ¿Tiene valor de administración?
+                      </label>
+                    </div>
+                  </div>
+                }
+
+                @if (mostrarValorAdministracion()) {
+                  <div class="propiedad-form-field">
+                    <label for="valorAdministracion" class="propiedad-form-label">Valor administración</label>
+                    <div class="input-group">
+                      <span class="input-group-text">$</span>
+                      <input
+                        id="valorAdministracion"
+                        type="number"
+                        min="0"
+                        class="form-control"
+                        [class.is-invalid]="fieldError('valorAdministracion')"
+                        formControlName="valorAdministracion"
+                      />
+                    </div>
+                    @if (fieldError('valorAdministracion'); as err) {
+                      <div class="form-error">{{ err }}</div>
+                    }
+                  </div>
+                }
+
+                <div class="propiedad-form-field">
+                  <label for="zonasComunes" class="propiedad-form-label">Zonas comunes</label>
+                  <textarea
+                    id="zonasComunes"
+                    class="form-control"
+                    rows="2"
+                    formControlName="zonasComunes"
+                  ></textarea>
+                </div>
+              }
+            }
+
+            @if (mostrarAdminDirecta()) {
+              <div class="propiedad-form-field">
+                <div class="form-check">
+                  <input
+                    id="tieneAdministracionDirecta"
+                    type="checkbox"
+                    class="form-check-input"
+                    formControlName="tieneAdministracion"
+                  />
+                  <label for="tieneAdministracionDirecta" class="form-check-label">¿Tiene administración?</label>
+                </div>
+              </div>
+
+              @if (mostrarValorAdministracion()) {
+                <div class="propiedad-form-field">
+                  <label for="valorAdministracionDirecta" class="propiedad-form-label">Valor administración</label>
+                  <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input
+                      id="valorAdministracionDirecta"
+                      type="number"
+                      min="0"
+                      class="form-control"
+                      [class.is-invalid]="fieldError('valorAdministracion')"
+                      formControlName="valorAdministracion"
+                    />
+                  </div>
+                  @if (fieldError('valorAdministracion'); as err) {
+                    <div class="form-error">{{ err }}</div>
+                  }
+                </div>
+              }
+            }
+
+            @if (mostrarBool('tieneServicios')) {
+              <div class="propiedad-form-field">
+                <div class="form-check">
+                  <input
+                    id="tieneServicios"
+                    type="checkbox"
+                    class="form-check-input"
+                    formControlName="tieneServicios"
+                  />
+                  <label for="tieneServicios" class="form-check-label">Servicios</label>
+                </div>
+              </div>
+
+              @if (tieneServiciosValue()) {
+                <div class="propiedad-form-checks">
+                  <div class="form-check">
+                    <input
+                      id="tieneAlcantarillado"
+                      type="checkbox"
+                      class="form-check-input"
+                      formControlName="tieneAlcantarillado"
+                    />
+                    <label for="tieneAlcantarillado" class="form-check-label">Alcantarillado</label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      id="tieneAcueducto"
+                      type="checkbox"
+                      class="form-check-input"
+                      formControlName="tieneAcueducto"
+                    />
+                    <label for="tieneAcueducto" class="form-check-label">Acueducto</label>
+                  </div>
+                </div>
+              }
+            }
+
+            <hr class="propiedad-form-divider" />
+
+            <div class="propiedad-form-field">
+              <div class="form-check">
+                <input
+                  id="permitePermuta"
+                  type="checkbox"
+                  class="form-check-input"
+                  formControlName="permitePermuta"
+                />
+                <label for="permitePermuta" class="form-check-label">Recibe permuta</label>
+              </div>
+            </div>
+
+            <div class="propiedad-form-field">
+              <div class="form-check">
+                <input
+                  id="tieneGravamenes"
+                  type="checkbox"
+                  class="form-check-input"
+                  formControlName="tieneGravamenes"
+                />
+                <label for="tieneGravamenes" class="form-check-label">Tiene gravámenes</label>
+              </div>
+            </div>
+
+            <div class="propiedad-form-field">
+              <div class="form-check">
+                <input
+                  id="tieneHipoteca"
+                  type="checkbox"
+                  class="form-check-input"
+                  formControlName="tieneHipoteca"
+                />
+                <label for="tieneHipoteca" class="form-check-label">Tiene hipoteca</label>
+              </div>
+            </div>
+
+            <div class="propiedad-form-field">
+              <label for="adicionales" class="propiedad-form-label">Adicionales</label>
+              <textarea id="adicionales" class="form-control" rows="2" formControlName="adicionales"></textarea>
+            </div>
+          </section>
+
+          <hr class="propiedad-form-divider" />
+
+          <section class="propiedad-form-section">
+            <h2 class="propiedad-form-section-title">Foto</h2>
+
+            <div class="propiedad-form-field">
+              <label class="propiedad-form-label">Foto principal *</label>
+
+              @if (fotoPrincipalPreview(); as preview) {
+                <div class="propiedad-form-dropzone propiedad-form-dropzone-filled" (click)="fotoPrincipalInput.click()">
+                  <img [src]="preview" alt="Vista previa de la foto principal" />
+                  <div class="propiedad-form-dropzone-overlay">Cambiar foto</div>
+                </div>
+                <button type="button" class="propiedad-form-clear" (click)="onRemoveFotoPrincipalSeleccionada(); $event.stopPropagation()">
+                  Quitar selección
+                </button>
+              } @else {
+                <div
+                  class="propiedad-form-dropzone"
+                  [class.is-dragover]="fotoPrincipalDragOver()"
+                  [class.has-error]="fotoPrincipalError()"
+                  (click)="fotoPrincipalInput.click()"
+                  (dragover)="onFotoPrincipalDragOver($event)"
+                  (dragleave)="onFotoPrincipalDragLeave($event)"
+                  (drop)="onFotoPrincipalDrop($event)"
+                >
+                  <svg class="propiedad-form-dropzone-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 16V4" />
+                    <path d="M7 9l5-5 5 5" />
+                    <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                  </svg>
+                  <p class="propiedad-form-dropzone-text">Arrastra una imagen o haz clic para seleccionar</p>
+                  <p class="propiedad-form-dropzone-hint">JPEG, PNG o WEBP · máx. 5MB</p>
+                </div>
+              }
+
+              <input
+                #fotoPrincipalInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                class="visually-hidden"
+                (change)="onFotoPrincipalSelected($event)"
+              />
+              @if (fotoPrincipalError(); as err) {
+                <div class="form-error">{{ err }}</div>
+              }
+            </div>
+          </section>
+        </div>
+
+        <div class="propiedad-form-actions">
+          <span class="propiedad-form-required-hint">* Campos obligatorios</span>
+          <button type="submit" class="btn btn-success" [disabled]="form.invalid || loading()">
+            @if (loading()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            Publicar mi propiedad
+          </button>
+        </div>
+      </div>
+    </form>
+  }
+</section>
+
+<app-footer />

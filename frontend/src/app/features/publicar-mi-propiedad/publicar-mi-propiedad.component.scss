@@ -1,0 +1,315 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.is-accent {
+  color: $cfpasto-accent-dark;
+}
+
+// ─── Hero ───────────────────────────────────────────────────────────────────
+
+.publicar-hero {
+  padding: 8rem 1.5rem 2.5rem;
+  background: $cfpasto-white;
+  text-align: center;
+
+  @media (max-width: 767.98px) {
+    padding: 7rem 1.5rem 2rem;
+  }
+}
+
+.publicar-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: $cfpasto-primary;
+  margin: 0 0 1rem;
+}
+
+.publicar-subtitle {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  color: $cfpasto-text-muted;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+// ─── Body ───────────────────────────────────────────────────────────────────
+
+.publicar-body {
+  padding: 1rem 1.5rem 5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.publicar-estado {
+  max-width: 480px;
+  width: 100%;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: $cfpasto-white;
+  border: 1px solid $cfpasto-border;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-md;
+
+  .spinner-border {
+    color: $cfpasto-primary;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: $cfpasto-font-heading;
+    font-weight: 700;
+    font-size: $cfpasto-text-xl;
+    color: $cfpasto-primary;
+    margin: 0 0 0.75rem;
+  }
+
+  p {
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-base;
+    color: $cfpasto-text-muted;
+    margin: 0 0 0.5rem;
+  }
+}
+
+.publicar-estado-error h2 {
+  color: $cfpasto-error;
+}
+
+.publicar-estado-hint {
+  font-size: $cfpasto-text-sm !important;
+}
+
+.publicar-estado-success .btn {
+  margin-top: 1rem;
+}
+
+// ─── Formulario (mismas clases que admin/propiedades/propiedad-form) ───────
+// Angular encapsula los estilos por componente, así que no se puede compartir
+// el .scss directamente — se copian las reglas relevantes desde
+// propiedad-form.component.scss. Cualquier ajuste visual del formulario debe
+// replicarse en los dos archivos.
+
+.card {
+  border-radius: $cfpasto-radius-xl;
+  overflow: hidden;
+  box-shadow: $cfpasto-shadow-md;
+  max-width: 760px;
+  width: 100%;
+}
+
+.propiedad-form-section-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 600;
+  font-size: $cfpasto-text-lg;
+  color: $cfpasto-text-dark;
+  margin: 0 0 1.25rem;
+}
+
+.propiedad-form-divider {
+  border: none;
+  border-top: 1px solid $cfpasto-border-light;
+  margin: 1.75rem 0;
+}
+
+.propiedad-form-field {
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.propiedad-form-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 600;
+  color: $cfpasto-text-dark;
+  margin-bottom: 0.4rem;
+}
+
+.propiedad-form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.propiedad-form-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.propiedad-form-price {
+  .input-group-text {
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-sm;
+    color: $cfpasto-text-muted;
+    background: $cfpasto-bg-subtle;
+    border-color: $cfpasto-border;
+  }
+
+  &.is-invalid .form-control,
+  &.is-invalid .input-group-text {
+    border-color: $cfpasto-error;
+  }
+}
+
+.form-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-error;
+  margin-top: 0.35rem;
+}
+
+.propiedad-form-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin-top: 0.35rem;
+}
+
+// --- Dropzone (foto principal) ---
+
+.propiedad-form-dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 1.5px dashed $cfpasto-border;
+  border-radius: $cfpasto-radius-lg;
+  background: $cfpasto-bg-subtle;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    border-color: $cfpasto-primary-light;
+    background: rgba($cfpasto-primary, 0.03);
+  }
+
+  &.is-dragover {
+    border-color: $cfpasto-primary;
+    background: rgba($cfpasto-primary, 0.06);
+  }
+
+  &.has-error {
+    border-color: $cfpasto-error;
+  }
+
+  &:focus-within {
+    outline: 2px solid $cfpasto-primary;
+    outline-offset: 2px;
+  }
+}
+
+.propiedad-form-dropzone-icon {
+  color: $cfpasto-text-light;
+}
+
+.propiedad-form-dropzone-text {
+  margin: 0;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+}
+
+.propiedad-form-dropzone-hint {
+  margin: 0;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-light;
+}
+
+.propiedad-form-dropzone-filled {
+  padding: 0;
+  overflow: hidden;
+  height: 200px;
+  border-style: solid;
+  border-color: $cfpasto-border;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &:hover {
+    border-color: $cfpasto-primary-light;
+  }
+}
+
+.propiedad-form-dropzone-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 600;
+  color: $cfpasto-white;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.propiedad-form-dropzone-filled:hover .propiedad-form-dropzone-overlay {
+  opacity: 1;
+}
+
+.propiedad-form-clear {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: $cfpasto-error;
+  }
+}
+
+// --- Barra de acciones ---
+
+.propiedad-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: $cfpasto-bg-subtle;
+  border-top: 1px solid $cfpasto-border-light;
+
+  @media (max-width: 575.98px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.propiedad-form-required-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-light;
+}

@@ -8,7 +8,14 @@ from app.models.propiedad_foto import PropiedadFoto
 from app.schemas.propiedad import PropiedadForm, PropiedadUpdate
 
 
-def create_propiedad(*, session: Session, form: PropiedadForm, foto_principal_key: str) -> Propiedad:
+def create_propiedad(
+    *,
+    session: Session,
+    form: PropiedadForm,
+    foto_principal_key: str,
+    destacada: bool = False,
+    solicitud_documento_id: uuid.UUID | None = None,
+) -> Propiedad:
     max_orden = session.scalar(select(func.max(Propiedad.orden))) or 0
     # Los nombres de PropiedadForm calzan 1:1 con las columnas de Propiedad, así
     # que se pasan tal cual en vez de listarlas a mano (evita que este función se
@@ -17,6 +24,8 @@ def create_propiedad(*, session: Session, form: PropiedadForm, foto_principal_ke
         **form.model_dump(),
         foto_principal_key=foto_principal_key,
         orden=max_orden + 1,
+        destacada=destacada,
+        solicitud_documento_id=solicitud_documento_id,
     )
     session.add(db_obj)
     session.commit()
@@ -37,7 +46,10 @@ def update_propiedad(*, session: Session, db_obj: Propiedad, obj_in: PropiedadUp
 def list_propiedades(*, session: Session, skip: int = 0, limit: int = 100) -> tuple[list[Propiedad], int]:
     count = session.scalar(select(func.count()).select_from(Propiedad))
     items = session.scalars(
-        select(Propiedad).order_by(Propiedad.orden.asc(), Propiedad.created_at.asc()).offset(skip).limit(limit)
+        select(Propiedad)
+        .order_by(Propiedad.destacada.desc(), Propiedad.orden.asc(), Propiedad.created_at.asc())
+        .offset(skip)
+        .limit(limit)
     ).all()
     return list(items), count or 0
 

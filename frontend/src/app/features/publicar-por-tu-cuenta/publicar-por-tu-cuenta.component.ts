@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { whatsappLink } from '../../core/whatsapp/whatsapp.util';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
+import { CargaDocumentosModalComponent } from './carga-documentos-modal/carga-documentos-modal.component';
 
 interface PricingPlan {
   id: string;
@@ -23,7 +24,13 @@ function planWhatsappHref(nombre: string, precio: string): string {
 @Component({
   selector: 'app-publicar-por-tu-cuenta',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, RouterLink, PublicarWhatsappFabComponent],
+  imports: [
+    NavbarComponent,
+    FooterComponent,
+    RouterLink,
+    PublicarWhatsappFabComponent,
+    CargaDocumentosModalComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './publicar-por-tu-cuenta.component.html',
   styleUrl: './publicar-por-tu-cuenta.component.scss',
@@ -79,4 +86,14 @@ export class PublicarPorTuCuentaComponent {
       whatsappHref: planWhatsappHref('Asesoría Legal Opcional', '$250.000'),
     },
   ];
+
+  protected readonly mostrarModalDocumentos = signal(false);
+
+  protected abrirModalDocumentos(): void {
+    this.mostrarModalDocumentos.set(true);
+  }
+
+  protected cerrarModalDocumentos(): void {
+    this.mostrarModalDocumentos.set(false);
+  }
 }

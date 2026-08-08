@@ -21,6 +21,21 @@ export const PropiedadesActions = {
   createSuccess: createAction('[Propiedades] Create Success', props<{ item: PropiedadPublic }>()),
   createFailure: createAction('[Propiedades] Create Failure', props<{ error: string }>()),
 
+  // Publicación pública vía el link de un solo uso que entrega el superadmin al
+  // validar los documentos del propietario (ver store/SolicitudesDocumentosPropietario).
+  createConToken: createAction(
+    '[Propiedades] Create Con Token',
+    props<{ token: string; form: PropiedadForm; fotoPrincipal: File }>(),
+  ),
+  createConTokenSuccess: createAction(
+    '[Propiedades] Create Con Token Success',
+    props<{ item: PropiedadPublic }>(),
+  ),
+  createConTokenFailure: createAction(
+    '[Propiedades] Create Con Token Failure',
+    props<{ error: string }>(),
+  ),
+
   update: createAction(
     '[Propiedades] Update',
     props<{ id: string; changes: PropiedadUpdate }>(),

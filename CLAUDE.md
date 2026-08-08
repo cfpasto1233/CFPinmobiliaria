@@ -36,7 +36,8 @@ Argon2id con fallback bcrypt (pwdlib). Payload del JWT: solo `sub=user_id`. Deta
 backend/app/
   api/routes/   # Routers FastAPI (uno por entidad): auth.py, login.py, users.py, utils.py,
                 # propiedades.py, proyectos.py, campanas.py, citas.py, solicitudes_venta.py,
-                # solicitudes_arriendo.py, solicitudes_arrendar_propiedad.py, reportes_dano.py
+                # solicitudes_arriendo.py, solicitudes_arrendar_propiedad.py, reportes_dano.py,
+                # solicitudes_publicar_propiedad.py, solicitudes_documentos_propietario.py
   api/deps.py   # SessionDep, CurrentUser, SuperUser
   core/         # config.py (Settings), security.py, db.py
   crud/         # Funciones de acceso a BD
@@ -82,12 +83,17 @@ frontend/src/app/
                        # crear/editar/mover/cancelar citas manualmente, con vínculo opcional a una
                        # SolicitudVenta o SolicitudArriendo; el agendamiento automático desde los
                        # formularios públicos del landing queda pendiente de definir),
-                       # admin/solicitudes-venta, admin/solicitudes-arriendo y
-                       # admin/solicitudes-arrendar-propiedad (listado + modal de detalle de leads
-                       # capturados por los formularios públicos de /ventas, /arrendar y
-                       # /arrendar-propiedad, superadmin), admin/reportes-dano (mismo patrón
-                       # listado + modal de detalle, con las fotos del reporte cargadas vía URLs
-                       # firmadas al abrir el modal)
+                       # admin/solicitudes-venta, admin/solicitudes-arriendo,
+                       # admin/solicitudes-arrendar-propiedad y admin/solicitudes-publicar-propiedad
+                       # (listado + modal de detalle de leads capturados por los formularios
+                       # públicos de /ventas, /arrendar, /arrendar-propiedad y /publicar-propiedad,
+                       # superadmin), admin/reportes-dano (mismo patrón listado + modal de detalle,
+                       # con las fotos del reporte cargadas vía URLs firmadas al abrir el modal),
+                       # admin/solicitudes-documentos-propietario (mismo patrón listado + modal de
+                       # detalle, con botón "Validar documentos" que genera el link de
+                       # /publicar-mi-propiedad/:token, ver Estado actual),
+                       # publicar-mi-propiedad (página pública que consume ese token para publicar
+                       # una Propiedad directamente, ver Estado actual)
   layouts/            # navbar, footer, admin-layout (shell /admin), sidebar, topbar
                        # (sidebar y topbar son componentes propios, usados por admin-layout)
   shared/components/  # toast-container, property-card, property-gallery-modal, project-card,
@@ -100,9 +106,12 @@ frontend/src/app/
   store/SolicitudesVenta/    # feature key "solicitudesVenta"
   store/SolicitudesArriendo/ # feature key "solicitudesArriendo"
   store/SolicitudesArrendarPropiedad/ # feature key "solicitudesArrendarPropiedad"
+  store/SolicitudesPublicarPropiedad/ # feature key "solicitudesPublicarPropiedad"
   store/ReportesDano/     # feature key "reportesDano" — create (formulario público), load
                           # (listado admin/reportes-dano) y loadFotos (URLs firmadas, compartido
                           # por la página pública /reportes/:id/fotos y el modal de detalle admin)
+  store/SolicitudesDocumentosPropietario/ # feature key "solicitudesDocumentosPropietario" — ver
+                          # flujo completo al final de "Estado actual"
 frontend/src/client/  # generado por ng-openapi — NUNCA editar a mano
 ```
 
@@ -191,8 +200,9 @@ usuarios en `PRODUCT.md`.
 ## Estado actual
 Backend: auth (login/refresh/logout) + CRUD de usuarios + CRUD de propiedades + CRUD de proyectos +
 CRUD de campañas + CRUD de citas + CRUD de solicitudes de venta + CRUD de solicitudes de arriendo +
-CRUD de solicitudes de arrendar-propiedad (lectura pública en propiedades/proyectos, escritura
-superadmin, fotos en MinIO vía `app/services/storage.py`). Entidades de negocio existentes: `User`,
+CRUD de solicitudes de arrendar-propiedad + CRUD de solicitudes de publicar-propiedad (lectura
+pública en propiedades/proyectos, escritura superadmin, fotos en MinIO vía
+`app/services/storage.py`). Entidades de negocio existentes: `User`,
 `Propiedad`/`PropiedadFoto`, `Proyecto` (una sola foto de portada, sin tabla de fotos adicionales —
 más simple que Propiedad a propósito), `Campana` (campaña activa mostrada en la landing — un solo
 registro, sin fotos), `Cita` (citas gestionadas por el superadmin, con estado
@@ -200,13 +210,19 @@ registro, sin fotos), `Cita` (citas gestionadas por el superadmin, con estado
 `SolicitudArriendo` vía FK nullable), `SolicitudVenta` (leads del formulario público `/ventas`),
 `SolicitudArriendo` (leads del formulario público `/arrendar`, inquilino buscando propiedad),
 `SolicitudArrendarPropiedad` (leads del formulario público `/arrendar-propiedad`, propietario que
-quiere que CFP le arriende/administre su inmueble), `ReporteDano` (reportes de daños del formulario
+quiere que CFP le arriende/administre su inmueble), `SolicitudPublicarPropiedad` (leads del
+formulario público `/publicar-propiedad`, propietario que quiere que CFP publique/gestione la venta
+de su inmueble — solo texto: nombre, medio de comunicación, contacto, dirección, precio estimado,
+características, observaciones, todos opcionales salvo nombre/contacto/dirección), `ReporteDano`
+(reportes de daños del formulario
 público `/reportes` — tubería, techo, estructura, instalación eléctrica, humedad u "otros" con texto
-libre — con hasta 5 fotos opcionales). Las cuatro solicitudes son solo texto salvo `ReporteDano`, que
-guarda las fotos como un `ARRAY(String)` de *keys* de MinIO directamente en la fila (no una tabla
-hija tipo `PropiedadFoto`: no hay panel de admin que necesite reordenarlas/reemplazarlas una a una).
-No asumir que existen más entidades. Las cuatro tablas de solicitudes (`solicitudes_venta`,
-`solicitudes_arriendo`, `solicitudes_arrendar_propiedad`, `reportes_dano`) se purgan
+libre — con hasta 5 fotos opcionales). Las solicitudes de texto (venta, arriendo,
+arrendar-propiedad, publicar-propiedad) son solo texto salvo `ReporteDano`, que guarda las fotos
+como un `ARRAY(String)` de *keys* de MinIO directamente en la fila (no una tabla hija tipo
+`PropiedadFoto`: no hay panel de admin que necesite reordenarlas/reemplazarlas una a una).
+No asumir que existen más entidades (aparte de `SolicitudDocumentoPropietario`, ver nota al final
+de esta sección). Esas cinco tablas de solicitudes (`solicitudes_venta`, `solicitudes_arriendo`,
+`solicitudes_arrendar_propiedad`, `solicitudes_publicar_propiedad`, `reportes_dano`) se purgan
 automáticamente: una tarea en background dentro del proceso backend (`app/main.py`, arrancada en el
 `lifespan`) borra cada `SOLICITUDES_RETENTION_DIAS` (15 por defecto, `core/config.py`) los registros
 con `created_at` más viejo que ese umbral, usando un lock diario en Redis (`core/redis.py`) para que
@@ -264,24 +280,30 @@ cuenta como gesto del usuario y el navegador lo bloquea como pop-up en silencio)
 final: el **id lo genera el navegador** (`crypto.randomUUID()`) antes de mandar el formulario, así
 se conoce de entrada y el link se arma sin esperar nada — el componente vuelve a ser 100% síncrono
 y solo despacha `ReportesDanoActions.create({ form, fotos, id })`, sin inyectar `Actions` ni
-suscribirse a nada. `/credito-hipotecario`,
-`/reduccion-credito`, `/publicar-propiedad`,
-`/publicar-por-tu-cuenta` siguen siendo solo visuales, sin backend propio — enlazados desde el menú
-de búsqueda del hero o desde "Publica tu propiedad") + contacto vía WhatsApp
+suscribirse a nada. `/publicar-propiedad` está conectado a `/api/v1/solicitudes-publicar-propiedad`
+real (mismo patrón que `/ventas`/`/arrendar`, solo texto, sin fotos, store
+`store/SolicitudesPublicarPropiedad`). `/credito-hipotecario` y `/reduccion-credito` siguen siendo
+solo visuales, sin backend propio — enlazados desde el menú de búsqueda del hero o desde "Publica tu
+propiedad") + contacto vía WhatsApp
 (`core/whatsapp/whatsapp.util.ts`, usado en landing, navbar, `/reportes` y
 `shared/components/publicar-whatsapp-fab`) + login/register + dashboard + `features/design-system`
 (showcase de componentes UI). El área superadmin (`layouts/admin-layout`, ruta `/admin`, con
 `layouts/sidebar` y `layouts/topbar` como componentes propios) tiene los módulos "Propiedades",
 "Proyectos", "Citas", "Campaña", "Solicitudes de venta", "Solicitudes de arriendo",
-"Propietarios (arrendar propiedad)" y "Reportes de daño" (`features/admin/propiedades`,
-`features/admin/proyectos`, `features/admin/citas`, `features/admin/campana`,
-`features/admin/solicitudes-venta`, `features/admin/solicitudes-arriendo`,
-`features/admin/solicitudes-arrendar-propiedad`, `features/admin/reportes-dano`, stores
-`store/Propiedades`, `store/Proyectos`, `store/Citas`, `store/Campana`, `store/SolicitudesVenta`,
-`store/SolicitudesArriendo`, `store/SolicitudesArrendarPropiedad`, `store/ReportesDano`). Como el
-resto de módulos de "Solicitudes", "Reportes de daño" es listado + modal de detalle de solo
-lectura (`ReportesDanoListComponent`/`ReporteDanoDetalleModalComponent`, sin editar/eliminar
-manual) — la purga automática de 15 días sigue siendo la única forma en que desaparecen. El
+"Propietarios (arrendar propiedad)", "Publicar propiedad", "Documentos de propietarios" y
+"Reportes de daño" (`features/admin/propiedades`, `features/admin/proyectos`,
+`features/admin/citas`, `features/admin/campana`, `features/admin/solicitudes-venta`,
+`features/admin/solicitudes-arriendo`, `features/admin/solicitudes-arrendar-propiedad`,
+`features/admin/solicitudes-publicar-propiedad`, `features/admin/solicitudes-documentos-propietario`,
+`features/admin/reportes-dano`, stores `store/Propiedades`, `store/Proyectos`, `store/Citas`,
+`store/Campana`, `store/SolicitudesVenta`, `store/SolicitudesArriendo`,
+`store/SolicitudesArrendarPropiedad`, `store/SolicitudesPublicarPropiedad`,
+`store/SolicitudesDocumentosPropietario`, `store/ReportesDano`). Como el
+resto de módulos de "Solicitudes", "Reportes de daño" (y "Documentos de propietarios", salvo el
+botón de validar) es listado + modal de detalle de solo lectura
+(`ReportesDanoListComponent`/`ReporteDanoDetalleModalComponent`, sin editar/eliminar manual) — la
+purga automática de 15 días sigue siendo la única forma en que desaparecen los reportes de daño (no
+así los documentos de propietarios, ver Estado actual). El
 calendario de Citas usa
 `angular-calendar` (vistas mes/semana/día, crear/editar/mover/redimensionar citas con clic y
 arrastre) — el superadmin gestiona las citas manualmente; el agendamiento automático desde los
@@ -292,4 +314,32 @@ qué formularios lo permitirán). El upload de fotos usa un servicio manual con 
 cada archivo con `String(file)` en vez de adjuntarlo como binario); el resto de operaciones
 (list/get/update/delete) sí usan el cliente generado. Estos servicios de upload solo los inyecta el
 Effect correspondiente (`PropiedadesEffects`, `ReportesDanoEffects`, etc.), nunca un componente.
+
+**Publicación de propiedad por el propio propietario** (rama `feature/publicarcon`, sin commitear
+todavía): un propietario que ya contrató un plan en `/publicar-por-tu-cuenta` sube sus documentos
+legales (cédula, certificado de libertad y tradición, escritura, comprobante de pago, y poder
+opcional; PDFs hasta 10MB validados en `storage.py::validate_document`, guardados en MinIO bajo
+`documentos-propietario/*`) vía el modal `carga-documentos-modal` (dispara
+`SolicitudesDocumentosPropietarioActions.create`). Eso crea una fila de `SolicitudDocumentoPropietario`
+(tabla `solicitudes_documentos_propietario`). El superadmin la revisa en
+`/admin/solicitudes-documentos-propietario` (`SolicitudesDocumentosPropietarioListComponent` +
+`SolicitudDocumentoPropietarioDetalleModalComponent`, mismo patrón listado + modal de detalle que
+`reportes-dano`, viendo los 5 documentos vía URLs firmadas de 1h) y, si están correctos, hace clic
+en "Validar documentos" (`POST /{id}/validar`) — esto genera un token de un solo uso válido 48h y el
+modal muestra un botón "Enviar por WhatsApp" (`whatsappLink()`) con un link a
+`/publicar-mi-propiedad/:token`. Esa página pública (`features/publicar-mi-propiedad/`, con
+navbar/footer y `<meta name="robots" content="noindex, nofollow">`) verifica el
+token (`checkToken`) y, si es válido, muestra el mismo formulario de propiedad de ~35 campos que usa
+el admin (matriz de campos por `tipo_inmueble` extraída a `store/Propiedades/propiedad-form-fields.ts`
+y compartida entre `PropiedadFormComponent` y `PublicarMiPropiedadComponent` para no duplicarla) con
+solo `foto_principal` (sin galería). Al enviar, despacha `PropiedadesActions.createConToken({ token,
+form, fotoPrincipal })`, que pega contra `POST /api/v1/propiedades/publicar-con-token/{token}` —
+crea la `Propiedad` con `destacada=true` (se posiciona primero en `list_propiedades`, ver
+`crud/propiedad.py`) y `solicitud_documento_id` apuntando a la solicitud (FK `ondelete=SET NULL`),
+y quema el token (`marcar_token_usado`). La página muestra un estado de confirmación (sin redirect
+automático); un segundo intento con el mismo link muestra "vencido/usado". A propósito,
+`SolicitudDocumentoPropietario` **no** está en `purga_solicitudes.py` (comentario explicativo en ese
+archivo): son documentos legales de una propiedad que puede seguir publicada después de los 15 días
+de retención del resto de solicitudes.
+
 Módulos de negocio adicionales del dominio inmobiliario siguen pendientes de definir/construir.

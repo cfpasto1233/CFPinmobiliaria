@@ -1,0 +1,159 @@
+<div class="carga-modal-overlay" (click)="close()">
+  <div class="carga-modal" (click)="$event.stopPropagation()">
+    <div class="carga-modal-header">
+      <div>
+        <p class="carga-modal-eyebrow">Carga de documentos</p>
+        <h2 class="carga-modal-title">Comparte los documentos de tu propiedad</h2>
+      </div>
+      <button type="button" class="carga-modal-close" aria-label="Cerrar" (click)="close()">&times;</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="carga-modal-body">
+        <div class="carga-modal-info">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.876.52 3.63 1.42 5.13L2 22l4.995-1.397A9.945 9.945 0 0 0 12 22c5.522 0 10-4.478 10-10S17.523 2 12.001 2zm0 18.09a8.075 8.075 0 0 1-4.115-1.115l-.295-.175-3.06.857.821-2.995-.192-.307A8.06 8.06 0 0 1 3.91 12c0-4.465 3.626-8.09 8.09-8.09 4.464 0 8.09 3.625 8.09 8.09 0 4.464-3.626 8.09-8.09 8.09z" />
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+          </svg>
+          <span>
+            Una vez revisemos tus documentos, te enviaremos por <strong>WhatsApp</strong> un link
+            para que puedas publicar tu propiedad.
+          </span>
+        </div>
+
+        <div class="carga-modal-row">
+          <div class="carga-modal-field">
+            <label for="nombreCompleto" class="carga-modal-label">Nombre completo *</label>
+            <input
+              id="nombreCompleto"
+              type="text"
+              class="carga-modal-input"
+              placeholder="Tu nombre"
+              [class.is-invalid]="fieldError('nombreCompleto')"
+              formControlName="nombreCompleto"
+            />
+            @if (fieldError('nombreCompleto'); as err) {
+              <div class="carga-modal-error">{{ err }}</div>
+            }
+          </div>
+
+          <div class="carga-modal-field">
+            <label for="numeroContacto" class="carga-modal-label">Número de contacto *</label>
+            <input
+              id="numeroContacto"
+              type="tel"
+              class="carga-modal-input"
+              placeholder="+57 300 000 0000"
+              [class.is-invalid]="fieldError('numeroContacto')"
+              formControlName="numeroContacto"
+            />
+            @if (fieldError('numeroContacto'); as err) {
+              <div class="carga-modal-error">{{ err }}</div>
+            }
+          </div>
+        </div>
+
+        <div class="carga-modal-field">
+          <label class="carga-modal-label">Plan contratado *</label>
+          <ng-select
+            [items]="planOptions"
+            bindLabel="label"
+            bindValue="value"
+            [clearable]="false"
+            [appendTo]="'body'"
+            placeholder="Seleccionar..."
+            formControlName="planContratado"
+          ></ng-select>
+          @if (fieldError('planContratado'); as err) {
+            <div class="carga-modal-error">{{ err }}</div>
+          }
+        </div>
+
+        <hr class="carga-modal-divider" />
+
+        <div class="carga-modal-docs">
+          <div class="carga-modal-doc-field">
+            <span class="carga-modal-doc-label">Cédula del propietario *</span>
+            @if (archivos().cedula; as file) {
+              <span class="carga-modal-doc-filename">{{ file.name }}</span>
+              <button type="button" class="carga-modal-doc-remove" (click)="quitarArchivo('cedula')">Quitar</button>
+            } @else {
+              <label class="carga-modal-doc-upload">
+                Seleccionar PDF
+                <input type="file" accept="application/pdf" class="visually-hidden" (change)="onArchivoSeleccionado($event, 'cedula')" />
+              </label>
+            }
+          </div>
+
+          <div class="carga-modal-doc-field">
+            <span class="carga-modal-doc-label">Certificado de libertad y tradición (&lt;30 días) *</span>
+            @if (archivos().certificadoLibertad; as file) {
+              <span class="carga-modal-doc-filename">{{ file.name }}</span>
+              <button type="button" class="carga-modal-doc-remove" (click)="quitarArchivo('certificadoLibertad')">Quitar</button>
+            } @else {
+              <label class="carga-modal-doc-upload">
+                Seleccionar PDF
+                <input type="file" accept="application/pdf" class="visually-hidden" (change)="onArchivoSeleccionado($event, 'certificadoLibertad')" />
+              </label>
+            }
+          </div>
+
+          <div class="carga-modal-doc-field">
+            <span class="carga-modal-doc-label">Escritura pública de adquisición *</span>
+            @if (archivos().escritura; as file) {
+              <span class="carga-modal-doc-filename">{{ file.name }}</span>
+              <button type="button" class="carga-modal-doc-remove" (click)="quitarArchivo('escritura')">Quitar</button>
+            } @else {
+              <label class="carga-modal-doc-upload">
+                Seleccionar PDF
+                <input type="file" accept="application/pdf" class="visually-hidden" (change)="onArchivoSeleccionado($event, 'escritura')" />
+              </label>
+            }
+          </div>
+
+          <div class="carga-modal-doc-field">
+            <span class="carga-modal-doc-label">
+              Poder <span class="carga-modal-doc-hint">(solo si no eres el propietario)</span>
+            </span>
+            @if (archivos().poder; as file) {
+              <span class="carga-modal-doc-filename">{{ file.name }}</span>
+              <button type="button" class="carga-modal-doc-remove" (click)="quitarArchivo('poder')">Quitar</button>
+            } @else {
+              <label class="carga-modal-doc-upload">
+                Seleccionar PDF
+                <input type="file" accept="application/pdf" class="visually-hidden" (change)="onArchivoSeleccionado($event, 'poder')" />
+              </label>
+            }
+          </div>
+
+          <div class="carga-modal-doc-field">
+            <span class="carga-modal-doc-label">Comprobante de pago *</span>
+            @if (archivos().comprobantePago; as file) {
+              <span class="carga-modal-doc-filename">{{ file.name }}</span>
+              <button type="button" class="carga-modal-doc-remove" (click)="quitarArchivo('comprobantePago')">Quitar</button>
+            } @else {
+              <label class="carga-modal-doc-upload">
+                Seleccionar PDF
+                <input type="file" accept="application/pdf" class="visually-hidden" (change)="onArchivoSeleccionado($event, 'comprobantePago')" />
+              </label>
+            }
+          </div>
+        </div>
+
+        @if (archivosError(); as err) {
+          <div class="carga-modal-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="carga-modal-actions">
+        <span class="carga-modal-required-hint">* Campos obligatorios · Solo PDF, máx. 10 MB c/u</span>
+        <button type="submit" class="btn btn-secondary" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Enviar documentos
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

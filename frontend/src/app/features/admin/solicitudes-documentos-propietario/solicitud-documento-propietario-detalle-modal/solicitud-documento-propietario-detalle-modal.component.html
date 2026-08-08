@@ -1,0 +1,80 @@
+<div class="detalle-modal-overlay" (click)="close()">
+  <div class="detalle-modal" (click)="$event.stopPropagation()">
+    <div class="detalle-modal-header">
+      <div>
+        <p class="detalle-modal-eyebrow">Documentos de propietario</p>
+        <h2 class="detalle-modal-title">{{ solicitud().nombre_completo }}</h2>
+      </div>
+      <button type="button" class="detalle-modal-close" aria-label="Cerrar" (click)="close()">&times;</button>
+    </div>
+
+    <div class="detalle-modal-body">
+      <div class="detalle-modal-badges">
+        <span class="detalle-modal-badge">{{ planLabel() }}</span>
+        <span class="detalle-modal-badge detalle-modal-badge-outline">
+          {{ actual().validado ? 'Validado' : 'Pendiente de validar' }}
+        </span>
+      </div>
+
+      <dl class="detalle-modal-grid">
+        <div class="detalle-modal-field">
+          <dt>Número de contacto</dt>
+          <dd>{{ solicitud().numero_contacto }}</dd>
+        </div>
+
+        <div class="detalle-modal-field">
+          <dt>Fecha de solicitud</dt>
+          <dd>{{ solicitud().created_at | date: "d 'de' MMMM 'de' y, h:mm a" }}</dd>
+        </div>
+      </dl>
+
+      <div class="detalle-modal-fotos">
+        <p class="detalle-modal-fotos-label">Documentos</p>
+        @if (loading() && !detalle()) {
+          <p class="detalle-modal-fotos-hint">Cargando documentos...</p>
+        } @else if (detalle(); as d) {
+          <ul class="detalle-modal-docs">
+            <li><a [href]="d.cedula_url" target="_blank" rel="noopener">Cédula del propietario</a></li>
+            <li><a [href]="d.certificado_libertad_url" target="_blank" rel="noopener">Certificado de libertad y tradición</a></li>
+            <li><a [href]="d.escritura_url" target="_blank" rel="noopener">Escritura pública de adquisición</a></li>
+            @if (d.poder_url) {
+              <li><a [href]="d.poder_url" target="_blank" rel="noopener">Poder</a></li>
+            }
+            <li><a [href]="d.comprobante_pago_url" target="_blank" rel="noopener">Comprobante de pago</a></li>
+          </ul>
+        } @else {
+          <p class="detalle-modal-fotos-hint">No se pudieron cargar los documentos.</p>
+        }
+      </div>
+
+      @if (!actual().validado) {
+        <div class="detalle-modal-validar">
+          <button type="button" class="btn btn-success" [disabled]="loading()" (click)="validar()">
+            @if (loading()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            Validar documentos
+          </button>
+        </div>
+      } @else if (linkVigente()) {
+        <div class="detalle-modal-link">
+          <p class="detalle-modal-fotos-label">Link para publicar (válido 48h)</p>
+          <div class="detalle-modal-link-row">
+            <input type="text" class="form-control" [value]="publicarLink()" readonly />
+            @if (whatsappHref(); as href) {
+              <a [href]="href" target="_blank" rel="noopener" class="btn btn-success">Enviar por WhatsApp</a>
+            }
+          </div>
+        </div>
+      } @else {
+        <p class="detalle-modal-fotos-hint">
+          El link de publicación ya expiró o ya fue utilizado.
+        </p>
+      }
+    </div>
+
+    <div class="detalle-modal-actions">
+      <button type="button" class="btn btn-outline-primary" (click)="close()">Cerrar</button>
+    </div>
+  </div>
+</div>

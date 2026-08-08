@@ -277,3 +277,102 @@
     }
   }
 }
+
+// ─── Banner: carga de documentos ────────────────────────────────────────────
+
+.carga-docs-banner {
+  padding: 1rem 1.5rem 5rem;
+}
+
+.carga-docs-banner-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  background: $cfpasto-primary;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+
+  @media (max-width: 767.98px) {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.5rem;
+  }
+}
+
+.carga-docs-banner-info {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.carga-docs-banner-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  border: 1.5px solid rgba($cfpasto-white, 0.4);
+  color: $cfpasto-white;
+}
+
+.carga-docs-banner-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-lg;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $cfpasto-white;
+  margin: 0 0 0.35rem;
+}
+
+.carga-docs-banner-text {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  line-height: 1.6;
+  color: rgba($cfpasto-white, 0.85);
+  margin: 0;
+}
+
+.carga-docs-banner-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border: none;
+  border-radius: 50rem;
+  background: $cfpasto-accent;
+  color: $cfpasto-primary;
+  font-family: $cfpasto-font-body;
+  font-weight: 700;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    background: $cfpasto-accent-light;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 767.98px) {
+    width: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}

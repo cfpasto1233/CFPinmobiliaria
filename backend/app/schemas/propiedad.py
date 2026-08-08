@@ -333,6 +333,7 @@ class PropiedadPublic(BaseModel):
     precio: Decimal
     tipo: str
     orden: int
+    destacada: bool
     foto_principal_url: str
     fotos: list[PropiedadFotoPublic]
     tipo_inmueble: str
