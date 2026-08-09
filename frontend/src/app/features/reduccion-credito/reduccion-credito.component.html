@@ -1,7 +1,7 @@
 <app-navbar />
 
-<section class="reduccion">
-  <div class="reduccion-header">
+<section class="reduccion-hero">
+  <div class="reduccion-hero-content">
     <a routerLink="/" class="reduccion-back">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M19 12H5" />
@@ -10,119 +10,157 @@
       Volver al inicio
     </a>
 
-    <p class="reduccion-eyebrow">Reducción de crédito</p>
-    <h1 class="reduccion-title">Reduce la carga de tu crédito actual</h1>
-    <p class="reduccion-subtitle">
-      Cuéntanos sobre tu crédito vigente y evaluamos contigo alternativas de refinanciación o reestructuración.
+    <p class="reduccion-kicker">
+      <span class="reduccion-kicker-label">Servicio de</span>
+      Reducción de crédito — Avanzar
+    </p>
+
+    <h1 class="reduccion-title">
+      Reduce tu deuda,<br />
+      <span class="is-accent">gana libertad</span><br />
+      financiera.
+    </h1>
+
+    <span class="reduccion-divider"></span>
+
+    <p class="reduccion-text">
+      Con Avanzar y CFP Inmobiliaria pagas menos, reduces años de deuda y recuperas tu
+      tranquilidad financiera.
     </p>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="reduccion-card">
-      <h2 class="reduccion-card-title">Datos de tu solicitud</h2>
-
-      <div class="reduccion-row">
-        <div class="reduccion-field">
-          <label for="nombreCompleto" class="reduccion-label">Nombre completo *</label>
-          <input
-            id="nombreCompleto"
-            type="text"
-            class="reduccion-input"
-            placeholder="Tu nombre"
-            [class.is-invalid]="fieldError('nombreCompleto')"
-            formControlName="nombreCompleto"
-          />
-          @if (fieldError('nombreCompleto'); as err) {
-            <div class="reduccion-error">{{ err }}</div>
-          }
-        </div>
-
-        <div class="reduccion-field">
-          <label for="numeroContacto" class="reduccion-label">Número de contacto *</label>
-          <input
-            id="numeroContacto"
-            type="tel"
-            class="reduccion-input"
-            placeholder="+57 300 000 0000"
-            [class.is-invalid]="fieldError('numeroContacto')"
-            formControlName="numeroContacto"
-          />
-          @if (fieldError('numeroContacto'); as err) {
-            <div class="reduccion-error">{{ err }}</div>
-          }
-        </div>
-      </div>
-
-      <div class="reduccion-row">
-        <div class="reduccion-field">
-          <label for="entidadFinanciera" class="reduccion-label">Entidad financiera actual *</label>
-          <input
-            id="entidadFinanciera"
-            type="text"
-            class="reduccion-input"
-            placeholder="Ej: Bancolombia, Davivienda..."
-            [class.is-invalid]="fieldError('entidadFinanciera')"
-            formControlName="entidadFinanciera"
-          />
-          @if (fieldError('entidadFinanciera'); as err) {
-            <div class="reduccion-error">{{ err }}</div>
-          }
-        </div>
-
-        <div class="reduccion-field">
-          <label class="reduccion-label">Motivo de tu solicitud *</label>
-          <ng-select
-            class="reduccion-select"
-            [items]="motivoOptions"
-            bindLabel="label"
-            bindValue="value"
-            [clearable]="false"
-            placeholder="Seleccionar..."
-            formControlName="motivoSolicitud"
-          ></ng-select>
-          @if (fieldError('motivoSolicitud'); as err) {
-            <div class="reduccion-error">{{ err }}</div>
-          }
-        </div>
-      </div>
-
-      <div class="reduccion-field">
-        <label for="saldoActual" class="reduccion-label">Saldo actual aproximado</label>
-        <input
-          id="saldoActual"
-          type="text"
-          class="reduccion-input"
-          placeholder="Ej: $95.000.000"
-          [class.is-invalid]="fieldError('saldoActual')"
-          formControlName="saldoActual"
-        />
-        @if (fieldError('saldoActual'); as err) {
-          <div class="reduccion-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="reduccion-field">
-        <label for="mensaje" class="reduccion-label">Mensaje</label>
-        <textarea
-          id="mensaje"
-          rows="3"
-          class="reduccion-input reduccion-textarea"
-          placeholder="Cuéntanos más detalles de tu solicitud..."
-          [class.is-invalid]="fieldError('mensaje')"
-          formControlName="mensaje"
-        ></textarea>
-        @if (fieldError('mensaje'); as err) {
-          <div class="reduccion-error">{{ err }}</div>
-        }
-      </div>
-
-      <div class="reduccion-actions">
-        <span class="reduccion-required-hint">* Campos obligatorios</span>
-        <button type="submit" class="btn btn-secondary">Enviar solicitud</button>
-      </div>
+  <div class="reduccion-hero-media">
+    <div class="reduccion-image-placeholder">
+      <span>Imagen: familia frente a su vivienda</span>
     </div>
-  </form>
+
+    <div class="reduccion-stat-card">
+      <div class="reduccion-stat-row">
+        <div class="reduccion-stat-block">
+          <span class="reduccion-stat-label">De</span>
+          <span class="reduccion-stat-value">30</span>
+          <span class="reduccion-stat-unit">años</span>
+        </div>
+
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="reduccion-stat-arrow">
+          <path d="M5 12h14" />
+          <path d="M12 5l7 7-7 7" />
+        </svg>
+
+        <div class="reduccion-stat-block">
+          <span class="reduccion-stat-label">A</span>
+          <span class="reduccion-stat-value is-accent">6</span>
+          <span class="reduccion-stat-unit">años</span>
+        </div>
+      </div>
+
+      <div class="reduccion-stat-banner">Menos años, más tranquilidad</div>
+    </div>
+  </div>
+</section>
+
+<section class="reduccion-features">
+  <div class="reduccion-features-grid">
+    <div class="reduccion-features-item">
+      <div class="reduccion-features-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <polyline points="12 7 12 12 15.5 14"></polyline>
+        </svg>
+      </div>
+      <span class="reduccion-features-numero">01</span>
+      <h3 class="reduccion-features-item-title">Reducción de tiempo</h3>
+      <span class="reduccion-features-item-divider"></span>
+      <p class="reduccion-features-item-text">
+        De 30 años a 6 años. Cada caso es independiente y puede ser de menor o mayor tiempo.
+      </p>
+    </div>
+
+    <div class="reduccion-features-item">
+      <div class="reduccion-features-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="2" x2="12" y2="22"></line>
+          <path d="M17 6.5c0-1.93-2.24-3.5-5-3.5s-5 1.57-5 3.5S9.24 10 12 10s5 1.57 5 3.5-2.24 3.5-5 3.5-5-1.57-5-3.5"></path>
+        </svg>
+      </div>
+      <span class="reduccion-features-numero">02</span>
+      <h3 class="reduccion-features-item-title">Ahorro real</h3>
+      <span class="reduccion-features-item-divider"></span>
+      <p class="reduccion-features-item-text">
+        Hasta $100 millones menos en tu crédito. El ahorro puede ser menor o mayor según tu caso.
+      </p>
+    </div>
+
+    <div class="reduccion-features-item">
+      <div class="reduccion-features-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="3" x2="12" y2="21"></line>
+          <line x1="5" y1="7" x2="19" y2="7"></line>
+          <path d="M5 7l-3 6a3 3 0 0 0 6 0l-3-6z"></path>
+          <path d="M19 7l-3 6a3 3 0 0 0 6 0l-3-6z"></path>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+        </svg>
+      </div>
+      <span class="reduccion-features-numero">03</span>
+      <h3 class="reduccion-features-item-title">Respaldo legal</h3>
+      <span class="reduccion-features-item-divider"></span>
+      <p class="reduccion-features-item-text">
+        Procesos contemplados en la normativa colombiana, sin contraindicaciones.
+      </p>
+    </div>
+
+    <div class="reduccion-features-item">
+      <div class="reduccion-features-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <span class="reduccion-features-numero">04</span>
+      <h3 class="reduccion-features-item-title">Pago por resultado</h3>
+      <span class="reduccion-features-item-divider"></span>
+      <p class="reduccion-features-item-text">
+        Solo se cancela cuando la reducción está reflejada en tu crédito.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="reduccion-cta-section">
+  <div class="reduccion-cta">
+    <div class="reduccion-cta-dark">
+      <h2 class="reduccion-cta-dark-title">Tu tranquilidad empieza hoy.</h2>
+      <p class="reduccion-cta-dark-text">
+        Analizamos tu crédito, encontramos la mejor estrategia y te acompañamos hasta que la
+        reducción se haga realidad.
+      </p>
+      <p class="reduccion-cta-dark-bold">
+        Cada caso es único. Los resultados pueden variar en tiempo y ahorro.
+      </p>
+    </div>
+
+    <div class="reduccion-cta-light">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="reduccion-cta-light-icon">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+
+      <h2 class="reduccion-cta-light-title">
+        Solicita tu diagnóstico gratuito y descubre cuánto puedes ahorrar.
+      </h2>
+      <p class="reduccion-cta-light-text">
+        El ahorro depende del caso, pero en la mayoría de los casos puede ser de menor o mayor
+        valor al estimado.
+      </p>
+
+      <a [href]="whatsappHref" target="_blank" rel="noopener noreferrer" class="reduccion-cta-btn">
+        Solicitar diagnóstico gratuito
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="M12 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </div>
 </section>
 
 <app-footer />
-<app-publicar-whatsapp-fab />
