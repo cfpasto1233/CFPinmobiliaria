@@ -10,6 +10,11 @@ interface CreditoFeature {
   texto: string;
 }
 
+interface BancoLogo {
+  nombre: string;
+  logo: string;
+}
+
 @Component({
   selector: 'app-credito-hipotecario',
   standalone: true,
@@ -23,16 +28,16 @@ export class CreditoHipotecarioComponent {
     'Hola, quiero comparar mi crédito hipotecario con CFP Inmobiliaria.',
   );
 
-  protected readonly bancos: string[] = [
-    'Banco AV Villas',
-    'Banco de Bogotá',
-    'BBVA Colombia',
-    'Credifamilia',
-    'Itaú',
-    'Banco de Occidente',
-    'Caja Social',
-    'Hipocredit',
-    'Banco W',
+  protected readonly bancos: BancoLogo[] = [
+    { nombre: 'Banco AV Villas', logo: 'images/av-villas.webp' },
+    { nombre: 'Banco de Bogotá', logo: 'images/bbogota.webp' },
+    { nombre: 'BBVA Colombia', logo: 'images/bbva.webp' },
+    { nombre: 'Credifamilia', logo: 'images/credifamilia.webp' },
+    { nombre: 'Itaú', logo: 'images/itau.webp' },
+    { nombre: 'Banco de Occidente', logo: 'images/b-occidente.webp' },
+    { nombre: 'Caja Social', logo: 'images/banco-caja-social.webp' },
+    { nombre: 'Hipocredit', logo: 'images/hipo.webp' },
+    { nombre: 'Banco W', logo: 'images/banco-w.webp' },
   ];
 
   protected readonly features: CreditoFeature[] = [

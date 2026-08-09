@@ -63,6 +63,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'quienes-somos',
+    loadComponent: () =>
+      import('./features/quienes-somos/quienes-somos.component').then(
+        (m) => m.QuienesSomosComponent,
+      ),
+  },
+  {
     path: 'proyectos',
     loadComponent: () =>
       import('./features/proyectos/proyectos-listado.component').then(

@@ -30,9 +30,7 @@
   </div>
 
   <div class="credito-hero-media">
-    <div class="credito-image-placeholder credito-image-placeholder--laptop">
-      <span>Imagen: mockup del comparador (laptop)</span>
-    </div>
+    <img src="images/computador.webp" alt="Comparador de crédito hipotecario CFP en computador" class="credito-hero-image" />
   </div>
 </section>
 
@@ -40,10 +38,19 @@
   <h2 class="credito-bancos-title">Comparamos entre 9 bancos líderes</h2>
   <span class="credito-divider credito-divider--center"></span>
 
-  <div class="credito-bancos-grid">
-    @for (banco of bancos; track banco) {
-      <div class="credito-banco-chip">{{ banco }}</div>
-    }
+  <div class="credito-bancos-marquee">
+    <div class="credito-bancos-track">
+      @for (banco of bancos; track banco.nombre) {
+        <div class="credito-banco-logo">
+          <img [src]="banco.logo" [alt]="banco.nombre" />
+        </div>
+      }
+      @for (banco of bancos; track banco.nombre + '-dup') {
+        <div class="credito-banco-logo" aria-hidden="true">
+          <img [src]="banco.logo" alt="" />
+        </div>
+      }
+    </div>
   </div>
 </section>
 
@@ -83,9 +90,7 @@
     </div>
 
     <div class="credito-cta-media">
-      <div class="credito-image-placeholder credito-image-placeholder--casa is-on-dark">
-        <span>Imagen: fachada de vivienda</span>
-      </div>
+      <img src="images/casa.webp" alt="Fachada de vivienda moderna" class="credito-cta-image" />
     </div>
   </div>
 </section>

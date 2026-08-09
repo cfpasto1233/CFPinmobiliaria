@@ -1,0 +1,397 @@
+<app-navbar />
+
+<section class="qs-hero">
+  <div class="qs-hero-inner">
+    <div class="qs-hero-content">
+      <h1 class="qs-hero-title">
+        Donde invertir en Pasto
+        <span class="is-accent">se convierte en una decisión inteligente.</span>
+      </h1>
+
+      <p class="qs-hero-text">Resultados e innovación en cada negocio inmobiliario.</p>
+
+      <button type="button" class="qs-btn qs-btn--accent" (click)="scrollToServicios()">
+        Conoce nuestra oferta
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="M12 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="qs-hero-media">
+      <div class="qs-image-placeholder is-on-dark">
+        <span>Imagen: interior con vista panorámica de Pasto</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="qs-historia">
+  <div class="qs-historia-content">
+    <p class="qs-kicker">Historia y trayectoria</p>
+
+    <h2 class="qs-historia-title">
+      Desde el <span class="is-accent">2023</span>, construimos confianza.
+    </h2>
+
+    <p class="qs-historia-text">
+      CFP Inmobiliaria nació en 2023 con el propósito de renovar el mercado tradicional mediante
+      estrategias digitales y un acompañamiento integral en cada etapa del negocio inmobiliario.
+    </p>
+
+    <p class="qs-historia-text">
+      Hoy combinamos innovación tecnológica, respaldo jurídico y gestión integral para ofrecer
+      resultados reales y experiencias seguras a nuestros clientes.
+    </p>
+
+    <button type="button" class="qs-btn qs-btn--dark" (click)="scrollToPilares()">
+      Conoce nuestra historia
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14" />
+        <path d="M12 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="qs-historia-media">
+    <div class="qs-image-placeholder qs-image-placeholder--historia">
+      <span>Imagen: vista panorámica de Pasto</span>
+    </div>
+
+    <div class="qs-historia-badge">
+      <span class="qs-historia-badge-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18" />
+          <path d="M6 21V8l6-4 6 4v13" />
+          <path d="M10 21v-6h4v6" />
+          <path d="M10 11h.01M14 11h.01M10 15h.01M14 15h.01" />
+        </svg>
+      </span>
+      <p class="qs-historia-badge-text">
+        Líderes en marketing inmobiliario y procesos legales de alto impacto en Pasto y Nariño.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="qs-pilares" id="pilares" #pilaresSection>
+  <div class="qs-pilares-grid">
+    @for (pilar of pilares; track pilar.tituloAcento) {
+      <div class="qs-pilar">
+        <h3 class="qs-pilar-title">
+          <span class="is-accent">{{ pilar.tituloAcento }}</span>
+          {{ pilar.tituloResto }}
+        </h3>
+        <p class="qs-pilar-text">{{ pilar.texto }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="qs-alianzas">
+  <div class="qs-alianzas-content">
+    <p class="qs-kicker">Alianzas que nos fortalecen</p>
+
+    <h2 class="qs-alianzas-title">Conectamos oportunidades, multiplicamos resultados.</h2>
+
+    <p class="qs-alianzas-text">
+      Pertenecer a la Red Inmobiliaria de Nariño y Afianzar de Nariño nos permite ofrecer más
+      respaldo, más clientes y más seguridad en cada operación.
+    </p>
+
+    <button type="button" class="qs-btn qs-btn--accent" (click)="scrollToServicios()">
+      Conoce nuestros servicios
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14" />
+        <path d="M12 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="qs-alianzas-logos">
+    <img src="images/RedInmo.webp" alt="Red Inmobiliaria de Nariño" class="qs-alianza-logo" />
+    <img src="images/Afianzar.webp" alt="Afianzar de Nariño" class="qs-alianza-logo" />
+  </div>
+</section>
+
+<section class="qs-servicios" id="servicios" #serviciosSection>
+  <div class="qs-servicios-header">
+    <h2 class="qs-servicios-title">Servicios integrales para cada etapa</h2>
+    <p class="qs-servicios-subtitle">
+      Acompañamiento experto, procesos eficientes y resultados que te dan tranquilidad.
+    </p>
+  </div>
+
+  <div class="qs-servicios-grid">
+    <!-- Ventas Inmobiliarias -->
+    <div class="qs-servicio-card">
+      <span class="qs-servicio-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 10.5 12 3l9 7.5" />
+          <path d="M5 9.5V21h14V9.5" />
+          <path d="M9 21v-6h6v6" />
+        </svg>
+      </span>
+
+      <p class="qs-servicio-eyebrow">Servicio de</p>
+      <h3 class="qs-servicio-title">Ventas Inmobiliarias</h3>
+
+      <ul class="qs-servicio-list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Seguridad jurídica:</strong> Revisión de títulos y certificado de libertad y tradición.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Avalúo competitivo:</strong> Basado en mercado real y plusvalía.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Impacto visual:</strong> Fotografía profesional, video y dron.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Mercadeo digital:</strong> Página web con agendamiento de visitas en un clic y toda la información del inmueble; campañas segmentadas en Meta Ads; ferias empresariales y red de aliados.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Gestión práctica:</strong> Resolución de conflictos ante notaría y empresas de servicios públicos; verificación y administración de recursos.</span>
+        </li>
+      </ul>
+
+      <p class="qs-servicio-tagline">
+        Tu inmueble no solo se vende, se convierte en una experiencia segura, visible y con respaldo total.
+      </p>
+
+      <a routerLink="/publicar-propiedad" class="qs-servicio-cta">
+        Publica tu propiedad hoy
+        <br />
+        y agenda visitas en un clic
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="M12 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Arrendamiento -->
+    <div class="qs-servicio-card">
+      <span class="qs-servicio-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="8" cy="8" r="5" />
+          <path d="M11.5 11.5 21 21" />
+          <path d="M16 16h5v5" />
+        </svg>
+      </span>
+
+      <p class="qs-servicio-eyebrow">Servicio de</p>
+      <h3 class="qs-servicio-title">Arrendamiento</h3>
+
+      <ul class="qs-servicio-list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Canon asegurado:</strong> Hasta 36 meses en mora con respaldo de Afianzar de Nariño.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Protección del inmueble:</strong> Inventario de entrega y evaluación de daños con cotizaciones o supervisión directa.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Asesoría integral:</strong> Comercial, legal y contable en propiedad horizontal.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Trámites claros:</strong> Notaría, alcaldía, curaduría e instrumentos públicos.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Equipo especializado:</strong> Abogado en títulos y contratos + asesores comerciales.</span>
+        </li>
+      </ul>
+
+      <p class="qs-servicio-tagline">
+        Arrendar con CFP Inmobiliaria es crecer con confianza y respaldo garantizado.
+      </p>
+
+      <a routerLink="/arrendar-propiedad" class="qs-servicio-cta">
+        Protege tu propiedad
+        <br />
+        y asegura tu renta desde el primer día
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="M12 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Asesorías -->
+    <div class="qs-servicio-card">
+      <span class="qs-servicio-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3h8a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+          <path d="M7 5H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1" />
+          <line x1="8" y1="12" x2="16" y2="12" />
+          <line x1="8" y1="16" x2="13" y2="16" />
+        </svg>
+      </span>
+
+      <p class="qs-servicio-eyebrow">Servicio de</p>
+      <h3 class="qs-servicio-title">Asesorías</h3>
+
+      <ul class="qs-servicio-list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Transferencia de dominio:</strong> Compraventa, donación, sucesión.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Derechos reales:</strong> Hipoteca, usufructo, servidumbre.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Modificaciones:</strong> Correcciones de escrituras, englobe y desenglobe.</span>
+        </li>
+      </ul>
+
+      <p class="qs-servicio-tagline">
+        Tus trámites notariales y registrales, claros, seguros y confiables.
+      </p>
+
+      <a [href]="whatsappAsesoriasHref" target="_blank" rel="noopener noreferrer" class="qs-servicio-cta">
+        Agenda tu asesoría
+        <br />
+        y resuelve tus trámites sin complicaciones
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="M12 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Reducción de Crédito -->
+    <div class="qs-servicio-card">
+      <span class="qs-servicio-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+          <polyline points="17 6 23 6 23 12" />
+        </svg>
+      </span>
+
+      <p class="qs-servicio-eyebrow">Servicio de</p>
+      <h3 class="qs-servicio-title">Reducción de Crédito - Avanzar</h3>
+
+      <ul class="qs-servicio-list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Beneficio directo:</strong> Reducción de plazo (ej. de 30 a 6 años).</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Ahorro real:</strong> Disminución de hasta $100 millones en tu crédito.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Respaldo legal:</strong> Procesos contemplados en la normativa colombiana, supervisados por la SIC.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Pago por resultado:</strong> Solo se cancela cuando la reducción está reflejada en el crédito.</span>
+        </li>
+      </ul>
+
+      <p class="qs-servicio-tagline">
+        Con Avanzar y CFP Inmobiliaria pagas menos, reduces años de deuda y recuperas tu tranquilidad financiera.
+      </p>
+
+      <a routerLink="/reduccion-credito" class="qs-servicio-cta">
+        Solicita tu diagnóstico gratuito
+        <br />
+        y descubre cuánto puedes ahorrar
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="M12 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Créditos Hipotecarios -->
+    <div class="qs-servicio-card">
+      <span class="qs-servicio-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18" />
+          <path d="M4 21V9l8-6 8 6v12" />
+          <line x1="8" y1="21" x2="8" y2="13" />
+          <line x1="12" y1="21" x2="12" y2="13" />
+          <line x1="16" y1="21" x2="16" y2="13" />
+        </svg>
+      </span>
+
+      <p class="qs-servicio-eyebrow">Servicio de</p>
+      <h3 class="qs-servicio-title">Créditos Hipotecarios - Broker CFP</h3>
+
+      <ul class="qs-servicio-list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Comparación inteligente:</strong> Análisis entre 9 bancos líderes (AV Villas, Bogotá, BBVA, Credifamilia, Itaú, Occidente, Caja Social, Hipocredit, Banco W).</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Evaluación completa:</strong> Tasas, plazos, cuotas en pesos o UVR.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Plataforma multibanca:</strong> Acceso rápido y eficiente para escoger la mejor opción de crédito.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+          <span><strong>Acompañamiento total:</strong> Desde la solicitud hasta el desembolso, con tecnología que reduce tiempos.</span>
+        </li>
+      </ul>
+
+      <p class="qs-servicio-tagline">
+        Con CFP Inmobiliaria eliges el crédito hipotecario que realmente te conviene, con respaldo de la primera plataforma multibanca digital.
+      </p>
+
+      <a routerLink="/credito-hipotecario" class="qs-servicio-cta">
+        Compara tu crédito en minutos
+        <br />
+        y asegura la mejor opción para tu vivienda
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="M12 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="qs-ayuda">
+  <div class="qs-ayuda-inner">
+    <div class="qs-ayuda-info">
+      <span class="qs-ayuda-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+        </svg>
+      </span>
+      <div>
+        <p class="qs-ayuda-title">Estamos para ayudarte</p>
+        <p class="qs-ayuda-text">
+          Asesoría personalizada para encontrar la mejor solución según tus necesidades.
+        </p>
+      </div>
+    </div>
+
+    <a [href]="whatsappAyudaHref" target="_blank" rel="noopener noreferrer" class="qs-btn qs-btn--accent">
+      Escríbenos por WhatsApp
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14" />
+        <path d="M12 5l7 7-7 7" />
+      </svg>
+    </a>
+  </div>
+</section>
+
+<app-footer />

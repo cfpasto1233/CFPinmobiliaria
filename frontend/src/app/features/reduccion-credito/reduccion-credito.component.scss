@@ -101,52 +101,20 @@
   }
 }
 
-// ─── Media del hero: placeholder + tarjeta de estadística ──────────────────
+// ─── Media del hero: tarjeta de estadística ────────────────────────────────
 
 .reduccion-hero-media {
-  position: relative;
-  padding-bottom: 3rem;
-
-  @media (max-width: 991.98px) {
-    padding-bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-}
-
-.reduccion-image-placeholder {
-  width: 100%;
-  aspect-ratio: 4 / 5;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 1.5rem;
-  border: 2px dashed $cfpasto-border;
-  border-radius: $cfpasto-radius-xl;
-  background: $cfpasto-bg-subtle;
-  font-family: $cfpasto-font-body;
-  font-size: $cfpasto-text-sm;
-  font-weight: 500;
-  color: $cfpasto-text-light;
 }
 
 .reduccion-stat-card {
-  position: absolute;
-  left: 1.5rem;
-  right: 1.5rem;
-  bottom: 0;
+  width: 100%;
+  max-width: 420px;
   overflow: hidden;
   border-radius: $cfpasto-radius-xl;
   box-shadow: $cfpasto-shadow-lg;
-
-  @media (max-width: 991.98px) {
-    position: static;
-    width: 100%;
-    max-width: 420px;
-  }
 }
 
 .reduccion-stat-row {

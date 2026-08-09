@@ -14,8 +14,12 @@
         <ul class="footer-links-list">
           @for (link of group.links; track link) {
             <li>
-              <!-- Visual únicamente por ahora: aún no existen estas rutas -->
-              <button type="button" class="footer-link">{{ link }}</button>
+              @if (link === 'Nosotros') {
+                <a routerLink="/quienes-somos" class="footer-link">{{ link }}</a>
+              } @else {
+                <!-- Visual únicamente por ahora: aún no existen estas rutas -->
+                <button type="button" class="footer-link">{{ link }}</button>
+              }
             </li>
           }
         </ul>

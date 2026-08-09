@@ -116,29 +116,20 @@
   display: flex;
 }
 
-// ─── Placeholders de imagen ─────────────────────────────────────────────────
-
-.credito-image-placeholder {
+.credito-hero-image {
   width: 100%;
   aspect-ratio: 4 / 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 1.5rem;
-  border: 2px dashed $cfpasto-border;
+  object-fit: cover;
   border-radius: $cfpasto-radius-xl;
-  background: $cfpasto-bg-subtle;
-  font-family: $cfpasto-font-body;
-  font-size: $cfpasto-text-sm;
-  font-weight: 500;
-  color: $cfpasto-text-light;
+  box-shadow: $cfpasto-shadow-lg;
+}
 
-  &.is-on-dark {
-    border-color: rgba($cfpasto-white, 0.3);
-    background: rgba($cfpasto-white, 0.04);
-    color: rgba($cfpasto-white, 0.6);
-  }
+.credito-cta-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
 }
 
 // ─── Bancos ─────────────────────────────────────────────────────────────────
@@ -157,25 +148,58 @@
   margin: 0;
 }
 
-.credito-bancos-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
+.credito-bancos-marquee {
+  position: relative;
+  overflow: hidden;
   max-width: 1100px;
   margin: 0 auto;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 }
 
-.credito-banco-chip {
+.credito-bancos-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 1rem;
+  animation: credito-bancos-scroll 32s linear infinite;
+
+  .credito-bancos-marquee:hover & {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes credito-bancos-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.credito-banco-logo {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 84px;
   padding: 1.1rem 1.5rem;
-  min-width: 150px;
   background: $cfpasto-bg-subtle;
   border: 1px solid $cfpasto-border-light;
   border-radius: $cfpasto-radius-lg;
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
-  font-size: $cfpasto-text-sm;
-  color: $cfpasto-text-muted;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
 }
 
 // ─── Grid numerado 01–04 ────────────────────────────────────────────────────

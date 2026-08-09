@@ -70,12 +70,14 @@
 }
 
 .footer-link {
+  display: inline-block;
   background: none;
   border: none;
   padding: 0;
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
   color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
   cursor: pointer;
   text-align: left;
   transition: color 0.2s ease;
