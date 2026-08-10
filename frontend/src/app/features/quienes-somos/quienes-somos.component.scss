@@ -81,37 +81,6 @@
   margin-bottom: 1rem;
 }
 
-// ─── Placeholders de imagen ─────────────────────────────────────────────────
-
-.qs-image-placeholder {
-  width: 100%;
-  height: 100%;
-  min-height: 320px;
-  aspect-ratio: 4 / 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 1.5rem;
-  border: 2px dashed $cfpasto-border;
-  border-radius: $cfpasto-radius-xl;
-  background: $cfpasto-bg-subtle;
-  font-family: $cfpasto-font-body;
-  font-size: $cfpasto-text-sm;
-  font-weight: 500;
-  color: $cfpasto-text-light;
-
-  &.is-on-dark {
-    border-color: rgba($cfpasto-white, 0.3);
-    background: rgba($cfpasto-white, 0.04);
-    color: rgba($cfpasto-white, 0.6);
-  }
-
-  &--historia {
-    aspect-ratio: 4 / 3.4;
-  }
-}
-
 // ─── Hero ───────────────────────────────────────────────────────────────────
 
 .qs-hero {
@@ -167,6 +136,14 @@
   display: flex;
 }
 
+.qs-hero-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+}
+
 // ─── Historia y trayectoria ─────────────────────────────────────────────────
 
 .qs-historia {
@@ -210,6 +187,14 @@
 
 .qs-historia-media {
   position: relative;
+}
+
+.qs-historia-image {
+  width: 100%;
+  aspect-ratio: 4 / 3.4;
+  object-fit: cover;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
 }
 
 .qs-historia-badge {
