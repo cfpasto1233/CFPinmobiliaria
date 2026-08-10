@@ -41,6 +41,7 @@ interface StatsCtaOption {
   question: string;
   actionLabel: string;
   whatsappMessage?: string;
+  routerLink?: string;
 }
 
 @Component({
@@ -192,8 +193,8 @@ export class Landing implements OnInit, AfterViewInit {
   }
 
   protected readonly statsCtaOptions: readonly StatsCtaOption[] = [
-    { question: '¿Tienes una propiedad?', actionLabel: 'Publícala aquí' },
-    { question: '¿Buscas casa o apartamento en venta?', actionLabel: 'Ver propiedades' },
+    { question: '¿Tienes una propiedad?', actionLabel: 'Publícala aquí', routerLink: '/publicar-propiedad' },
+    { question: '¿Buscas casa o apartamento en venta?', actionLabel: 'Ver propiedades', routerLink: '/propiedades' },
     {
       question: '¿Necesitas orientación?',
       actionLabel: 'Pide una asesoría',
