@@ -1,0 +1,78 @@
+<div class="logos-list">
+  <div class="logos-list-header">
+    <h1 class="logos-list-title">Logos</h1>
+    <a routerLink="/admin/logos/nuevo" class="btn btn-success">+ Nuevo logo</a>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  @if (loading() && items().length === 0) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+  } @else {
+    <h2 class="logos-section-title">Aliados</h2>
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body p-0">
+        @if (aliados().length === 0) {
+          <div class="text-center py-4 text-muted">Sin logos de aliados registrados.</div>
+        } @else {
+          <div class="logos-table-scroll">
+            <div class="logos-grid logos-grid-head" role="row">
+              <span></span>
+              <span>Nombre</span>
+              <span>Acciones</span>
+            </div>
+            @for (item of aliados(); track item.id) {
+              <div class="logos-grid logos-row">
+                <img [src]="item.imagen_url" [alt]="item.nombre" class="logos-list-thumb" />
+                <span class="logos-cell-nombre">{{ item.nombre }}</span>
+                <span class="logos-row-actions">
+                  <a [routerLink]="['/admin/logos', item.id, 'editar']" class="btn btn-sm btn-soft-secondary me-1">
+                    Editar
+                  </a>
+                  <button type="button" class="btn btn-sm btn-soft-danger" (click)="onDelete(item.id)">
+                    Eliminar
+                  </button>
+                </span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <h2 class="logos-section-title">Inmobiliarias</h2>
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-0">
+        @if (inmobiliarias().length === 0) {
+          <div class="text-center py-4 text-muted">Sin logos de inmobiliarias registrados.</div>
+        } @else {
+          <div class="logos-table-scroll">
+            <div class="logos-grid logos-grid-head" role="row">
+              <span></span>
+              <span>Nombre</span>
+              <span>Acciones</span>
+            </div>
+            @for (item of inmobiliarias(); track item.id) {
+              <div class="logos-grid logos-row">
+                <img [src]="item.imagen_url" [alt]="item.nombre" class="logos-list-thumb" />
+                <span class="logos-cell-nombre">{{ item.nombre }}</span>
+                <span class="logos-row-actions">
+                  <a [routerLink]="['/admin/logos', item.id, 'editar']" class="btn btn-sm btn-soft-secondary me-1">
+                    Editar
+                  </a>
+                  <button type="button" class="btn btn-sm btn-soft-danger" (click)="onDelete(item.id)">
+                    Eliminar
+                  </button>
+                </span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

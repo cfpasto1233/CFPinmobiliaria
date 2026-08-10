@@ -3,6 +3,7 @@ import { AuthState, authReducer } from './Authentication/authentication.reducer'
 import { CampanaState, campanaReducer } from './Campana/campana.reducer';
 import { CitasState, citasReducer } from './Citas/citas.reducer';
 import { EventosState, eventosReducer } from './Eventos/eventos.reducer';
+import { LogosState, logosReducer } from './Logos/logos.reducer';
 import { PropiedadesState, propiedadesReducer } from './Propiedades/propiedades.reducer';
 import { ProyectosState, proyectosReducer } from './Proyectos/proyectos.reducer';
 import { ReportesDanoState, reportesDanoReducer } from './ReportesDano/reportes-dano.reducer';
@@ -30,6 +31,7 @@ export interface RootReducerState {
   propiedades: PropiedadesState;
   proyectos: ProyectosState;
   eventos: EventosState;
+  logos: LogosState;
   campana: CampanaState;
   citas: CitasState;
   solicitudesVenta: SolicitudesVentaState;
@@ -46,6 +48,7 @@ export const rootReducer: ActionReducerMap<RootReducerState> = {
   propiedades: propiedadesReducer,
   proyectos: proyectosReducer,
   eventos: eventosReducer,
+  logos: logosReducer,
   campana: campanaReducer,
   citas: citasReducer,
   solicitudesVenta: solicitudesVentaReducer,

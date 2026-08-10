@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   computed,
   inject,
@@ -21,6 +20,8 @@ import { CampanaActions } from '../../store/Campana/campana.actions';
 import { selectCampanaItem } from '../../store/Campana/campana.selectors';
 import { EventosActions } from '../../store/Eventos/eventos.actions';
 import { selectEventosItems } from '../../store/Eventos/eventos.selectors';
+import { LogosActions } from '../../store/Logos/logos.actions';
+import { selectLogosItems } from '../../store/Logos/logos.selectors';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems } from '../../store/Propiedades/propiedades.selectors';
 
@@ -30,13 +31,6 @@ interface RealEstateTip {
   number: string;
   title: string;
   description: string;
-}
-
-interface StatSlide {
-  value?: string;
-  image?: string;
-  label: string;
-  description?: string;
 }
 
 interface StatsCtaOption {
@@ -53,7 +47,7 @@ interface StatsCtaOption {
   templateUrl: './landing.html',
   styleUrl: './landing.scss',
 })
-export class Landing implements OnInit, AfterViewInit, OnDestroy {
+export class Landing implements OnInit, AfterViewInit {
   @ViewChild('heroVideo') private readonly heroVideo?: ElementRef<HTMLVideoElement>;
 
   private readonly store = inject(Store);
@@ -75,6 +69,27 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
     return this.eventos().filter((evento) => this.parseFecha(evento.fecha) >= hoy);
   });
 
+  private readonly logos = this.store.selectSignal(selectLogosItems);
+  protected readonly logosAliados = computed(() => this.logos().filter((l) => l.tipo === 'aliado'));
+  protected readonly logosInmobiliarias = computed(() =>
+    this.logos().filter((l) => l.tipo === 'inmobiliaria'),
+  );
+
+  // Con pocos logos (p.ej. 1 solo) las dos copias del marquee no alcanzan a llenar el ancho
+  // de .logo-track-wrapper y se ve una franja vacía al deslizar — se repite el patrón hasta un
+  // mínimo de slots antes de que el template lo duplique para el loop infinito. El mínimo es bajo
+  // a propósito (antes 8) para no repetir tanto la misma imagen; el ancho que se pierde por
+  // repetir menos se compensa con más separación entre logos (ver marqueeGapRem).
+  protected readonly logosAliadosLoop = computed(() => this.repeatToFill(this.logosAliados(), 5));
+  protected readonly logosInmobiliariasLoop = computed(() =>
+    this.repeatToFill(this.logosInmobiliarias(), 5),
+  );
+
+  protected readonly logosAliadosGapRem = computed(() => this.marqueeGapRem(this.logosAliados().length));
+  protected readonly logosInmobiliariasGapRem = computed(() =>
+    this.marqueeGapRem(this.logosInmobiliarias().length),
+  );
+
   protected formatDate(isoDate: string): string {
     return this.parseFecha(isoDate).toLocaleDateString('es-CO', ISO_DATE_FORMAT);
   }
@@ -84,10 +99,26 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
     return new Date(year, month - 1, day);
   }
 
+  private repeatToFill<T>(items: T[], minSlots: number): T[] {
+    if (items.length === 0) return [];
+    const repeats = Math.max(1, Math.ceil(minSlots / items.length));
+    return Array.from({ length: repeats }, () => items).flat();
+  }
+
+  // Cuantos menos logos únicos haya, más espacio se deja entre cada uno — así se necesitan
+  // menos repeticiones para llenar la tira y no se ve "copiado y pegado".
+  private marqueeGapRem(uniqueCount: number): number {
+    if (uniqueCount <= 1) return 6;
+    if (uniqueCount === 2) return 5;
+    if (uniqueCount <= 4) return 4;
+    return 3;
+  }
+
   ngOnInit(): void {
     this.store.dispatch(PropiedadesActions.load());
     this.store.dispatch(CampanaActions.load());
     this.store.dispatch(EventosActions.load());
+    this.store.dispatch(LogosActions.load());
   }
 
   protected readonly tips: readonly RealEstateTip[] = [
@@ -177,43 +208,6 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  protected readonly statSlides: readonly StatSlide[] = [
-    {
-      value: '+1.200',
-      label: 'Propiedades vendidas',
-      description: 'Cerramos más de mil doscientas operaciones de compraventa en los últimos tres años.',
-    },
-    {
-      value: '98%',
-      label: 'Clientes satisfechos',
-      description: 'Nuestra tasa de satisfacción nos posiciona como referentes de confianza en el sector.',
-    },
-    {
-      value: '3 años',
-      label: 'De experiencia',
-      description: 'Acompañamos a las familias desde 2023 con confianza y respaldo.',
-    },
-    {
-      value: '$0',
-      label: 'Costo de asesoría inicial',
-      description: 'La primera consulta con nuestros asesores es completamente gratuita y sin compromiso.',
-    },
-    {
-      image: 'images/RedInmo.webp',
-      label: 'Miembros de la Red Inmobiliaria de Nariño',
-    },
-    {
-      image: 'images/Afianzar.webp',
-      label: 'Miembros de Afianzar de Nariño',
-      description: 'Con +15 años en el mercado inmobiliario respaldando contratos de arrendamiento.',
-    },
-    {
-      label: 'Soluciones integrales con respaldo legal y público',
-      description:
-        'Ante entidades como IGAC, SNR y empresas de servicios públicos para respaldar tu propiedad y que todo se encuentre en orden.',
-    },
-  ];
-
   protected readonly statsCtaOptions: readonly StatsCtaOption[] = [
     { question: '¿Tienes una propiedad?', actionLabel: 'Publícala aquí' },
     { question: '¿Buscas casa o apartamento en venta?', actionLabel: 'Ver propiedades' },
@@ -226,21 +220,6 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
 
   protected readonly whatsappLink = whatsappLink;
 
-  protected readonly activeStatIndex = signal(0);
-  private statAutoplayId?: ReturnType<typeof setInterval>;
-
-  protected goToStat(index: number): void {
-    this.activeStatIndex.set(index);
-  }
-
-  protected nextStat(): void {
-    this.activeStatIndex.update((current) => (current + 1) % this.statSlides.length);
-  }
-
-  protected prevStat(): void {
-    this.activeStatIndex.update((current) => (current - 1 + this.statSlides.length) % this.statSlides.length);
-  }
-
   ngAfterViewInit(): void {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -252,16 +231,6 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
       video.play().catch(() => {
         // Autoplay bloqueado por el navegador: el poster/overlay queda como fallback visual.
       });
-    }
-
-    if (!reducedMotion) {
-      this.statAutoplayId = setInterval(() => this.nextStat(), 9000);
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.statAutoplayId !== undefined) {
-      clearInterval(this.statAutoplayId);
     }
   }
 }

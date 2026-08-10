@@ -59,7 +59,10 @@ export class SidebarComponent {
     },
     {
       label: 'Marketing',
-      items: [{ label: 'Campaña', path: '/admin/campana', icon: 'campaign' }],
+      items: [
+        { label: 'Campaña', path: '/admin/campana', icon: 'campaign' },
+        { label: 'Logos', path: '/admin/logos', icon: 'campaign' },
+      ],
     },
   ];
 }

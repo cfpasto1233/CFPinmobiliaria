@@ -558,115 +558,89 @@
   margin-bottom: 0;
 }
 
-// ─── Carrusel de estadísticas ────────────────────────────────────────────────
+// ─── Marquee de logos ────────────────────────────────────────────────────────
 
-.stats-carousel {
+.logos-marquee-section {
   background: linear-gradient(180deg, $cfpasto-primary-dark 0%, $cfpasto-primary 100%);
   padding: 4rem 1.5rem 0;
 }
 
-.stats-carousel-inner {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2.5rem 2rem;
-  margin-bottom: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  background: $cfpasto-white;
-  border-radius: $cfpasto-radius-xl;
-  box-shadow: $cfpasto-shadow-lg;
-
-  @media (max-width: 575.98px) {
-    padding: 2rem 1.25rem;
-  }
+.logo-track-wrapper {
+  max-width: 1100px;
+  margin: 0 auto 2.5rem;
+  overflow: hidden;
+  // Difumina los bordes para que la entrada/salida del loop no se vea cortada.
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
 
-.carousel-arrow {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  background: transparent;
-  border: 1px solid $cfpasto-border;
-  border-radius: $cfpasto-radius;
-  color: $cfpasto-primary;
-  cursor: pointer;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
-
-  &:hover {
-    background: $cfpasto-bg-subtle;
-    border-color: $cfpasto-primary-light;
-  }
-
-  @media (max-width: 767.98px) {
-    display: none;
-  }
-}
-
-.carousel-content {
-  flex: 1;
+.logo-track-heading {
+  @extend %body-semibold;
+  font-size: $cfpasto-text-sm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
   text-align: center;
-  min-width: 0;
+  margin-bottom: 1.25rem;
 }
 
-.carousel-value {
-  @extend %heading-bold;
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  color: $cfpasto-accent;
-  line-height: 1;
-  margin-bottom: 0.5rem;
-}
-
-.carousel-image {
-  display: block;
-  margin: 0 auto 0.75rem;
-  width: 100%;
-  max-width: 160px;
-  height: auto;
-}
-
-.carousel-label {
-  @extend %heading-bold;
-  font-size: $cfpasto-text-2xl;
-  color: $cfpasto-primary;
-  margin-bottom: 0.75rem;
-}
-
-.carousel-description {
-  @extend %body-text;
-  color: $cfpasto-text-muted;
-  max-width: 480px;
-  margin: 0 auto 1.5rem;
-}
-
-.carousel-dots {
+.logo-track {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  width: max-content;
 }
 
-.carousel-dot {
-  width: 8px;
-  height: 8px;
-  padding: 0;
-  border: none;
-  border-radius: 50rem;
-  background: $cfpasto-border;
-  cursor: pointer;
-  transition: width 0.25s ease, background-color 0.25s ease;
+// La duración escala con la cantidad de slots (--track-count, seteado desde el template) para
+// que la velocidad se sienta igual sin importar cuántos logos haya — con 32s fijos, una tira
+// rellenada a más slots que otra se vería animar a velocidades muy distintas.
+.logo-track-ltr {
+  animation: logo-scroll-ltr clamp(18s, calc(var(--track-count, 8) * 3.5s), 70s) linear infinite;
+}
 
-  &.is-active {
-    width: 24px;
-    background: $cfpasto-accent;
+.logo-track-rtl {
+  animation: logo-scroll-rtl clamp(18s, calc(var(--track-count, 8) * 3.5s), 70s) linear infinite;
+}
+
+.logo-track-item {
+  flex-shrink: 0;
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  // Reemplaza el `gap` que tenía .logo-track: con `gap` en el contenedor, el punto donde
+  // arranca la segunda copia (real + clon) queda desfasado medio gap respecto al 50% exacto
+  // del ancho total, y el translateX(-50%) del loop se ve saltar al reiniciar. Poniendo el
+  // espacio como margen de cada item (uniforme, incluido el último), el ancho de "una copia"
+  // ya incluye su espacio final y el 50% cae justo donde empieza la copia siguiente.
+  // El valor viene de --track-gap (seteado desde el template según cuántos logos únicos hay):
+  // con pocos logos se separan más entre sí para no tener que repetir tantas veces la misma
+  // imagen y aun así llenar el ancho de la tira.
+  margin-right: calc(var(--track-gap, 3) * 1rem);
+}
+
+@keyframes logo-scroll-ltr {
+  from {
+    transform: translateX(-50%);
   }
+  to {
+    transform: translateX(0);
+  }
+}
 
-  @include no-motion-transition;
+@keyframes logo-scroll-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-track-ltr,
+  .logo-track-rtl {
+    animation: none;
+    overflow-x: auto;
+  }
 }
 
 .stats-cta-row {

@@ -18,6 +18,7 @@ import { AuthenticationEffects } from './store/Authentication/authentication.eff
 import { CampanaEffects } from './store/Campana/campana.effects';
 import { CitasEffects } from './store/Citas/citas.effects';
 import { EventosEffects } from './store/Eventos/eventos.effects';
+import { LogosEffects } from './store/Logos/logos.effects';
 import { PropiedadesEffects } from './store/Propiedades/propiedades.effects';
 import { ProyectosEffects } from './store/Proyectos/proyectos.effects';
 import { ReportesDanoEffects } from './store/ReportesDano/reportes-dano.effects';
@@ -56,6 +57,7 @@ export const appConfig: ApplicationConfig = {
       PropiedadesEffects,
       ProyectosEffects,
       EventosEffects,
+      LogosEffects,
       CampanaEffects,
       CitasEffects,
       SolicitudesVentaEffects,

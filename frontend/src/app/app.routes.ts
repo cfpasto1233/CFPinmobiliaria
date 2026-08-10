@@ -178,6 +178,27 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'logos',
+        loadComponent: () =>
+          import('./features/admin/logos/logos-list/logos-list.component').then(
+            (m) => m.LogosListComponent,
+          ),
+      },
+      {
+        path: 'logos/nuevo',
+        loadComponent: () =>
+          import('./features/admin/logos/logo-form/logo-form.component').then(
+            (m) => m.LogoFormComponent,
+          ),
+      },
+      {
+        path: 'logos/:id/editar',
+        loadComponent: () =>
+          import('./features/admin/logos/logo-form/logo-form.component').then(
+            (m) => m.LogoFormComponent,
+          ),
+      },
+      {
         path: 'eventos',
         loadComponent: () =>
           import('./features/admin/eventos/eventos-list/eventos-list.component').then(

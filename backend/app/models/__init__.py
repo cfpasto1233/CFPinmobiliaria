@@ -1,6 +1,7 @@
 from app.models.campana import Campana
 from app.models.cita import Cita
 from app.models.evento import Evento
+from app.models.logo import Logo
 from app.models.propiedad import Propiedad
 from app.models.propiedad_foto import PropiedadFoto
 from app.models.proyecto import Proyecto
@@ -19,6 +20,7 @@ __all__ = [
     "Campana",
     "Cita",
     "Evento",
+    "Logo",
     "Propiedad",
     "PropiedadFoto",
     "Proyecto",

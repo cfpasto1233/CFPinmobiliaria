@@ -1,0 +1,96 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.logos-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.logos-list-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-text-dark;
+  margin: 0;
+}
+
+.logos-section-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-lg;
+  color: $cfpasto-text-dark;
+  margin: 0 0 0.75rem;
+}
+
+.logos-list-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: $cfpasto-radius-sm;
+  object-fit: contain;
+  background: $cfpasto-bg-subtle;
+}
+
+.card {
+  border-radius: $cfpasto-radius-xl;
+  overflow: hidden;
+  box-shadow: $cfpasto-shadow-md;
+}
+
+.logos-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.logos-grid {
+  display: grid;
+  grid-template-columns: 56px minmax(160px, 1.4fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  min-width: 420px;
+}
+
+.logos-grid-head {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $cfpasto-text-light;
+  background: $cfpasto-bg-subtle;
+  border-bottom: 1px solid $cfpasto-border-light;
+}
+
+.logos-row {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-dark;
+  background: $cfpasto-surface;
+  border-bottom: 1px solid $cfpasto-border-light;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: $cfpasto-bg-subtle;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.logos-cell-nombre {
+  font-weight: 500;
+}
+
+.logos-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
+}

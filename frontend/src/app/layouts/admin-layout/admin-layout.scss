@@ -6,7 +6,12 @@
 
 .admin-shell {
   display: flex;
-  min-height: 100vh;
+  // Debe ser una altura fija (no min-height): con min-height, un hijo con height:100% (el
+  // sidebar) se trata como auto para el cálculo de altura del contenedor flex, así que el
+  // sidebar termina creciendo tanto como su propio contenido sin recortar y nunca hay nada
+  // que el overflow-y:auto de .sidebar-nav pueda scrollear — en cambio crece toda la página.
+  // Con height fija, sidebar y .admin-shell-content quedan realmente acotados al viewport.
+  height: 100vh;
   background: $cfpasto-bg-subtle;
 }
 

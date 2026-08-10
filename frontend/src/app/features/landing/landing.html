@@ -289,75 +289,42 @@
   </div>
 </section>
 
-<section class="stats-carousel">
-  <div class="stats-carousel-inner">
-    <button
-      type="button"
-      class="carousel-arrow carousel-arrow-prev"
-      aria-label="Estadística anterior"
-      (click)="prevStat()"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+<section class="logos-marquee-section">
+  @if (logosAliados().length > 0) {
+    <div class="logo-track-wrapper">
+      <h3 class="logo-track-heading">Nuestros aliados</h3>
+      <div
+        class="logo-track logo-track-ltr"
+        [style.--track-count]="logosAliadosLoop().length"
+        [style.--track-gap]="logosAliadosGapRem()"
       >
-        <polyline points="15 18 9 12 15 6"></polyline>
-      </svg>
-    </button>
-
-    <div class="carousel-content">
-      @if (statSlides[activeStatIndex()].image; as image) {
-        <img [src]="image" alt="" class="carousel-image" />
-      } @else if (statSlides[activeStatIndex()].value; as value) {
-        <p class="carousel-value">{{ value }}</p>
-      }
-      <h3 class="carousel-label">{{ statSlides[activeStatIndex()].label }}</h3>
-      @if (statSlides[activeStatIndex()].description; as description) {
-        <p class="carousel-description">{{ description }}</p>
-      }
-
-      <div class="carousel-dots">
-        @for (slide of statSlides; track slide.label; let i = $index) {
-        <button
-          type="button"
-          class="carousel-dot"
-          [class.is-active]="i === activeStatIndex()"
-          [attr.aria-current]="i === activeStatIndex()"
-          [attr.aria-label]="'Ir a la estadística ' + (i + 1)"
-          (click)="goToStat(i)"
-        ></button>
+        @for (logo of logosAliadosLoop(); track $index) {
+          <img [src]="logo.imagen_url" [alt]="logo.nombre" class="logo-track-item" />
+        }
+        @for (logo of logosAliadosLoop(); track $index) {
+          <img [src]="logo.imagen_url" alt="" aria-hidden="true" class="logo-track-item" />
         }
       </div>
     </div>
+  }
 
-    <button
-      type="button"
-      class="carousel-arrow carousel-arrow-next"
-      aria-label="Siguiente estadística"
-      (click)="nextStat()"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+  @if (logosInmobiliarias().length > 0) {
+    <div class="logo-track-wrapper">
+      <h3 class="logo-track-heading">Inmobiliarias asociadas</h3>
+      <div
+        class="logo-track logo-track-rtl"
+        [style.--track-count]="logosInmobiliariasLoop().length"
+        [style.--track-gap]="logosInmobiliariasGapRem()"
       >
-        <polyline points="9 18 15 12 9 6"></polyline>
-      </svg>
-    </button>
-  </div>
+        @for (logo of logosInmobiliariasLoop(); track $index) {
+          <img [src]="logo.imagen_url" [alt]="logo.nombre" class="logo-track-item" />
+        }
+        @for (logo of logosInmobiliariasLoop(); track $index) {
+          <img [src]="logo.imagen_url" alt="" aria-hidden="true" class="logo-track-item" />
+        }
+      </div>
+    </div>
+  }
 
   <div class="stats-cta-row">
     @for (cta of statsCtaOptions; track cta.question) {

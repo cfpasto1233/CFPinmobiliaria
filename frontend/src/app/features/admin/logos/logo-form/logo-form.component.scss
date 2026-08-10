@@ -1,0 +1,217 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+.logo-form-header {
+  margin-bottom: 1.5rem;
+}
+
+.logo-form-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+
+  &:hover {
+    color: $cfpasto-primary;
+  }
+}
+
+.logo-form-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: $cfpasto-text-2xl;
+  color: $cfpasto-text-dark;
+  margin: 0;
+}
+
+.card {
+  border-radius: $cfpasto-radius-xl;
+  overflow: hidden;
+  box-shadow: $cfpasto-shadow-md;
+  max-width: 560px;
+}
+
+.logo-form-field {
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.logo-form-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 600;
+  color: $cfpasto-text-dark;
+  margin-bottom: 0.4rem;
+}
+
+.form-error {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-error;
+  margin-top: 0.35rem;
+}
+
+.logo-form-divider {
+  border: none;
+  border-top: 1px solid $cfpasto-border-light;
+  margin: 1.75rem 0;
+}
+
+// --- Dropzone (imagen del logo) ---
+
+.logo-form-dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 1.5px dashed $cfpasto-border;
+  border-radius: $cfpasto-radius-lg;
+  background: $cfpasto-bg-subtle;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    border-color: $cfpasto-primary-light;
+    background: rgba($cfpasto-primary, 0.03);
+  }
+
+  &.is-dragover {
+    border-color: $cfpasto-primary;
+    background: rgba($cfpasto-primary, 0.06);
+  }
+
+  &.has-error {
+    border-color: $cfpasto-error;
+  }
+
+  &:focus-within {
+    outline: 2px solid $cfpasto-primary;
+    outline-offset: 2px;
+  }
+}
+
+.logo-form-dropzone-icon {
+  color: $cfpasto-text-light;
+}
+
+.logo-form-dropzone-text {
+  margin: 0;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+}
+
+.logo-form-dropzone-hint {
+  margin: 0;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-light;
+}
+
+.logo-form-dropzone-filled {
+  padding: 1rem;
+  overflow: hidden;
+  height: 160px;
+  border-style: solid;
+  border-color: $cfpasto-border;
+
+  img {
+    width: 100%;
+    height: 100%;
+    // Un logo no debe recortarse como una foto de portada — se conserva completo.
+    object-fit: contain;
+  }
+
+  &:hover {
+    border-color: $cfpasto-primary-light;
+  }
+}
+
+.logo-form-dropzone-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 600;
+  color: $cfpasto-white;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.logo-form-dropzone-filled:hover .logo-form-dropzone-overlay {
+  opacity: 1;
+}
+
+.logo-form-clear {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: $cfpasto-error;
+  }
+}
+
+// --- Barra de acciones ---
+
+.logo-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: $cfpasto-bg-subtle;
+  border-top: 1px solid $cfpasto-border-light;
+
+  @media (max-width: 575.98px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.logo-form-required-hint {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-xs;
+  color: $cfpasto-text-light;
+}
+
+.logo-form-actions-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  @media (max-width: 575.98px) {
+    justify-content: flex-end;
+  }
+}
