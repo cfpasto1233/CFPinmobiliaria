@@ -27,6 +27,10 @@ import { selectPropiedadesItems } from '../../store/Propiedades/propiedades.sele
 
 const ISO_DATE_FORMAT: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
 
+// Por debajo de este número de logos únicos por categoría, la franja se muestra estática
+// (sin animar) en vez de arrancar el efecto de scroll infinito.
+const MIN_LOGOS_PARA_ANIMAR = 6;
+
 interface RealEstateTip {
   number: string;
   title: string;
@@ -75,19 +79,13 @@ export class Landing implements OnInit, AfterViewInit {
     this.logos().filter((l) => l.tipo === 'inmobiliaria'),
   );
 
-  // Con pocos logos (p.ej. 1 solo) las dos copias del marquee no alcanzan a llenar el ancho
-  // de .logo-track-wrapper y se ve una franja vacía al deslizar — se repite el patrón hasta un
-  // mínimo de slots antes de que el template lo duplique para el loop infinito. El mínimo es bajo
-  // a propósito (antes 8) para no repetir tanto la misma imagen; el ancho que se pierde por
-  // repetir menos se compensa con más separación entre logos (ver marqueeGapRem).
-  protected readonly logosAliadosLoop = computed(() => this.repeatToFill(this.logosAliados(), 5));
-  protected readonly logosInmobiliariasLoop = computed(() =>
-    this.repeatToFill(this.logosInmobiliarias(), 5),
+  // Menos de este mínimo por categoría, no se anima nada (se ve estático, centrado): con pocos
+  // logos únicos el efecto de scroll infinito se ve repetitivo o deja espacio en blanco.
+  protected readonly logosAliadosAnimado = computed(
+    () => this.logosAliados().length >= MIN_LOGOS_PARA_ANIMAR,
   );
-
-  protected readonly logosAliadosGapRem = computed(() => this.marqueeGapRem(this.logosAliados().length));
-  protected readonly logosInmobiliariasGapRem = computed(() =>
-    this.marqueeGapRem(this.logosInmobiliarias().length),
+  protected readonly logosInmobiliariasAnimado = computed(
+    () => this.logosInmobiliarias().length >= MIN_LOGOS_PARA_ANIMAR,
   );
 
   protected formatDate(isoDate: string): string {
@@ -97,21 +95,6 @@ export class Landing implements OnInit, AfterViewInit {
   private parseFecha(isoDate: string): Date {
     const [year, month, day] = isoDate.split('-').map(Number);
     return new Date(year, month - 1, day);
-  }
-
-  private repeatToFill<T>(items: T[], minSlots: number): T[] {
-    if (items.length === 0) return [];
-    const repeats = Math.max(1, Math.ceil(minSlots / items.length));
-    return Array.from({ length: repeats }, () => items).flat();
-  }
-
-  // Cuantos menos logos únicos haya, más espacio se deja entre cada uno — así se necesitan
-  // menos repeticiones para llenar la tira y no se ve "copiado y pegado".
-  private marqueeGapRem(uniqueCount: number): number {
-    if (uniqueCount <= 1) return 6;
-    if (uniqueCount === 2) return 5;
-    if (uniqueCount <= 4) return 4;
-    return 3;
   }
 
   ngOnInit(): void {

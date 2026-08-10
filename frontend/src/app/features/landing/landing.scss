@@ -566,12 +566,10 @@
 }
 
 .logo-track-wrapper {
-  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0 auto 2.5rem;
-  overflow: hidden;
-  // Difumina los bordes para que la entrada/salida del loop no se vea cortada.
-  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
 
 .logo-track-heading {
@@ -584,21 +582,32 @@
   margin-bottom: 1.25rem;
 }
 
+.logo-marquee {
+  display: grid;
+  overflow: hidden;
+  // Se encoge al ancho de UNA sola copia: las dos tiras (.logo-track-a/.logo-track-b) están
+  // superpuestas en la misma celda de grid (grid-area 1/1), no una al lado de la otra, así que
+  // el ancho intrínseco del visor es el de un solo logo-track, nunca la suma de ambas. Por eso
+  // nunca queda más ancho que el contenido real (tope 1100px) — no importa cuán angostos sean
+  // los logos, jamás se ve espacio en blanco ni salto al reiniciar el loop.
+  width: fit-content;
+  max-width: min(1100px, 100%);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+
 .logo-track {
+  grid-area: 1 / 1;
   display: flex;
   align-items: center;
   width: max-content;
 }
 
-// La duración escala con la cantidad de slots (--track-count, seteado desde el template) para
-// que la velocidad se sienta igual sin importar cuántos logos haya — con 32s fijos, una tira
-// rellenada a más slots que otra se vería animar a velocidades muy distintas.
-.logo-track-ltr {
-  animation: logo-scroll-ltr clamp(18s, calc(var(--track-count, 8) * 3.5s), 70s) linear infinite;
-}
-
-.logo-track-rtl {
-  animation: logo-scroll-rtl clamp(18s, calc(var(--track-count, 8) * 3.5s), 70s) linear infinite;
+.logo-track-static {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: auto;
 }
 
 .logo-track-item {
@@ -606,40 +615,86 @@
   height: 48px;
   width: auto;
   object-fit: contain;
-  // Reemplaza el `gap` que tenía .logo-track: con `gap` en el contenedor, el punto donde
-  // arranca la segunda copia (real + clon) queda desfasado medio gap respecto al 50% exacto
-  // del ancho total, y el translateX(-50%) del loop se ve saltar al reiniciar. Poniendo el
-  // espacio como margen de cada item (uniforme, incluido el último), el ancho de "una copia"
-  // ya incluye su espacio final y el 50% cae justo donde empieza la copia siguiente.
-  // El valor viene de --track-gap (seteado desde el template según cuántos logos únicos hay):
-  // con pocos logos se separan más entre sí para no tener que repetir tantas veces la misma
-  // imagen y aun así llenar el ancho de la tira.
-  margin-right: calc(var(--track-gap, 3) * 1rem);
+  margin-right: 3rem;
 }
 
-@keyframes logo-scroll-ltr {
+// Dos tiras idénticas superpuestas, cada una animada con SU PROPIO ancho como referencia
+// (100% = ancho de esa tira): la tira A sale por un lado exactamente al mismo ritmo que la B
+// entra por donde A va dejando espacio — nunca hay un instante sin contenido cubriendo el
+// visor, sin importar el ancho real de los logos. La duración escala con --track-count
+// (cantidad de logos, seteada desde el template) para que la velocidad se sienta igual sin
+// importar cuántos logos haya.
+$logo-marquee-duration: clamp(18s, calc(var(--track-count, 6) * 3.5s), 70s);
+
+.logo-marquee-ltr .logo-track-a {
+  animation: logo-track-a-ltr $logo-marquee-duration linear infinite;
+}
+
+.logo-marquee-ltr .logo-track-b {
+  animation: logo-track-b-ltr $logo-marquee-duration linear infinite;
+}
+
+.logo-marquee-rtl .logo-track-a {
+  animation: logo-track-a-rtl $logo-marquee-duration linear infinite;
+}
+
+.logo-marquee-rtl .logo-track-b {
+  animation: logo-track-b-rtl $logo-marquee-duration linear infinite;
+}
+
+@keyframes logo-track-a-ltr {
   from {
-    transform: translateX(-50%);
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes logo-track-b-ltr {
+  from {
+    transform: translateX(100%);
   }
   to {
     transform: translateX(0);
   }
 }
 
-@keyframes logo-scroll-rtl {
+@keyframes logo-track-a-rtl {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(100%);
+  }
+}
+
+@keyframes logo-track-b-rtl {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .logo-track-ltr,
-  .logo-track-rtl {
+  .logo-marquee-ltr .logo-track-a,
+  .logo-marquee-ltr .logo-track-b,
+  .logo-marquee-rtl .logo-track-a,
+  .logo-marquee-rtl .logo-track-b {
     animation: none;
+  }
+
+  .logo-marquee {
     overflow-x: auto;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .logo-track-b {
+    // Sin animación no hace falta el clon — solo estorbaría al scroll manual de respaldo.
+    display: none;
   }
 }
 

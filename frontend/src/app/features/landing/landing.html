@@ -293,36 +293,52 @@
   @if (logosAliados().length > 0) {
     <div class="logo-track-wrapper">
       <h3 class="logo-track-heading">Nuestros aliados</h3>
-      <div
-        class="logo-track logo-track-ltr"
-        [style.--track-count]="logosAliadosLoop().length"
-        [style.--track-gap]="logosAliadosGapRem()"
-      >
-        @for (logo of logosAliadosLoop(); track $index) {
-          <img [src]="logo.imagen_url" [alt]="logo.nombre" class="logo-track-item" />
-        }
-        @for (logo of logosAliadosLoop(); track $index) {
-          <img [src]="logo.imagen_url" alt="" aria-hidden="true" class="logo-track-item" />
-        }
-      </div>
+      @if (logosAliadosAnimado()) {
+        <div class="logo-marquee logo-marquee-ltr" [style.--track-count]="logosAliados().length">
+          <div class="logo-track logo-track-a">
+            @for (logo of logosAliados(); track logo.id) {
+              <img [src]="logo.imagen_url" [alt]="logo.nombre" class="logo-track-item" />
+            }
+          </div>
+          <div class="logo-track logo-track-b" aria-hidden="true">
+            @for (logo of logosAliados(); track logo.id) {
+              <img [src]="logo.imagen_url" alt="" class="logo-track-item" />
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="logo-track logo-track-static">
+          @for (logo of logosAliados(); track logo.id) {
+            <img [src]="logo.imagen_url" [alt]="logo.nombre" class="logo-track-item" />
+          }
+        </div>
+      }
     </div>
   }
 
   @if (logosInmobiliarias().length > 0) {
     <div class="logo-track-wrapper">
       <h3 class="logo-track-heading">Inmobiliarias asociadas</h3>
-      <div
-        class="logo-track logo-track-rtl"
-        [style.--track-count]="logosInmobiliariasLoop().length"
-        [style.--track-gap]="logosInmobiliariasGapRem()"
-      >
-        @for (logo of logosInmobiliariasLoop(); track $index) {
-          <img [src]="logo.imagen_url" [alt]="logo.nombre" class="logo-track-item" />
-        }
-        @for (logo of logosInmobiliariasLoop(); track $index) {
-          <img [src]="logo.imagen_url" alt="" aria-hidden="true" class="logo-track-item" />
-        }
-      </div>
+      @if (logosInmobiliariasAnimado()) {
+        <div class="logo-marquee logo-marquee-rtl" [style.--track-count]="logosInmobiliarias().length">
+          <div class="logo-track logo-track-a">
+            @for (logo of logosInmobiliarias(); track logo.id) {
+              <img [src]="logo.imagen_url" [alt]="logo.nombre" class="logo-track-item" />
+            }
+          </div>
+          <div class="logo-track logo-track-b" aria-hidden="true">
+            @for (logo of logosInmobiliarias(); track logo.id) {
+              <img [src]="logo.imagen_url" alt="" class="logo-track-item" />
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="logo-track logo-track-static">
+          @for (logo of logosInmobiliarias(); track logo.id) {
+            <img [src]="logo.imagen_url" [alt]="logo.nombre" class="logo-track-item" />
+          }
+        </div>
+      }
     </div>
   }
 
