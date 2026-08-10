@@ -178,6 +178,27 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'eventos',
+        loadComponent: () =>
+          import('./features/admin/eventos/eventos-list/eventos-list.component').then(
+            (m) => m.EventosListComponent,
+          ),
+      },
+      {
+        path: 'eventos/nuevo',
+        loadComponent: () =>
+          import('./features/admin/eventos/evento-form/evento-form.component').then(
+            (m) => m.EventoFormComponent,
+          ),
+      },
+      {
+        path: 'eventos/:id/editar',
+        loadComponent: () =>
+          import('./features/admin/eventos/evento-form/evento-form.component').then(
+            (m) => m.EventoFormComponent,
+          ),
+      },
+      {
         path: 'campana',
         loadComponent: () =>
           import('./features/admin/campana/campana-form/campana-form.component').then(

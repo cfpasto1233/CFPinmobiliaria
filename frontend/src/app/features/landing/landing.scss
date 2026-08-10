@@ -393,6 +393,116 @@
   @include responsive-grid-cols;
 }
 
+// ─── Eventos ─────────────────────────────────────────────────────────────────
+
+.eventos {
+  background: $cfpasto-white;
+  padding: 5rem 1.5rem;
+}
+
+.eventos-header {
+  max-width: 640px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.eventos-eyebrow {
+  @extend %eyebrow-text;
+  margin-bottom: 0.75rem;
+}
+
+.eventos-title {
+  @extend %heading-bold;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  color: $cfpasto-primary;
+  margin-bottom: 0;
+}
+
+.eventos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @include responsive-grid-cols;
+}
+
+.event-card {
+  display: flex;
+  flex-direction: column;
+  background: $cfpasto-white;
+  border: 1px solid $cfpasto-border;
+  border-radius: $cfpasto-radius-lg;
+  overflow: hidden;
+  box-shadow: $cfpasto-shadow-md;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $cfpasto-shadow-lg;
+  }
+
+  @include no-motion-transition-hover;
+}
+
+.event-card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: $cfpasto-bg-subtle;
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.event-card-date {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 50rem;
+  background: $cfpasto-primary;
+  color: $cfpasto-white;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-xs;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.event-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.25rem;
+}
+
+.event-card-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 600;
+  font-size: $cfpasto-text-lg;
+  color: $cfpasto-text-dark;
+  margin-bottom: 0.5rem;
+}
+
+.event-card-text {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .tip-card {
   border: 1px solid $cfpasto-border;
   border-radius: $cfpasto-radius;

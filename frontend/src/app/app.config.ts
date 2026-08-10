@@ -17,6 +17,7 @@ import { RefreshInterceptor } from './core/auth/refresh.interceptor';
 import { AuthenticationEffects } from './store/Authentication/authentication.effects';
 import { CampanaEffects } from './store/Campana/campana.effects';
 import { CitasEffects } from './store/Citas/citas.effects';
+import { EventosEffects } from './store/Eventos/eventos.effects';
 import { PropiedadesEffects } from './store/Propiedades/propiedades.effects';
 import { ProyectosEffects } from './store/Proyectos/proyectos.effects';
 import { ReportesDanoEffects } from './store/ReportesDano/reportes-dano.effects';
@@ -54,6 +55,7 @@ export const appConfig: ApplicationConfig = {
       AuthenticationEffects,
       PropiedadesEffects,
       ProyectosEffects,
+      EventosEffects,
       CampanaEffects,
       CitasEffects,
       SolicitudesVentaEffects,

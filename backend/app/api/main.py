@@ -4,6 +4,7 @@ from app.api.routes import (
     auth,
     campanas,
     citas,
+    eventos,
     login,
     propiedades,
     proyectos,
@@ -24,6 +25,7 @@ api_router.include_router(auth.router)
 api_router.include_router(users.router)
 api_router.include_router(propiedades.router)
 api_router.include_router(proyectos.router)
+api_router.include_router(eventos.router)
 api_router.include_router(campanas.router)
 api_router.include_router(citas.router)
 api_router.include_router(solicitudes_venta.router)

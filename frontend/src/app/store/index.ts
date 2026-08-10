@@ -2,6 +2,7 @@ import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { AuthState, authReducer } from './Authentication/authentication.reducer';
 import { CampanaState, campanaReducer } from './Campana/campana.reducer';
 import { CitasState, citasReducer } from './Citas/citas.reducer';
+import { EventosState, eventosReducer } from './Eventos/eventos.reducer';
 import { PropiedadesState, propiedadesReducer } from './Propiedades/propiedades.reducer';
 import { ProyectosState, proyectosReducer } from './Proyectos/proyectos.reducer';
 import { ReportesDanoState, reportesDanoReducer } from './ReportesDano/reportes-dano.reducer';
@@ -28,6 +29,7 @@ export interface RootReducerState {
   auth: AuthState;
   propiedades: PropiedadesState;
   proyectos: ProyectosState;
+  eventos: EventosState;
   campana: CampanaState;
   citas: CitasState;
   solicitudesVenta: SolicitudesVentaState;
@@ -43,6 +45,7 @@ export const rootReducer: ActionReducerMap<RootReducerState> = {
   auth: authReducer,
   propiedades: propiedadesReducer,
   proyectos: proyectosReducer,
+  eventos: eventosReducer,
   campana: campanaReducer,
   citas: citasReducer,
   solicitudesVenta: solicitudesVentaReducer,

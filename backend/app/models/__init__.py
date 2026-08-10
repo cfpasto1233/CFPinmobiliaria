@@ -1,5 +1,6 @@
 from app.models.campana import Campana
 from app.models.cita import Cita
+from app.models.evento import Evento
 from app.models.propiedad import Propiedad
 from app.models.propiedad_foto import PropiedadFoto
 from app.models.proyecto import Proyecto
@@ -17,6 +18,7 @@ from app.models.user import User
 __all__ = [
     "Campana",
     "Cita",
+    "Evento",
     "Propiedad",
     "PropiedadFoto",
     "Proyecto",

@@ -1,0 +1,49 @@
+<div class="eventos-list">
+  <div class="eventos-list-header">
+    <h1 class="eventos-list-title">Eventos</h1>
+    <a routerLink="/admin/eventos/nuevo" class="btn btn-success">+ Nuevo evento</a>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      @if (loading() && items().length === 0) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary"></div>
+        </div>
+      } @else if (items().length === 0) {
+        <div class="text-center py-5 text-muted">Sin eventos registrados.</div>
+      } @else {
+        <div class="eventos-table-scroll">
+          <div class="eventos-grid eventos-grid-head" role="row">
+            <span></span>
+            <span>Nombre</span>
+            <span>Fecha</span>
+            <span>Acciones</span>
+          </div>
+
+          <div class="eventos-grid-body">
+            @for (item of items(); track item.id) {
+              <div class="eventos-grid eventos-row">
+                <img [src]="item.foto_url" [alt]="item.nombre" class="eventos-list-thumb" />
+                <span class="eventos-cell-nombre">{{ item.nombre }}</span>
+                <span>{{ formatFecha(item.fecha) }}</span>
+                <span class="eventos-row-actions">
+                  <a [routerLink]="['/admin/eventos', item.id, 'editar']" class="btn btn-sm btn-soft-secondary me-1">
+                    Editar
+                  </a>
+                  <button type="button" class="btn btn-sm btn-soft-danger" (click)="onDelete(item.id)">
+                    Eliminar
+                  </button>
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

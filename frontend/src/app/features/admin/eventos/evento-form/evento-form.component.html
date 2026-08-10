@@ -1,0 +1,129 @@
+<div class="evento-form">
+  <div class="evento-form-header">
+    <div>
+      <a routerLink="/admin/eventos" class="evento-form-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5" />
+          <path d="M12 19l-7-7 7-7" />
+        </svg>
+        Eventos
+      </a>
+      <h1 class="evento-form-title">{{ isEditMode ? 'Editar evento' : 'Nuevo evento' }}</h1>
+    </div>
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert alert-danger">{{ err }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="card border-0">
+      <div class="card-body p-4 p-lg-5">
+        <div class="evento-form-field">
+          <label for="nombre" class="evento-form-label">Nombre *</label>
+          <input
+            id="nombre"
+            type="text"
+            class="form-control"
+            [class.is-invalid]="fieldError('nombre')"
+            formControlName="nombre"
+          />
+          @if (fieldError('nombre'); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="evento-form-field">
+          <label for="descripcion" class="evento-form-label">Descripción *</label>
+          <textarea
+            id="descripcion"
+            class="form-control"
+            rows="4"
+            [class.is-invalid]="fieldError('descripcion')"
+            formControlName="descripcion"
+          ></textarea>
+          @if (fieldError('descripcion'); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="evento-form-field">
+          <label for="fecha" class="evento-form-label">Fecha *</label>
+          <input
+            id="fecha"
+            type="date"
+            class="form-control"
+            [class.is-invalid]="fieldError('fecha')"
+            formControlName="fecha"
+          />
+          @if (fieldError('fecha'); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+
+        <hr class="evento-form-divider" />
+
+        <div class="evento-form-field">
+          <label class="evento-form-label">Foto {{ isEditMode ? '' : '*' }}</label>
+
+          @if (fotoPreview(); as preview) {
+            <div class="evento-form-dropzone evento-form-dropzone-filled" (click)="fotoInput.click()">
+              <img [src]="preview" alt="Vista previa de la foto del evento" />
+              <div class="evento-form-dropzone-overlay">Cambiar foto</div>
+            </div>
+            <button type="button" class="evento-form-clear" (click)="onRemoveFotoSeleccionada(); $event.stopPropagation()">
+              Quitar selección
+            </button>
+          } @else if (isEditMode && selected(); as evento) {
+            <div class="evento-form-dropzone evento-form-dropzone-filled" (click)="fotoInput.click()">
+              <img [src]="evento.foto_url" [alt]="evento.nombre" />
+              <div class="evento-form-dropzone-overlay">Cambiar foto</div>
+            </div>
+          } @else {
+            <div
+              class="evento-form-dropzone"
+              [class.is-dragover]="fotoDragOver()"
+              [class.has-error]="fotoError()"
+              (click)="fotoInput.click()"
+              (dragover)="onFotoDragOver($event)"
+              (dragleave)="onFotoDragLeave($event)"
+              (drop)="onFotoDrop($event)"
+            >
+              <svg class="evento-form-dropzone-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 16V4" />
+                <path d="M7 9l5-5 5 5" />
+                <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+              </svg>
+              <p class="evento-form-dropzone-text">Arrastra una imagen o haz clic para seleccionar</p>
+              <p class="evento-form-dropzone-hint">JPEG, PNG o WEBP · máx. 5MB</p>
+            </div>
+          }
+
+          <input
+            #fotoInput
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            class="visually-hidden"
+            (change)="onFotoSelected($event)"
+          />
+          @if (fotoError(); as err) {
+            <div class="form-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="evento-form-actions">
+        <span class="evento-form-required-hint">* Campos obligatorios</span>
+        <div class="evento-form-actions-buttons">
+          <a routerLink="/admin/eventos" class="btn btn-soft-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-success" [disabled]="form.invalid || loading()">
+            @if (loading()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            {{ isEditMode ? 'Guardar cambios' : 'Crear evento' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

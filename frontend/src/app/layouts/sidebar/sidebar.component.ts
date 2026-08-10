@@ -29,6 +29,7 @@ export class SidebarComponent {
       items: [
         { label: 'Propiedades', path: '/admin/propiedades', icon: 'properties' },
         { label: 'Proyectos', path: '/admin/proyectos', icon: 'projects' },
+        { label: 'Eventos', path: '/admin/eventos', icon: 'calendar' },
       ],
     },
     {

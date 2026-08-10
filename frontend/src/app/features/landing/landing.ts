@@ -19,10 +19,12 @@ import { PropertyCardComponent } from '../../shared/components/property-card/pro
 import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 import { CampanaActions } from '../../store/Campana/campana.actions';
 import { selectCampanaItem } from '../../store/Campana/campana.selectors';
+import { EventosActions } from '../../store/Eventos/eventos.actions';
+import { selectEventosItems } from '../../store/Eventos/eventos.selectors';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems } from '../../store/Propiedades/propiedades.selectors';
 
-const CAMPANA_DATE_FORMAT: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+const ISO_DATE_FORMAT: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
 
 interface RealEstateTip {
   number: string;
@@ -63,17 +65,29 @@ export class Landing implements OnInit, AfterViewInit, OnDestroy {
   protected readonly campanaRango = computed(() => {
     const campana = this.campana();
     if (!campana) return '';
-    return `${this.formatCampanaDate(campana.fecha_inicio)} – ${this.formatCampanaDate(campana.fecha_fin)}`;
+    return `${this.formatDate(campana.fecha_inicio)} – ${this.formatDate(campana.fecha_fin)}`;
   });
 
-  private formatCampanaDate(isoDate: string): string {
+  private readonly eventos = this.store.selectSignal(selectEventosItems);
+  protected readonly proximosEventos = computed(() => {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    return this.eventos().filter((evento) => this.parseFecha(evento.fecha) >= hoy);
+  });
+
+  protected formatDate(isoDate: string): string {
+    return this.parseFecha(isoDate).toLocaleDateString('es-CO', ISO_DATE_FORMAT);
+  }
+
+  private parseFecha(isoDate: string): Date {
     const [year, month, day] = isoDate.split('-').map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString('es-CO', CAMPANA_DATE_FORMAT);
+    return new Date(year, month - 1, day);
   }
 
   ngOnInit(): void {
     this.store.dispatch(PropiedadesActions.load());
     this.store.dispatch(CampanaActions.load());
+    this.store.dispatch(EventosActions.load());
   }
 
   protected readonly tips: readonly RealEstateTip[] = [
