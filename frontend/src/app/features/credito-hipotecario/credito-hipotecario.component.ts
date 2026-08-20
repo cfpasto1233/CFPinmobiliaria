@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { whatsappLink } from '../../core/whatsapp/whatsapp.util';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 
@@ -24,9 +23,7 @@ interface BancoLogo {
   styleUrl: './credito-hipotecario.component.scss',
 })
 export class CreditoHipotecarioComponent {
-  protected readonly whatsappHref = whatsappLink(
-    'Hola, quiero comparar mi crédito hipotecario con CFP Inmobiliaria.',
-  );
+  protected readonly ctaHref = 'https://loquenecesito.co/oficina-virtual?code=nl20161';
 
   protected readonly bancos: BancoLogo[] = [
     { nombre: 'Banco AV Villas', logo: 'images/av-villas.webp' },
