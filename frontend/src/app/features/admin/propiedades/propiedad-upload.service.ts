@@ -71,6 +71,7 @@ export class PropiedadUploadService {
     body.append('zona_bbq', String(form.zona_bbq));
     body.append('piscina', String(form.piscina));
     body.append('cocina', String(form.cocina));
+    body.append('zona_lavanderia', String(form.zona_lavanderia));
     body.append('conjunto_cerrado', String(form.conjunto_cerrado));
     body.append('tiene_administracion', String(form.tiene_administracion));
     if (form.valor_administracion !== null) body.append('valor_administracion', String(form.valor_administracion));

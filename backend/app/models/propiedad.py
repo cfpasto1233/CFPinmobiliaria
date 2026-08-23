@@ -49,6 +49,7 @@ class Propiedad(TimestampMixin, Base):
     zona_bbq: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     piscina: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     cocina: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
+    zona_lavanderia: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
 
     conjunto_cerrado: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     tiene_administracion: Mapped[bool] = mapped_column(

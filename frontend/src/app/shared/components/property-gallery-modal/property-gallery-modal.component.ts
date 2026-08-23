@@ -25,6 +25,7 @@ type SpecIcon =
   | 'terrace'
   | 'patio'
   | 'storage'
+  | 'laundry'
   | 'grill'
   | 'pool'
   | 'kitchen'
@@ -183,6 +184,7 @@ export class PropertyGalleryModalComponent implements OnInit, OnDestroy {
       items.push({ icon: 'patio', label: property.tipo_inmueble === 'local' ? 'Patio/zona de lavado' : 'Patio' });
     }
     if (property.bodega) items.push({ icon: 'storage', label: 'Bodega' });
+    if (property.zona_lavanderia) items.push({ icon: 'laundry', label: 'Zona de lavandería' });
     if (property.zona_bbq) items.push({ icon: 'grill', label: 'Zona BBQ' });
     if (property.piscina) items.push({ icon: 'pool', label: 'Piscina' });
     if (property.cocina) items.push({ icon: 'kitchen', label: 'Cocina' });

@@ -169,6 +169,7 @@ export class PublicarMiPropiedadComponent implements OnInit {
     zonaBbq: [false],
     piscina: [false],
     cocina: [false],
+    zonaLavanderia: [false],
 
     conjuntoCerrado: [false],
     tieneAdministracion: [false],
@@ -427,6 +428,7 @@ export class PublicarMiPropiedadComponent implements OnInit {
           zona_bbq: raw.zonaBbq ?? false,
           piscina: raw.piscina ?? false,
           cocina: raw.cocina ?? false,
+          zona_lavanderia: raw.zonaLavanderia ?? false,
 
           conjunto_cerrado: raw.conjuntoCerrado ?? false,
           tiene_administracion: raw.tieneAdministracion ?? false,

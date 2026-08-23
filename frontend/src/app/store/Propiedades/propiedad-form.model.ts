@@ -49,6 +49,7 @@ export interface PropiedadForm {
   zona_bbq: boolean;
   piscina: boolean;
   cocina: boolean;
+  zona_lavanderia: boolean;
 
   conjunto_cerrado: boolean;
   tiene_administracion: boolean;

@@ -326,7 +326,7 @@
             </div>
           }
 
-          @if (mostrarBool('balcon') || mostrarBool('terraza') || mostrarBool('patio') || mostrarBool('bodega') || mostrarBool('zonaBbq') || mostrarBool('piscina') || mostrarBool('cocina')) {
+          @if (mostrarBool('balcon') || mostrarBool('terraza') || mostrarBool('patio') || mostrarBool('bodega') || mostrarBool('zonaBbq') || mostrarBool('piscina') || mostrarBool('cocina') || mostrarBool('zonaLavanderia')) {
             <div class="propiedad-form-checks">
               @if (mostrarBool('balcon')) {
                 <div class="form-check">
@@ -368,6 +368,12 @@
                 <div class="form-check">
                   <input id="cocina" type="checkbox" class="form-check-input" formControlName="cocina" />
                   <label for="cocina" class="form-check-label">Cocina</label>
+                </div>
+              }
+              @if (mostrarBool('zonaLavanderia')) {
+                <div class="form-check">
+                  <input id="zonaLavanderia" type="checkbox" class="form-check-input" formControlName="zonaLavanderia" />
+                  <label for="zonaLavanderia" class="form-check-label">Zona de lavandería independiente</label>
                 </div>
               }
             </div>

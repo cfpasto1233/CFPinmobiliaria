@@ -48,12 +48,18 @@ _CAMPOS_OPCIONALES: dict[str, set[str]] = {
 # Checkboxes propios de cada tipo: siempre tienen un valor (True/False), nunca
 # son "obligatorios" en el sentido de exigir que se marquen.
 _CAMPOS_BOOL_PROPIOS: dict[str, set[str]] = {
-    "casa": {"balcon", "terraza", "patio", "conjunto_cerrado"},
-    "apartamento": {"balcon", "bodega", "conjunto_cerrado", "tiene_administracion"},
-    "apartaestudio": {"bodega", "conjunto_cerrado", "tiene_administracion"},
-    "finca": {"balcon", "terraza", "zona_bbq", "piscina", "conjunto_cerrado"},
-    "oficina": {"cocina", "patio", "tiene_administracion"},
-    "local": {"cocina", "patio"},
+    "casa": {"balcon", "terraza", "patio", "conjunto_cerrado", "zona_lavanderia"},
+    "apartamento": {
+        "balcon",
+        "bodega",
+        "conjunto_cerrado",
+        "tiene_administracion",
+        "zona_lavanderia",
+    },
+    "apartaestudio": {"bodega", "conjunto_cerrado", "tiene_administracion", "zona_lavanderia"},
+    "finca": {"balcon", "terraza", "zona_bbq", "piscina", "conjunto_cerrado", "zona_lavanderia"},
+    "oficina": {"cocina", "patio", "tiene_administracion", "zona_lavanderia"},
+    "local": {"cocina", "patio", "zona_lavanderia"},
     "lote": {"tiene_servicios", "tiene_alcantarillado", "tiene_acueducto"},
 }
 
@@ -68,6 +74,7 @@ _CAMPOS_BOOL: frozenset[str] = frozenset(
         "conjunto_cerrado",
         "tiene_administracion",
         "cocina",
+        "zona_lavanderia",
         "tiene_servicios",
         "tiene_alcantarillado",
         "tiene_acueducto",
@@ -159,6 +166,7 @@ class PropiedadForm(BaseModel):
     zona_bbq: bool = False
     piscina: bool = False
     cocina: bool = False
+    zona_lavanderia: bool = False
 
     conjunto_cerrado: bool = False
     tiene_administracion: bool = False
@@ -212,6 +220,7 @@ class PropiedadUpdate(BaseModel):
     zona_bbq: bool | None = None
     piscina: bool | None = None
     cocina: bool | None = None
+    zona_lavanderia: bool | None = None
 
     conjunto_cerrado: bool | None = None
     tiene_administracion: bool | None = None
@@ -359,6 +368,7 @@ class PropiedadPublic(BaseModel):
     zona_bbq: bool
     piscina: bool
     cocina: bool
+    zona_lavanderia: bool
 
     conjunto_cerrado: bool
     tiene_administracion: bool

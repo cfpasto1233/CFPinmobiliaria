@@ -62,12 +62,12 @@ export const CAMPOS_OPCIONALES: Record<TipoInmueble, CampoDetalle[]> = {
 
 // Checkboxes propios de cada tipo: siempre tienen valor, nunca son "obligatorios".
 export const CAMPOS_BOOL_PROPIOS: Record<TipoInmueble, string[]> = {
-  casa: ['balcon', 'terraza', 'patio', 'conjuntoCerrado'],
-  apartamento: ['balcon', 'bodega', 'conjuntoCerrado', 'tieneAdministracion'],
-  apartaestudio: ['bodega', 'conjuntoCerrado', 'tieneAdministracion'],
-  finca: ['balcon', 'terraza', 'zonaBbq', 'piscina', 'conjuntoCerrado'],
-  oficina: ['cocina', 'patio', 'tieneAdministracion'],
-  local: ['cocina', 'patio'],
+  casa: ['balcon', 'terraza', 'patio', 'conjuntoCerrado', 'zonaLavanderia'],
+  apartamento: ['balcon', 'bodega', 'conjuntoCerrado', 'tieneAdministracion', 'zonaLavanderia'],
+  apartaestudio: ['bodega', 'conjuntoCerrado', 'tieneAdministracion', 'zonaLavanderia'],
+  finca: ['balcon', 'terraza', 'zonaBbq', 'piscina', 'conjuntoCerrado', 'zonaLavanderia'],
+  oficina: ['cocina', 'patio', 'tieneAdministracion', 'zonaLavanderia'],
+  local: ['cocina', 'patio', 'zonaLavanderia'],
   lote: ['tieneServicios', 'tieneAlcantarillado', 'tieneAcueducto'],
 };
 

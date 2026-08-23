@@ -162,6 +162,7 @@ export class PropiedadFormComponent implements OnInit {
     zonaBbq: [false],
     piscina: [false],
     cocina: [false],
+    zonaLavanderia: [false],
 
     conjuntoCerrado: [false],
     tieneAdministracion: [false],
@@ -308,6 +309,7 @@ export class PropiedadFormComponent implements OnInit {
           zonaBbq: item.zona_bbq,
           piscina: item.piscina,
           cocina: item.cocina,
+          zonaLavanderia: item.zona_lavanderia,
           conjuntoCerrado: item.conjunto_cerrado,
           tieneAdministracion: item.tiene_administracion,
           valorAdministracion: item.valor_administracion !== null ? Number(item.valor_administracion) : null,
@@ -486,6 +488,7 @@ export class PropiedadFormComponent implements OnInit {
       zona_bbq: raw.zonaBbq ?? false,
       piscina: raw.piscina ?? false,
       cocina: raw.cocina ?? false,
+      zona_lavanderia: raw.zonaLavanderia ?? false,
 
       conjunto_cerrado: raw.conjuntoCerrado ?? false,
       tiene_administracion: raw.tieneAdministracion ?? false,
