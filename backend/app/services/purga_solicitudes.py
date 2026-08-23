@@ -12,6 +12,8 @@ from app.crud.solicitud_venta import delete_solicitudes_venta_antiguas
 # SolicitudDocumentoPropietario queda excluida a propósito: guarda los documentos
 # legales (cédula, escritura, comprobante de pago) de una Propiedad que puede seguir
 # publicada bien pasados los 15 días de retención del resto de solicitudes.
+# SolicitudTrabajo (hojas de vida de "Trabaja con nosotros") también queda excluida:
+# una postulación de trabajo se revisa en semanas o meses, no en 15 días.
 
 logger = logging.getLogger(__name__)
 

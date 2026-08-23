@@ -19,7 +19,7 @@ export class FooterComponent {
 
   protected readonly linkGroups: readonly FooterLinkGroup[] = [
     { heading: 'Servicios', links: ['Arriendos', 'Ventas', 'Asesorías', 'Publicar propiedad'] },
-    { heading: 'Empresa', links: ['Nosotros', 'Equipo', 'Noticias', 'Trabaja con nosotros'] },
+    { heading: 'Empresa', links: ['Nosotros', 'Trabaja con nosotros'] },
     { heading: 'Legal', links: ['Privacidad', 'Términos', 'Cookies', 'HABEAS DATA'] },
   ];
 }

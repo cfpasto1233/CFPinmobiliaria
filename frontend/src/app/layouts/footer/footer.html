@@ -16,6 +16,8 @@
             <li>
               @if (link === 'Nosotros') {
                 <a routerLink="/quienes-somos" class="footer-link">{{ link }}</a>
+              } @else if (link === 'Trabaja con nosotros') {
+                <a routerLink="/trabaja-con-nosotros" class="footer-link">{{ link }}</a>
               } @else {
                 <!-- Visual únicamente por ahora: aún no existen estas rutas -->
                 <button type="button" class="footer-link">{{ link }}</button>

@@ -89,6 +89,13 @@ export const routes: Routes = [
       import('./features/sugerencias/sugerencias.component').then((m) => m.SugerenciasComponent),
   },
   {
+    path: 'trabaja-con-nosotros',
+    loadComponent: () =>
+      import('./features/trabaja-con-nosotros/trabaja-con-nosotros.component').then(
+        (m) => m.TrabajaConNosotrosComponent,
+      ),
+  },
+  {
     path: 'publicar-por-tu-cuenta',
     loadComponent: () =>
       import('./features/publicar-por-tu-cuenta/publicar-por-tu-cuenta.component').then(
@@ -274,6 +281,13 @@ export const routes: Routes = [
           import(
             './features/admin/solicitudes-documentos-propietario/solicitudes-documentos-propietario-list.component'
           ).then((m) => m.SolicitudesDocumentosPropietarioListComponent),
+      },
+      {
+        path: 'solicitudes-trabajo',
+        loadComponent: () =>
+          import('./features/admin/solicitudes-trabajo/solicitudes-trabajo-list.component').then(
+            (m) => m.SolicitudesTrabajoListComponent,
+          ),
       },
       {
         path: 'reportes-dano',

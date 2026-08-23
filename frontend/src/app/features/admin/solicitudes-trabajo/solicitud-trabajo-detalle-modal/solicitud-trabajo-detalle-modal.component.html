@@ -1,0 +1,47 @@
+<div class="detalle-modal-overlay" (click)="close()">
+  <div class="detalle-modal" (click)="$event.stopPropagation()">
+    <div class="detalle-modal-header">
+      <div>
+        <p class="detalle-modal-eyebrow">Trabaja con nosotros</p>
+        <h2 class="detalle-modal-title">{{ solicitud().nombre }}</h2>
+      </div>
+      <button type="button" class="detalle-modal-close" aria-label="Cerrar" (click)="close()">&times;</button>
+    </div>
+
+    <div class="detalle-modal-body">
+      <dl class="detalle-modal-grid">
+        <div class="detalle-modal-field">
+          <dt>Correo</dt>
+          <dd>{{ solicitud().correo }}</dd>
+        </div>
+
+        <div class="detalle-modal-field">
+          <dt>Teléfono</dt>
+          <dd>{{ solicitud().numero_contacto }}</dd>
+        </div>
+
+        <div class="detalle-modal-field">
+          <dt>Fecha de postulación</dt>
+          <dd>{{ solicitud().created_at | date: "d 'de' MMMM 'de' y, h:mm a" }}</dd>
+        </div>
+      </dl>
+
+      <div class="detalle-modal-fotos">
+        <p class="detalle-modal-fotos-label">Hoja de vida</p>
+        @if (loading() && !hojaDeVidaUrl()) {
+          <p class="detalle-modal-fotos-hint">Cargando hoja de vida...</p>
+        } @else if (hojaDeVidaUrl(); as url) {
+          <ul class="detalle-modal-docs">
+            <li><a [href]="url" target="_blank" rel="noopener">Ver hoja de vida (PDF)</a></li>
+          </ul>
+        } @else {
+          <p class="detalle-modal-fotos-hint">No se pudo cargar la hoja de vida.</p>
+        }
+      </div>
+    </div>
+
+    <div class="detalle-modal-actions">
+      <button type="button" class="btn btn-outline-primary" (click)="close()">Cerrar</button>
+    </div>
+  </div>
+</div>

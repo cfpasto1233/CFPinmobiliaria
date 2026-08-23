@@ -54,6 +54,7 @@ export class SidebarComponent {
           icon: 'requests',
         },
         { label: 'Reportes de daño', path: '/admin/reportes-dano', icon: 'requests' },
+        { label: 'Trabaja con nosotros', path: '/admin/solicitudes-trabajo', icon: 'requests' },
         { label: 'Citas', path: '/admin/citas', icon: 'calendar' },
       ],
     },

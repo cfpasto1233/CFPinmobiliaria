@@ -27,6 +27,7 @@ import { SolicitudesArriendoEffects } from './store/SolicitudesArriendo/solicitu
 import { SolicitudesDocumentosPropietarioEffects } from './store/SolicitudesDocumentosPropietario/solicitudes-documentos-propietario.effects';
 import { SolicitudesPublicarPropiedadEffects } from './store/SolicitudesPublicarPropiedad/solicitudes-publicar-propiedad.effects';
 import { SolicitudesSugerenciasEffects } from './store/SolicitudesSugerencias/solicitudes-sugerencias.effects';
+import { SolicitudesTrabajoEffects } from './store/SolicitudesTrabajo/solicitudes-trabajo.effects';
 import { SolicitudesVentaEffects } from './store/SolicitudesVenta/solicitudes-venta.effects';
 import { metaReducers, rootReducer } from './store';
 import { routes } from './app.routes';
@@ -66,6 +67,7 @@ export const appConfig: ApplicationConfig = {
       SolicitudesPublicarPropiedadEffects,
       SolicitudesSugerenciasEffects,
       SolicitudesDocumentosPropietarioEffects,
+      SolicitudesTrabajoEffects,
       ReportesDanoEffects,
     ]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),

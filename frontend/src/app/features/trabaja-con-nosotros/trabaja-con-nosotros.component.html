@@ -1,0 +1,106 @@
+<app-navbar />
+
+<section class="trabajo-hero">
+  <a routerLink="/" class="trabajo-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5" />
+      <path d="M12 19l-7-7 7-7" />
+    </svg>
+    Volver al inicio
+  </a>
+
+  <p class="trabajo-kicker">— CFP Inmobiliaria · Trabaja con nosotros</p>
+
+  <h1 class="trabajo-title">Súmate a <span class="is-accent">nuestro equipo</span>.</h1>
+
+  <p class="trabajo-subtitle">
+    Cuéntanos sobre ti y adjunta tu hoja de vida. La revisaremos y te contactaremos si tu perfil
+    encaja con una vacante disponible.
+  </p>
+</section>
+
+<section class="trabajo-form-section">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="trabajo-card">
+      <h2 class="trabajo-card-title">Tus datos</h2>
+
+      <div class="trabajo-row">
+        <div class="trabajo-field">
+          <label for="nombre" class="trabajo-label">Nombre *</label>
+          <input
+            id="nombre"
+            type="text"
+            class="trabajo-input"
+            placeholder="Tu nombre completo"
+            [class.is-invalid]="fieldError('nombre')"
+            formControlName="nombre"
+          />
+          @if (fieldError('nombre'); as err) {
+            <div class="trabajo-error">{{ err }}</div>
+          }
+        </div>
+
+        <div class="trabajo-field">
+          <label for="correo" class="trabajo-label">Correo *</label>
+          <input
+            id="correo"
+            type="email"
+            class="trabajo-input"
+            placeholder="tu@correo.com"
+            [class.is-invalid]="fieldError('correo')"
+            formControlName="correo"
+          />
+          @if (fieldError('correo'); as err) {
+            <div class="trabajo-error">{{ err }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="trabajo-field">
+        <label for="numeroContacto" class="trabajo-label">Teléfono *</label>
+        <input
+          id="numeroContacto"
+          type="tel"
+          class="trabajo-input"
+          placeholder="+57 300 000 0000"
+          [class.is-invalid]="fieldError('numeroContacto')"
+          formControlName="numeroContacto"
+        />
+        @if (fieldError('numeroContacto'); as err) {
+          <div class="trabajo-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="trabajo-field">
+        <span class="trabajo-label">Hoja de vida (PDF) *</span>
+        @if (hojaDeVida(); as file) {
+          <div class="trabajo-doc-field">
+            <span class="trabajo-doc-filename">{{ file.name }}</span>
+            <button type="button" class="trabajo-doc-remove" (click)="quitarHojaDeVida()">Quitar</button>
+          </div>
+        } @else {
+          <label class="trabajo-doc-upload">
+            Seleccionar PDF
+            <input type="file" accept="application/pdf" class="visually-hidden" (change)="onHojaDeVidaSeleccionada($event)" />
+          </label>
+        }
+        @if (hojaDeVidaError(); as err) {
+          <div class="trabajo-error">{{ err }}</div>
+        }
+      </div>
+
+      <div class="trabajo-actions">
+        <span class="trabajo-required-hint">* Campos obligatorios · Solo PDF, máx. 10 MB</span>
+        <button type="submit" class="btn btn-secondary" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Enviar postulación
+        </button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<app-footer />
+<app-publicar-whatsapp-fab [message]="'Hola, quiero más información sobre las vacantes en CFP Inmobiliaria.'" />
