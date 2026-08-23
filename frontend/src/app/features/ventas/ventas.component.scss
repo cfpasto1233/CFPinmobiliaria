@@ -285,6 +285,21 @@
   margin: 0;
 }
 
+.ventas-listing-filter {
+  max-width: 260px;
+  margin: 1.25rem auto 0;
+  text-align: left;
+}
+
+.ventas-listing-filter-label {
+  display: block;
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  color: $cfpasto-text-muted;
+  margin-bottom: 0.35rem;
+}
+
 .ventas-listing-state {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-base;

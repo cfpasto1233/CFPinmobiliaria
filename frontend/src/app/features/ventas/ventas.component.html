@@ -200,6 +200,21 @@
   <div class="ventas-listing-header">
     <p class="ventas-listing-eyebrow">Disponibles ahora</p>
     <h2 class="ventas-listing-title">Propiedades en venta</h2>
+
+    <div class="ventas-listing-filter">
+      <label class="ventas-listing-filter-label">Tipo de inmueble</label>
+      <ng-select
+        class="ventas-listing-select"
+        [items]="tipoInmuebleOptions"
+        bindLabel="label"
+        bindValue="value"
+        [clearable]="false"
+        [searchable]="false"
+        [appendTo]="'body'"
+        [ngModel]="tipoInmuebleFiltro()"
+        (ngModelChange)="tipoInmuebleFiltro.set($event)"
+      ></ng-select>
+    </div>
   </div>
 
   @if (loading()) {

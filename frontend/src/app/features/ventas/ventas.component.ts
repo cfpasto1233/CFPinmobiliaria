@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Store } from '@ngrx/store';
@@ -8,6 +8,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
 import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
 import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
+import { TipoInmueble } from '../../store/Propiedades/propiedad-form.model';
 import { PropiedadesActions } from '../../store/Propiedades/propiedades.actions';
 import { selectPropiedadesItems, selectPropiedadesLoading } from '../../store/Propiedades/propiedades.selectors';
 import { SolicitudesVentaActions } from '../../store/SolicitudesVenta/solicitudes-venta.actions';
@@ -15,6 +16,7 @@ import { selectSolicitudesVentaLoading } from '../../store/SolicitudesVenta/soli
 
 type MedioComunicacion = 'whatsapp' | 'llamada';
 type FormaPagoVenta = 'contado' | 'credito_hipotecario' | 'otros';
+type TipoInmuebleFiltro = TipoInmueble | 'todos';
 
 type FormFieldName =
   | 'nombreCompleto'
@@ -44,6 +46,7 @@ const REQUIRED_MESSAGES: Record<FormFieldName, string> = {
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     NgSelectModule,
     NavbarComponent,
     FooterComponent,
@@ -63,7 +66,28 @@ export class VentasComponent implements OnInit {
 
   protected readonly loading = this.store.selectSignal(selectPropiedadesLoading);
   private readonly items = this.store.selectSignal(selectPropiedadesItems);
-  protected readonly propiedadesVenta = computed(() => this.items().filter((item) => item.tipo === 'venta'));
+
+  protected readonly tipoInmuebleFiltro = signal<TipoInmuebleFiltro>('todos');
+  protected readonly tipoInmuebleOptions: { value: TipoInmuebleFiltro; label: string }[] = [
+    { value: 'todos', label: 'Todos los tipos' },
+    { value: 'casa', label: 'Casa' },
+    { value: 'apartamento', label: 'Apartamento' },
+    { value: 'apartaestudio', label: 'Apartaestudio' },
+    { value: 'finca', label: 'Finca' },
+    { value: 'local', label: 'Local' },
+    { value: 'oficina', label: 'Oficina' },
+    { value: 'lote', label: 'Lote' },
+  ];
+
+  protected readonly propiedadesVenta = computed(() =>
+    this.items()
+      .filter(
+        (item) =>
+          item.tipo === 'venta' &&
+          (this.tipoInmuebleFiltro() === 'todos' || item.tipo_inmueble === this.tipoInmuebleFiltro()),
+      )
+      .sort((a, b) => Number(a.precio) - Number(b.precio)),
+  );
 
   protected readonly submitting = this.store.selectSignal(selectSolicitudesVentaLoading);
 
