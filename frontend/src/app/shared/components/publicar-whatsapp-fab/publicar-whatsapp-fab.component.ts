@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { whatsappLink } from '../../../core/whatsapp/whatsapp.util';
 
 @Component({
@@ -9,7 +9,6 @@ import { whatsappLink } from '../../../core/whatsapp/whatsapp.util';
   styleUrl: './publicar-whatsapp-fab.component.scss',
 })
 export class PublicarWhatsappFabComponent {
-  protected readonly link = whatsappLink(
-    'Hola, quiero publicar mi propiedad con CFP Inmobiliaria.',
-  );
+  readonly message = input.required<string>();
+  protected readonly link = computed(() => whatsappLink(this.message()));
 }

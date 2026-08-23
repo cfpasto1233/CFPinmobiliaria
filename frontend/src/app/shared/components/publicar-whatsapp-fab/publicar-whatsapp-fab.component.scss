@@ -11,8 +11,7 @@
   z-index: 1040;
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 1.25rem;
+  padding: 0.85rem;
   border-radius: 50rem;
   background: #25d366;
   color: $cfpasto-white;
@@ -47,30 +46,11 @@
   flex-shrink: 0;
 }
 
-.whatsapp-fab-label {
-  font-family: $cfpasto-font-body;
-  font-weight: 600;
-  font-size: $cfpasto-text-sm;
-  white-space: nowrap;
-}
-
-// Tablet: mismo diseño, un poco más compacto.
+// Tablet/mobile: mismo botón circular, un poco más compacto y más cerca del borde.
 @media (max-width: 767.98px) {
   .whatsapp-fab {
     left: 1rem;
     bottom: 1rem;
-    padding: 0.75rem 1rem;
-  }
-}
-
-// Mobile: solo el ícono en un botón circular para no tapar contenido ni el footer.
-@media (max-width: 575.98px) {
-  .whatsapp-fab {
-    padding: 0.85rem;
-    gap: 0;
-  }
-
-  .whatsapp-fab-label {
-    display: none;
+    padding: 0.75rem;
   }
 }

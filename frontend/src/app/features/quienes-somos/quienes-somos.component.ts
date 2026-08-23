@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { whatsappLink } from '../../core/whatsapp/whatsapp.util';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { NavbarComponent } from '../../layouts/navbar/navbar.component';
+import { PublicarWhatsappFabComponent } from '../../shared/components/publicar-whatsapp-fab/publicar-whatsapp-fab.component';
 
 interface Pilar {
   tituloAcento: string;
@@ -13,7 +14,7 @@ interface Pilar {
 @Component({
   selector: 'app-quienes-somos',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, RouterLink],
+  imports: [NavbarComponent, FooterComponent, RouterLink, PublicarWhatsappFabComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './quienes-somos.component.html',
   styleUrl: './quienes-somos.component.scss',
