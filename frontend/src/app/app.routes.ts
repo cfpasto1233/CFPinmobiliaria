@@ -89,6 +89,30 @@ export const routes: Routes = [
       import('./features/sugerencias/sugerencias.component').then((m) => m.SugerenciasComponent),
   },
   {
+    path: 'privacidad',
+    data: { slug: 'privacidad' },
+    loadComponent: () =>
+      import('./features/legal/legal-page.component').then((m) => m.LegalPageComponent),
+  },
+  {
+    path: 'terminos',
+    data: { slug: 'terminos' },
+    loadComponent: () =>
+      import('./features/legal/legal-page.component').then((m) => m.LegalPageComponent),
+  },
+  {
+    path: 'cookies',
+    data: { slug: 'cookies' },
+    loadComponent: () =>
+      import('./features/legal/legal-page.component').then((m) => m.LegalPageComponent),
+  },
+  {
+    path: 'habeas-data',
+    data: { slug: 'habeas-data' },
+    loadComponent: () =>
+      import('./features/legal/legal-page.component').then((m) => m.LegalPageComponent),
+  },
+  {
     path: 'trabaja-con-nosotros',
     loadComponent: () =>
       import('./features/trabaja-con-nosotros/trabaja-con-nosotros.component').then(

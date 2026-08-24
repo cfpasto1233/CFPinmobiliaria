@@ -18,6 +18,14 @@
                 <a routerLink="/quienes-somos" class="footer-link">{{ link }}</a>
               } @else if (link === 'Trabaja con nosotros') {
                 <a routerLink="/trabaja-con-nosotros" class="footer-link">{{ link }}</a>
+              } @else if (link === 'Privacidad') {
+                <a routerLink="/privacidad" class="footer-link">{{ link }}</a>
+              } @else if (link === 'Términos') {
+                <a routerLink="/terminos" class="footer-link">{{ link }}</a>
+              } @else if (link === 'Cookies') {
+                <a routerLink="/cookies" class="footer-link">{{ link }}</a>
+              } @else if (link === 'HABEAS DATA') {
+                <a routerLink="/habeas-data" class="footer-link">{{ link }}</a>
               } @else {
                 <!-- Visual únicamente por ahora: aún no existen estas rutas -->
                 <button type="button" class="footer-link">{{ link }}</button>

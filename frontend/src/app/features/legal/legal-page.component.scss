@@ -1,0 +1,112 @@
+@use 'design-tokens' as *;
+
+:host {
+  display: block;
+}
+
+// ─── Hero ───────────────────────────────────────────────────────────────────
+
+.legal-hero {
+  padding: 8rem 1.5rem 3rem;
+  background: $cfpasto-white;
+  text-align: center;
+
+  @media (max-width: 767.98px) {
+    padding: 7rem 1.5rem 2.5rem;
+  }
+}
+
+.legal-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-sm;
+  font-weight: 500;
+  color: $cfpasto-text-muted;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $cfpasto-primary;
+  }
+}
+
+.legal-kicker {
+  font-family: $cfpasto-font-body;
+  font-weight: 600;
+  font-size: $cfpasto-text-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $cfpasto-accent-dark;
+  margin-bottom: 1rem;
+}
+
+.legal-title {
+  font-family: $cfpasto-font-heading;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.15;
+  color: $cfpasto-primary;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+// ─── Contenido ──────────────────────────────────────────────────────────────
+
+.legal-content-section {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1.5rem 6rem;
+  background: rgba($cfpasto-primary, 0.04);
+}
+
+.legal-card {
+  width: 100%;
+  max-width: 760px;
+  padding: 2.5rem 3rem;
+  background: $cfpasto-white;
+  border: 1.5px solid $cfpasto-primary;
+  border-radius: $cfpasto-radius-xl;
+  box-shadow: $cfpasto-shadow-lg;
+
+  @media (max-width: 575.98px) {
+    padding: 1.75rem;
+  }
+}
+
+.legal-paragraph {
+  font-family: $cfpasto-font-body;
+  font-size: $cfpasto-text-base;
+  line-height: 1.75;
+  color: $cfpasto-text-dark;
+  margin: 0 0 1.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.legal-bullets {
+  margin: 0 0 1.5rem;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  li {
+    font-family: $cfpasto-font-body;
+    font-size: $cfpasto-text-base;
+    line-height: 1.7;
+    color: $cfpasto-text-dark;
+
+    strong {
+      color: $cfpasto-primary;
+    }
+  }
+}

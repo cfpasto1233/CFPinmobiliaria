@@ -1,0 +1,38 @@
+<app-navbar />
+
+<section class="legal-hero">
+  <a routerLink="/" class="legal-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5" />
+      <path d="M12 19l-7-7 7-7" />
+    </svg>
+    Volver al inicio
+  </a>
+
+  <p class="legal-kicker">— {{ doc.eyebrow }}</p>
+  <h1 class="legal-title">{{ doc.title }}</h1>
+</section>
+
+<section class="legal-content-section">
+  <div class="legal-card">
+    @for (block of doc.blocks; track $index) {
+      @if (block.paragraph) {
+        <p class="legal-paragraph">{{ block.paragraph }}</p>
+      }
+      @if (block.bullets) {
+        <ul class="legal-bullets">
+          @for (bullet of block.bullets; track $index) {
+            <li>
+              @if (bullet.lead) {
+                <strong>{{ bullet.lead }}</strong>
+              }
+              {{ bullet.text }}
+            </li>
+          }
+        </ul>
+      }
+    }
+  </div>
+</section>
+
+<app-footer />
