@@ -23,7 +23,8 @@ interface BancoLogo {
   styleUrl: './credito-hipotecario.component.scss',
 })
 export class CreditoHipotecarioComponent {
-  protected readonly ctaHref = 'https://loquenecesito.co/oficina-virtual?code=nl20161';
+  protected readonly ctaHref =
+    'https://loquenecesito.co/store?referrerCode=hp06286&isCreditOnly=ok';
 
   protected readonly bancos: BancoLogo[] = [
     { nombre: 'Banco AV Villas', logo: 'images/av-villas.webp' },
