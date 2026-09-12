@@ -11,7 +11,9 @@
   flex-direction: column;
   align-items: center;
   padding: 8rem 1.5rem 4rem;
-  background: $cfpasto-white;
+  background:
+    linear-gradient(180deg, rgba($cfpasto-primary-dark, 0.85) 0%, rgba($cfpasto-primary, 0.65) 100%),
+    url('/images/ventas_img.webp') center / cover no-repeat;
 
   @media (max-width: 767.98px) {
     padding: 7rem 1.25rem 3rem;
@@ -31,13 +33,13 @@
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-sm;
   font-weight: 500;
-  color: $cfpasto-text-muted;
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
   margin-bottom: 1.5rem;
   transition: color 0.2s ease;
 
   &:hover {
-    color: $cfpasto-primary;
+    color: $cfpasto-white;
   }
 }
 
@@ -47,7 +49,7 @@
   font-size: $cfpasto-text-sm;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: $cfpasto-primary;
+  color: $cfpasto-accent;
   margin-bottom: 0.75rem;
 }
 
@@ -55,14 +57,14 @@
   font-family: $cfpasto-font-heading;
   font-weight: 700;
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-  color: $cfpasto-primary;
+  color: $cfpasto-white;
   margin: 0 0 0.75rem;
 }
 
 .ventas-subtitle {
   font-family: $cfpasto-font-body;
   font-size: $cfpasto-text-base;
-  color: $cfpasto-text-muted;
+  color: rgba($cfpasto-white, 0.85);
   margin: 0;
 }
 
