@@ -22,6 +22,5 @@ RUN apk add --no-cache ca-certificates curl
 COPY --from=build /out/minio /usr/local/bin/minio
 ENV MINIO_ROOT_USER=minioadmin
 EXPOSE 9000 9001
-VOLUME ["/data"]
 # Railway sobrescribe esto con el "Start command" del servicio: minio server /data --console-address ":9001"
 CMD ["minio", "server", "/data", "--console-address", ":9001"]
