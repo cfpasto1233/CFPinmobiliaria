@@ -1,9 +1,0 @@
-# Config del servicio "minio" en Railway.
-# En Railway: servicio minio → Settings → "Config-as-code" → Railway Config File = minio/railway.toml
-[build]
-builder = "DOCKERFILE"
-dockerfilePath = "minio/Dockerfile"
-
-[deploy]
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 3
